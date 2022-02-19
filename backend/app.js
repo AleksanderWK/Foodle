@@ -1,11 +1,14 @@
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
-const port = 3001
-require("dotenv/config")
+const bodyParser = require("body-parser");
+const port = 3001;
+require("dotenv/config");
 
-const postRoute = require("./routes/posts")
-app.use("/food", postRoute)
+app.use(bodyParser.json())
+
+const usersRoute = require("./routes/users")
+app.use("/register", usersRoute)
 
 //HOME ROUTE
 app.get("/", (req, res) => {
