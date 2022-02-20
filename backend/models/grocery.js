@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const grocerySchema = mongoose.Schema({
-    matvare: {
+    Matvare: {
         type: String,
         required: true
     }
