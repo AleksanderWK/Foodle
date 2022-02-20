@@ -10,10 +10,8 @@ app.use(bodyParser.json())
 const usersRoute = require("./routes/users")
 app.use("/register", usersRoute)
 
-//HOME ROUTE
-app.get("/", (req, res) => {
-    res.send("home")
-});
+const groceriesRoute = require("./routes/groceries")
+app.use("/groceries", groceriesRoute)
 
 //CONNECT TO MONGODB
 mongoose.connect(process.env.MONGODB_URI, ()=>{
