@@ -5,12 +5,21 @@ const bodyParser = require("body-parser");
 const port = 3001;
 require("dotenv/config");
 
-app.use(bodyParser.json());
+const cors = require("cors");
+const corsOptions = {
+  origin: "*",
+  credentials: true,
+  optionSuccessStatus: 200,
+};
+app.use(cors(corsOptions));
 
 const usersRoute = require("./routes/users");
-app.use("/register", usersRoute);
-
 const groceriesRoute = require("./routes/groceries");
+
+app.use(bodyParser.json());
+
+app.use("/users", usersRoute);
+
 app.use("/groceries", groceriesRoute);
 
 //CONNECT TO MONGODB

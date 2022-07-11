@@ -1,0 +1,27 @@
+@use '../../food.module.scss';
+
+.button {
+    cursor: pointer;
+    width: 135px;
+    height: 40px;
+    border: none;
+    background-color: food.$primary-200;
+    color: white;
+    font-weight: bold;
+    border-radius: 15px;
+
+    &:hover {
+        background-color: food.$primary-100;
+
+        &.secondary {
+            border: solid 3px food.$primary-100;
+            color: food.$primary-100;
+        }
+    }
+
+    &.secondary {
+        background-color: white;
+        border: solid 3px food.$primary-200;
+        color: food.$primary-200;
+    }
+}

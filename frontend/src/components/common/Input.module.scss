@@ -1,0 +1,43 @@
+@use '../../food.module.scss';
+.inputWrapper {
+    width: 100%;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: food.$text;
+}
+.input {
+    padding: food.$size-spacing-1;
+    border: none;
+    height: 35px;
+    width: 100%;
+    border-radius: food.$size-spacing-2;
+    box-shadow: 0px 0px 10px 5px rgba(0, 0, 0, 0.15);
+    font-weight: bold;
+    caret-color: food.$text;
+
+    &.withIcon {
+        padding-left: 32.5px;
+    }
+
+    &::placeholder {
+        color: food.$placeholder;
+    }
+
+    &:focus {
+        outline: none;
+        border: none;
+        resize: none;
+    }
+
+    &.error {
+        box-shadow: 0px 0px 10px 5px rgba(255, 99, 99);
+    }
+}
+
+.inputIcon {
+    position: absolute;
+    top: 17.5px;
+    left: 10px;
+}

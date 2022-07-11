@@ -1,0 +1,32 @@
+@use '../../food.module.scss';
+
+.feedback {
+    width: 100%;
+    padding: food.$size-spacing-1 0 food.$size-spacing-1 0;
+    color: white;
+    border-radius: food.$size-spacing-1;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    &.information {
+        background-color: food.$information;
+    }
+    &.error {
+        background-color: food.$alert;
+    }
+
+    &.success {
+        background-color: food.$success;
+    }
+}
+
+.icon {
+    & > svg {
+        width: 21px;
+        height: 21px;
+        fill: white;
+    }
+}

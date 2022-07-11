@@ -1,0 +1,30 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Pacifico&display=swap');
+
+$font-title: 'Pacifico', cursive;
+$font-text: 'Inter', sans-serif;
+
+$primary-200: hsl(243, 100%, 69%);
+$primary-100: hsl(243, 100%, 74%);
+$secondary: hsl(163, 91%, 39%);
+$text: #3f3d56;
+$placeholder: #cccccc;
+$alert: #ff6363;
+$information: #63abff;
+$success: #5cee7c;
+
+$size-spacing-1: 10px;
+$size-spacing-2: 20px;
+$size-spacing-3: 30px;
+
+* {
+    font-family: $font-text;
+    color: $text;
+}
+
+.container {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
