@@ -1,15 +1,22 @@
 import { useEffect, useState } from 'react'
-import { Outlet, Route, Routes, useNavigate } from 'react-router-dom'
-import { useRecoilValue } from 'recoil'
+import {
+    Outlet,
+    Route,
+    Routes,
+    useLocation,
+    useNavigate,
+} from 'react-router-dom'
+import { useRecoilState } from 'recoil'
 import { Authentication } from './components/Authentication'
 import { Header, HeaderItemProps } from './components/Header'
 import styles from './food.module.scss'
 import { userState } from './state/user'
 
 export const FoodleApp: React.FunctionComponent = () => {
-    const user = useRecoilValue(userState)
+    const [user, setUserState] = useRecoilState(userState)
     const [currentTab, setCurrentTab] = useState('Hjem')
-    let navigate = useNavigate()
+    const navigate = useNavigate()
+    const location = useLocation()
 
     const headerItems: HeaderItemProps[] = [
         {
@@ -31,7 +38,15 @@ export const FoodleApp: React.FunctionComponent = () => {
     }
 
     useEffect(() => {
-        navigate('/hjem', { replace: true })
+        if (location.pathname == '/') {
+            setUserState(null)
+        }
+    }, [location])
+
+    useEffect(() => {
+        if (user) {
+            navigate('/hjem', { replace: true })
+        } else navigate('/', { replace: true })
     }, [user])
 
     return (

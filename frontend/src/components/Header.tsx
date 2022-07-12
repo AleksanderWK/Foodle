@@ -71,7 +71,7 @@ export const Header: React.FC<HeaderProps> = ({
                     />
                 ))}
             </div>
-            <Button onClick={() => setUserState(null)} type={'Primary'}>
+            <Button onClick={() => setUserState(null)} type={'Secondary'}>
                 Logg ut
             </Button>
         </div>
