@@ -1,14 +1,16 @@
 import classNames from 'classnames'
-import { AuthenticationTabs } from './Authentication'
+import { NavLink } from 'react-router-dom'
+import { useSetRecoilState } from 'recoil'
+import { userState } from '../state/user'
+import { Button } from './common/Button'
 import styles from './Header.module.scss'
 
 export interface HeaderItemProps {
-    navName: AuthenticationTabs
-    navLink?: string
+    navName: string
 }
 
 interface HeaderFunctionProps {
-    onHeaderItemClick: (navName: AuthenticationTabs, navLink?: string) => void
+    onHeaderItemClick: (navName: string) => void
 }
 
 interface Props {
@@ -19,13 +21,14 @@ interface Props {
 
 const HeaderItem: React.FC<Props> = (props: Props) => {
     return (
-        <div
+        <NavLink
             className={styles.headerItem}
             onClick={() =>
                 props.headerFunctionProps.onHeaderItemClick(
                     props.headerItemProps.navName
                 )
             }
+            to={props.headerItemProps.navName.replaceAll('ø', 'o')}
         >
             {props.headerItemProps.navName}
             <div
@@ -36,13 +39,13 @@ const HeaderItem: React.FC<Props> = (props: Props) => {
                         : styles.inactive
                 )}
             />
-        </div>
+        </NavLink>
     )
 }
 
 interface HeaderProps {
     headerItems: HeaderItemProps[]
-    onHeaderItemClick: (navName: AuthenticationTabs, navLink?: string) => void
+    onHeaderItemClick: (navName: string) => void
     currentTab: string
 }
 
@@ -51,18 +54,26 @@ export const Header: React.FC<HeaderProps> = ({
     onHeaderItemClick,
     currentTab,
 }: HeaderProps) => {
+    const setUserState = useSetRecoilState(userState)
+
     return (
         <div className={styles.header}>
-            {headerItems.map((item) => (
-                <HeaderItem
-                    key={item.navName}
-                    headerItemProps={{
-                        navName: item.navName,
-                    }}
-                    headerFunctionProps={{ onHeaderItemClick }}
-                    currentTab={currentTab}
-                />
-            ))}
+            <div className={styles.title}>Foodle</div>
+            <div className={styles.headerItemsContainer}>
+                {headerItems.map((item) => (
+                    <HeaderItem
+                        key={item.navName}
+                        headerItemProps={{
+                            navName: item.navName,
+                        }}
+                        headerFunctionProps={{ onHeaderItemClick }}
+                        currentTab={currentTab}
+                    />
+                ))}
+            </div>
+            <Button onClick={() => setUserState(null)} type={'Primary'}>
+                Logg ut
+            </Button>
         </div>
     )
 }

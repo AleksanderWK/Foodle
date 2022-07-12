@@ -1,13 +1,38 @@
-import { useState } from 'react'
-import { Outlet, Route, Routes } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { Outlet, Route, Routes, useNavigate } from 'react-router-dom'
 import { useRecoilValue } from 'recoil'
-import { Authentication, AuthenticationTabs } from './components/Authentication'
-import { Header } from './components/Header'
+import { Authentication } from './components/Authentication'
+import { Header, HeaderItemProps } from './components/Header'
 import styles from './food.module.scss'
 import { userState } from './state/user'
 
 export const FoodleApp: React.FunctionComponent = () => {
     const user = useRecoilValue(userState)
+    const [currentTab, setCurrentTab] = useState('Hjem')
+    let navigate = useNavigate()
+
+    const headerItems: HeaderItemProps[] = [
+        {
+            navName: 'Hjem',
+        },
+        {
+            navName: 'Kjøleskap',
+        },
+        {
+            navName: 'Kjøkken',
+        },
+        {
+            navName: 'Profil',
+        },
+    ]
+
+    const onHeaderItemClicked = (navName: string) => {
+        setCurrentTab(navName)
+    }
+
+    useEffect(() => {
+        navigate('/hjem', { replace: true })
+    }, [user])
 
     return (
         <>
@@ -18,17 +43,10 @@ export const FoodleApp: React.FunctionComponent = () => {
                         element={
                             <>
                                 <Header
-                                    headerItems={[]}
-                                    onHeaderItemClick={function (
-                                        navName: AuthenticationTabs,
-                                        navLink?: string | undefined
-                                    ): void {
-                                        throw new Error(
-                                            'Function not implemented.'
-                                        )
-                                    }}
-                                    currentTab={''}
-                                />{' '}
+                                    headerItems={headerItems}
+                                    currentTab={currentTab}
+                                    onHeaderItemClick={onHeaderItemClicked}
+                                />
                                 <Outlet />
                             </>
                         }
