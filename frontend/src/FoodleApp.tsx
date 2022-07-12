@@ -41,14 +41,14 @@ export const FoodleApp: React.FunctionComponent = () => {
                     <Route
                         path="/"
                         element={
-                            <>
+                            <div className={styles.pageContainer}>
                                 <Header
                                     headerItems={headerItems}
                                     currentTab={currentTab}
                                     onHeaderItemClick={onHeaderItemClicked}
                                 />
                                 <Outlet />
-                            </>
+                            </div>
                         }
                     >
                         <Route path="hjem" element={'Hjem'} />
