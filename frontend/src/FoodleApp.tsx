@@ -6,7 +6,7 @@ import { Header } from './components/Header'
 import styles from './food.module.scss'
 import { userState } from './state/user'
 
-export const FoodApp: React.FunctionComponent = () => {
+export const FoodleApp: React.FunctionComponent = () => {
     const user = useRecoilValue(userState)
 
     return (

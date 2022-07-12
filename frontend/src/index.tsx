@@ -2,14 +2,14 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import './index.css'
 import { BrowserRouter } from 'react-router-dom'
-import { FoodApp } from './FoodApp'
+import { FoodleApp } from './FoodleApp'
 import { RecoilRoot } from 'recoil'
 
 ReactDOM.render(
     <React.StrictMode>
         <RecoilRoot>
             <BrowserRouter>
-                <FoodApp />
+                <FoodleApp />
             </BrowserRouter>
         </RecoilRoot>
     </React.StrictMode>,
