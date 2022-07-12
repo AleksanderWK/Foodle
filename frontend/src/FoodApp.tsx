@@ -1,11 +1,13 @@
 import { useState } from 'react'
 import { Outlet, Route, Routes } from 'react-router-dom'
+import { useRecoilValue } from 'recoil'
 import { Authentication, AuthenticationTabs } from './components/Authentication'
 import { Header } from './components/Header'
 import styles from './food.module.scss'
+import { userState } from './state/user'
 
 export const FoodApp: React.FunctionComponent = () => {
-    const [user, setUser] = useState(null)
+    const user = useRecoilValue(userState)
 
     return (
         <>

@@ -20,7 +20,21 @@ router.post("/register", async (req, res) => {
   }
 });
 
-//Get a user
-router.get("/:id", async () => {});
+//login a user
+router.post("/login", async (req, res) => {
+  User.findOne(
+    {
+      username: req.body.username,
+      password: req.body.password,
+    },
+    (error, user) => {
+      if (error) {
+        res.json(error);
+      } else {
+        res.json(user);
+      }
+    }
+  );
+});
 
 module.exports = router;

@@ -3,12 +3,15 @@ import ReactDOM from 'react-dom'
 import './index.css'
 import { BrowserRouter } from 'react-router-dom'
 import { FoodApp } from './FoodApp'
+import { RecoilRoot } from 'recoil'
 
 ReactDOM.render(
     <React.StrictMode>
-        <BrowserRouter>
-            <FoodApp />
-        </BrowserRouter>
+        <RecoilRoot>
+            <BrowserRouter>
+                <FoodApp />
+            </BrowserRouter>
+        </RecoilRoot>
     </React.StrictMode>,
     document.getElementById('root')
 )

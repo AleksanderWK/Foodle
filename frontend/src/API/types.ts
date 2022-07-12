@@ -1,0 +1,54 @@
+export interface RegisterValues {
+    username: string
+    email: string
+    password: string
+}
+
+export interface Credentials {
+    username: string
+    password: string
+}
+
+export interface Grocery {
+    Matvare: string
+    Vann: string
+    Kilojoule: string
+    Kilokalorier: string
+    Fett: string
+    Mettet: string
+    Trans: string
+    Enumettet: string
+    Flerumettet: string
+    'Omega-3': string
+    'Omega-6': string
+    Kolesterol: string
+    Karbohydrat: string
+    Stivelse: string
+    'Tilsatt sukker': string
+    Kostfiber: string
+    Protein: string
+    Salt: string
+    Alkohol: string
+    'Vitamin A': string
+    Retinol: string
+    'Beta-karoten': string
+    'Vitamin D': string
+    'Vitamin E': string
+    Tiamin: string
+    Riboflavin: string
+    Niacin: string
+    'Vitamin B6': string
+    Folat: string
+    'Vitamin B12': string
+    'Vitamin C': string
+    Kalsium: string
+    Jern: string
+    Natrium: string
+    Kalium: string
+    Magnesium: string
+    Sink: string
+    Selen: string
+    Kopper: string
+    Fosfor: string
+    Jod: string
+}

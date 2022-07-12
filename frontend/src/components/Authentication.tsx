@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
-import { registerUser, User } from '../api/main'
+import { loginUser, registerUser } from '../api/main'
+import { Credentials, RegisterValues } from '../api/types'
+import { User } from '../state/user'
 import styles from './Authentication.module.scss'
 import { Button } from './common/Button'
 import { Input } from './common/Input'
@@ -7,6 +9,8 @@ import dashboardIllustration from '../assets/dashboard.svg'
 import { UserOutlined, LockOutlined, MailOutlined } from '@ant-design/icons'
 import { Feedback, FeedbackTypes } from './common/Feedback'
 import classNames from 'classnames'
+import { useSetRecoilState } from 'recoil'
+import { userState } from '../state/user'
 
 export enum AuthenticationTabs {
     LOGIN = 'Logg inn',
@@ -28,6 +32,7 @@ export const Authentication: React.FunctionComponent = () => {
         password2: '',
     })
     const [feedback, setFeedback] = useState<null | Feedback>()
+    const setUserState = useSetRecoilState(userState)
 
     const onInputChanged = (
         type: AuthenticationTabs,
@@ -55,8 +60,21 @@ export const Authentication: React.FunctionComponent = () => {
         setFeedback(null)
     }
 
-    const submitLoginForm = () => {
-        console.log(loginValues)
+    const submitLoginForm = async () => {
+        setFeedback(null)
+        const credentials: Credentials = {
+            username: loginValues.username,
+            password: loginValues.password,
+        }
+        const result = await loginUser(credentials)
+        if (result != null) {
+            setUserState(result)
+        } else {
+            setFeedback({
+                type: FeedbackTypes.ERROR,
+                message: 'Feil brukernavn eller passord!',
+            })
+        }
     }
 
     const submitRegisterForm = async () => {
@@ -68,7 +86,7 @@ export const Authentication: React.FunctionComponent = () => {
             })
         } else {
             setFeedback(null)
-            const user: User = {
+            const user: RegisterValues = {
                 username: registerValues.username,
                 password: registerValues.password1,
                 email: registerValues.email,
