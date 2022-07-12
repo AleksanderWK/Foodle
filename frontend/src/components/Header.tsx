@@ -1,4 +1,5 @@
 import classNames from 'classnames'
+import { useState } from 'react'
 import { NavLink } from 'react-router-dom'
 import { useSetRecoilState } from 'recoil'
 import { userState } from '../state/user'
@@ -55,25 +56,38 @@ export const Header: React.FC<HeaderProps> = ({
     currentTab,
 }: HeaderProps) => {
     const setUserState = useSetRecoilState(userState)
+    const [isLogout, setIsLogout] = useState<boolean>(false)
+
+    const logout = () => {
+        setIsLogout(true)
+        setTimeout(() => setUserState(null), 450)
+    }
 
     return (
-        <div className={styles.header}>
-            <div className={styles.title}>Foodle</div>
-            <div className={styles.headerItemsContainer}>
-                {headerItems.map((item) => (
-                    <HeaderItem
-                        key={item.navName}
-                        headerItemProps={{
-                            navName: item.navName,
-                        }}
-                        headerFunctionProps={{ onHeaderItemClick }}
-                        currentTab={currentTab}
-                    />
-                ))}
+        <div
+            className={classNames(
+                styles.headerContainer,
+                isLogout && styles.logout
+            )}
+        >
+            <div className={styles.header}>
+                <div className={styles.title}>Foodle</div>
+                <div className={styles.headerItemsContainer}>
+                    {headerItems.map((item) => (
+                        <HeaderItem
+                            key={item.navName}
+                            headerItemProps={{
+                                navName: item.navName,
+                            }}
+                            headerFunctionProps={{ onHeaderItemClick }}
+                            currentTab={currentTab}
+                        />
+                    ))}
+                </div>
+                <Button onClick={() => logout()} type={'Secondary'}>
+                    Logg ut
+                </Button>
             </div>
-            <Button onClick={() => setUserState(null)} type={'Secondary'}>
-                Logg ut
-            </Button>
         </div>
     )
 }
