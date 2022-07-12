@@ -1,9 +1,8 @@
 import React, { useState } from 'react'
-import { getGroceries, Grocery, registerUser, User } from '../API/main'
+import { registerUser, User } from '../api/main'
 import styles from './Authentication.module.scss'
 import { Button } from './common/Button'
 import { Input } from './common/Input'
-import { Header, HeaderItemProps } from './Header'
 import dashboardIllustration from '../assets/dashboard.svg'
 import { UserOutlined, LockOutlined, MailOutlined } from '@ant-design/icons'
 import { Feedback, FeedbackTypes } from './common/Feedback'
@@ -28,10 +27,7 @@ export const Authentication: React.FunctionComponent = () => {
         password1: '',
         password2: '',
     })
-    const [feedback, setFeedback] = useState<null | Feedback>(/**{
-        type: FeedbackTypes.INFORMATION,
-        message: 'HEI',
-    }*/)
+    const [feedback, setFeedback] = useState<null | Feedback>()
 
     const onInputChanged = (
         type: AuthenticationTabs,
@@ -54,11 +50,16 @@ export const Authentication: React.FunctionComponent = () => {
         }
     }
 
+    const switchTab = (tab: AuthenticationTabs) => {
+        setCurrentTab(tab)
+        setFeedback(null)
+    }
+
     const submitLoginForm = () => {
         console.log(loginValues)
     }
 
-    const submitRegisterForm = () => {
+    const submitRegisterForm = async () => {
         if (registerValues.password1 != registerValues.password2) {
             console.log('ERROR PASSORD MATCHER IKKE')
             setFeedback({
@@ -72,9 +73,17 @@ export const Authentication: React.FunctionComponent = () => {
                 password: registerValues.password1,
                 email: registerValues.email,
             }
-            registerUser(user).then((response) => {
-                console.log(response)
-            })
+            if ((await registerUser(user)) != null) {
+                setFeedback({
+                    type: FeedbackTypes.SUCCESS,
+                    message: 'Bruker opprettet!',
+                })
+            } else {
+                setFeedback({
+                    type: FeedbackTypes.INFORMATION,
+                    message: 'Det skjedde en feil ved opprettelse av bruker.',
+                })
+            }
         }
     }
 
@@ -201,7 +210,7 @@ export const Authentication: React.FunctionComponent = () => {
                     <Button
                         onClick={() =>
                             currentTab == AuthenticationTabs.LOGIN
-                                ? setCurrentTab(AuthenticationTabs.REGISTER)
+                                ? switchTab(AuthenticationTabs.REGISTER)
                                 : submitRegisterForm()
                         }
                         type={
@@ -215,7 +224,7 @@ export const Authentication: React.FunctionComponent = () => {
                     <Button
                         onClick={() =>
                             currentTab == AuthenticationTabs.REGISTER
-                                ? setCurrentTab(AuthenticationTabs.LOGIN)
+                                ? switchTab(AuthenticationTabs.LOGIN)
                                 : submitLoginForm()
                         }
                         type={

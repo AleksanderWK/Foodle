@@ -50,14 +50,22 @@ export interface Grocery {
     Jod: string
 }
 
-export const registerUser = async (user: User) => {
-    await fetch(PATH.concat('/users/register'), {
+export const registerUser = async (user: User): Promise<User | null> => {
+    return await fetch(PATH.concat('/users/register'), {
         method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
         body: JSON.stringify(user),
-    }).then((response) => {
-        console.log(response)
-        return response.json()
     })
+        .then((response) => {
+            if (response.ok) {
+                return response.json()
+            } else return null
+        })
+        .then((response) => {
+            return response
+        })
 }
 
 export const getGroceries = async () => {
