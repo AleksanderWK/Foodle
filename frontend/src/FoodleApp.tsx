@@ -1,13 +1,54 @@
-import { useState } from 'react'
-import { Outlet, Route, Routes } from 'react-router-dom'
-import { useRecoilValue } from 'recoil'
-import { Authentication, AuthenticationTabs } from './components/Authentication'
-import { Header } from './components/Header'
+import { ChangeEvent, useEffect, useState } from 'react'
+import {
+    Outlet,
+    Route,
+    Routes,
+    useLocation,
+    useNavigate,
+} from 'react-router-dom'
+import { useRecoilState } from 'recoil'
+import { Authentication } from './components/Authentication'
+import { Input } from './components/common/Input'
+import { Header, HeaderItemProps } from './components/Header'
 import styles from './food.module.scss'
 import { userState } from './state/user'
 
 export const FoodleApp: React.FunctionComponent = () => {
-    const user = useRecoilValue(userState)
+    const [user, setUserState] = useRecoilState(userState)
+    const [currentTab, setCurrentTab] = useState('Hjem')
+    const navigate = useNavigate()
+    const location = useLocation()
+
+    const headerItems: HeaderItemProps[] = [
+        {
+            navName: 'Hjem',
+        },
+        {
+            navName: 'Kjøleskap',
+        },
+        {
+            navName: 'Kjøkken',
+        },
+        {
+            navName: 'Profil',
+        },
+    ]
+
+    const onHeaderItemClicked = (navName: string) => {
+        setCurrentTab(navName)
+    }
+
+    useEffect(() => {
+        if (location.pathname == '/') {
+            setUserState(null)
+        }
+    }, [location])
+
+    useEffect(() => {
+        if (user) {
+            navigate('/hjem', { replace: true })
+        } else navigate('/', { replace: true })
+    }, [user])
 
     return (
         <>
@@ -16,21 +57,18 @@ export const FoodleApp: React.FunctionComponent = () => {
                     <Route
                         path="/"
                         element={
-                            <>
+                            <div className={styles.pageContainer}>
                                 <Header
-                                    headerItems={[]}
-                                    onHeaderItemClick={function (
-                                        navName: AuthenticationTabs,
-                                        navLink?: string | undefined
-                                    ): void {
-                                        throw new Error(
-                                            'Function not implemented.'
-                                        )
-                                    }}
-                                    currentTab={''}
-                                />{' '}
-                                <Outlet />
-                            </>
+                                    headerItems={headerItems}
+                                    currentTab={currentTab}
+                                    onHeaderItemClick={onHeaderItemClicked}
+                                />
+                                <div className={styles.pageSectionBackdrop}>
+                                    <div className={styles.pageSection}>
+                                        <Outlet />
+                                    </div>
+                                </div>
+                            </div>
                         }
                     >
                         <Route path="hjem" element={'Hjem'} />
