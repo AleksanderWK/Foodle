@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { ChangeEvent, useEffect, useState } from 'react'
 import {
     Outlet,
     Route,
@@ -8,6 +8,7 @@ import {
 } from 'react-router-dom'
 import { useRecoilState } from 'recoil'
 import { Authentication } from './components/Authentication'
+import { Input } from './components/common/Input'
 import { Header, HeaderItemProps } from './components/Header'
 import styles from './food.module.scss'
 import { userState } from './state/user'
@@ -62,7 +63,11 @@ export const FoodleApp: React.FunctionComponent = () => {
                                     currentTab={currentTab}
                                     onHeaderItemClick={onHeaderItemClicked}
                                 />
-                                <Outlet />
+                                <div className={styles.pageSectionBackdrop}>
+                                    <div className={styles.pageSection}>
+                                        <Outlet />
+                                    </div>
+                                </div>
                             </div>
                         }
                     >
