@@ -3,7 +3,7 @@
 .groceryContainer {
     position: relative;
     background-color: white;
-    height: 100px;
+    max-height: 50px;
     display: flex;
     justify-content: space-between;
     align-items: center;

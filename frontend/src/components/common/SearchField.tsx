@@ -40,7 +40,9 @@ export const SearchField: React.FC<Props> = ({
             )}
             style={
                 searchResult && searchResult.length > 0
-                    ? { height: '400px' }
+                    ? { height: '455px' }
+                    : searchResult != null && searchResult.length == 0
+                    ? { height: '110px' }
                     : { height: '55px' }
             }
         >
@@ -74,9 +76,18 @@ export const SearchField: React.FC<Props> = ({
                     <SearchOutlined className={styles.inputButtonIcon} />
                 </Button>
             </span>
-            {searchResult?.map((grocery: Grocery) => (
-                <GroceryItem key={grocery.Matvare} grocery={grocery} />
-            ))}
+            {searchResult && (
+                <>
+                    {searchResult.map((grocery: Grocery) => (
+                        <GroceryItem key={grocery.Matvare} grocery={grocery} />
+                    ))}
+                    <div className={styles.information}>
+                        {searchResult.length > 0
+                            ? 'Ingen flere resultater'
+                            : 'Ingen resultater'}
+                    </div>
+                </>
+            )}
         </div>
     )
 }
