@@ -51,7 +51,9 @@ $size-spacing-3: 30px;
 }
 
 .pageSection {
-    padding-top: 80px;
+    padding-top: calc(80px + $size-spacing-3);
+    display: flex;
+    justify-content: center;
     width: 100%;
     height: auto;
     background-color: $secondary;

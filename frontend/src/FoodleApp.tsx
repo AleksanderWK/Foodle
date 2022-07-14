@@ -9,9 +9,17 @@ import {
 import { useRecoilState } from 'recoil'
 import { Authentication } from './components/Authentication'
 import { Input } from './components/common/Input'
+import { SearchField } from './components/common/SearchField'
 import { Header, HeaderItemProps } from './components/Header'
 import styles from './food.module.scss'
 import { userState } from './state/user'
+
+export const LocationToNavNameMap: Record<string, string> = {
+    Hjem: 'Hjem',
+    Kjokken: 'Kjøkken',
+    Kjoleskap: 'Kjøleskap',
+    Profil: 'Profil',
+}
 
 export const FoodleApp: React.FunctionComponent = () => {
     const [user, setUserState] = useRecoilState(userState)
@@ -24,10 +32,10 @@ export const FoodleApp: React.FunctionComponent = () => {
             navName: 'Hjem',
         },
         {
-            navName: 'Kjøleskap',
+            navName: 'Kjoleskap',
         },
         {
-            navName: 'Kjøkken',
+            navName: 'Kjokken',
         },
         {
             navName: 'Profil',
@@ -46,7 +54,7 @@ export const FoodleApp: React.FunctionComponent = () => {
 
     useEffect(() => {
         if (user) {
-            navigate('/hjem', { replace: true })
+            navigate('/Hjem', { replace: true })
         } else navigate('/', { replace: true })
     }, [user])
 
@@ -60,7 +68,6 @@ export const FoodleApp: React.FunctionComponent = () => {
                             <div className={styles.pageContainer}>
                                 <Header
                                     headerItems={headerItems}
-                                    currentTab={currentTab}
                                     onHeaderItemClick={onHeaderItemClicked}
                                 />
                                 <div className={styles.pageSectionBackdrop}>
@@ -71,7 +78,16 @@ export const FoodleApp: React.FunctionComponent = () => {
                             </div>
                         }
                     >
-                        <Route path="hjem" element={'Hjem'} />
+                        <Route
+                            path="hjem"
+                            element={
+                                <SearchField
+                                    placeholder={
+                                        'Søk på matvarer eller merker...'
+                                    }
+                                />
+                            }
+                        />
                         <Route path="kjoleskap" element={'Kjøleskap'} />
                         <Route path="kjokken" element={'Kjøkken'} />
                         <Route path="profil" element={'Profil'} />
