@@ -1,7 +1,8 @@
 import classNames from 'classnames'
 import { useState } from 'react'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useLocation } from 'react-router-dom'
 import { useSetRecoilState } from 'recoil'
+import { LocationToNavNameMap } from '../FoodleApp'
 import { userState } from '../state/user'
 import { Button } from './common/Button'
 import styles from './Header.module.scss'
@@ -17,10 +18,11 @@ interface HeaderFunctionProps {
 interface Props {
     headerItemProps: HeaderItemProps
     headerFunctionProps: HeaderFunctionProps
-    currentTab: string
 }
 
 const HeaderItem: React.FC<Props> = (props: Props) => {
+    const currentTab = useLocation()
+
     return (
         <NavLink
             className={styles.headerItem}
@@ -29,13 +31,14 @@ const HeaderItem: React.FC<Props> = (props: Props) => {
                     props.headerItemProps.navName
                 )
             }
-            to={props.headerItemProps.navName.replaceAll('ø', 'o')}
+            to={props.headerItemProps.navName}
         >
-            {props.headerItemProps.navName}
+            {LocationToNavNameMap[props.headerItemProps.navName]}
             <div
                 className={classNames(
                     styles.navIndicator,
-                    props.currentTab == props.headerItemProps.navName
+                    props.headerItemProps.navName ==
+                        currentTab.pathname.slice(1)
                         ? styles.active
                         : styles.inactive
                 )}
@@ -47,13 +50,11 @@ const HeaderItem: React.FC<Props> = (props: Props) => {
 interface HeaderProps {
     headerItems: HeaderItemProps[]
     onHeaderItemClick: (navName: string) => void
-    currentTab: string
 }
 
 export const Header: React.FC<HeaderProps> = ({
     headerItems,
     onHeaderItemClick,
-    currentTab,
 }: HeaderProps) => {
     const setUserState = useSetRecoilState(userState)
     const [isLogout, setIsLogout] = useState<boolean>(false)
@@ -80,7 +81,6 @@ export const Header: React.FC<HeaderProps> = ({
                                 navName: item.navName,
                             }}
                             headerFunctionProps={{ onHeaderItemClick }}
-                            currentTab={currentTab}
                         />
                     ))}
                 </div>

@@ -1,0 +1,100 @@
+@use '../../food.module.scss';
+
+$input-button-width: 75px;
+
+.searchContainer {
+    position: relative;
+    width: 60%;
+    height: 50px;
+    background-color: white;
+    border-radius: food.$size-spacing-3;
+    transition: height 400ms;
+    display: flex;
+    flex-direction: column;
+
+    &.hasResults {
+        overflow-y: scroll;
+        box-shadow: 0px 0px 10px 5px rgba(0, 0, 0, 0.15);
+    }
+}
+
+.inputWrapper {
+    z-index: 1;
+    background-color: white;
+    box-shadow: 0px 0px 10px 5px rgba(0, 0, 0, 0.15);
+    position: sticky;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 55px;
+    border-radius: food.$size-spacing-3;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: food.$text;
+}
+.input {
+    padding: food.$size-spacing-1;
+    padding-right: $input-button-width + 40px;
+    padding-left: 20px;
+    border: none;
+    height: 35px;
+    width: 100%;
+    border-radius: food.$size-spacing-3;
+    font-weight: bold;
+    caret-color: food.$text;
+
+    &::placeholder {
+        color: food.$placeholder;
+    }
+
+    &:focus {
+        outline: none;
+        border: none;
+        resize: none;
+    }
+
+    &.error {
+        box-shadow: 0px 0px 10px 5px rgba(255, 99, 99);
+    }
+}
+
+.inputButton {
+    position: absolute;
+    right: 5px;
+    align-self: center;
+    width: $input-button-width;
+    height: 85%;
+    border-radius: food.$size-spacing-3;
+}
+
+.inputButtonIcon {
+    & > svg {
+        width: 21px;
+        height: 21px;
+        fill: white;
+    }
+}
+
+.closeIcon {
+    position: absolute;
+    right: calc($input-button-width + 15px);
+
+    & > svg {
+        fill: food.$primary-200;
+        width: 15px;
+        height: 15px;
+    }
+}
+
+.information {
+    height: 55px;
+    padding: food.$size-spacing-1;
+    padding-left: food.$size-spacing-2;
+    padding-right: food.$size-spacing-2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-style: italic;
+    font-size: small;
+}

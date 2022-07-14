@@ -14,14 +14,14 @@
         background-color: food.$primary-100;
 
         &.secondary {
-            border: solid 3px food.$primary-100;
+            outline: solid 3px food.$primary-100;
             color: food.$primary-100;
         }
     }
 
     &.secondary {
         background-color: white;
-        border: solid 3px food.$primary-200;
+        outline: solid 3px food.$primary-200;
         color: food.$primary-200;
     }
 }
