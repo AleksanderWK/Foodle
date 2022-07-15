@@ -1,8 +1,10 @@
 const express = require("express");
+const ShoppingList = require("../models/ShoppingList");
 const User = require("../models/User");
 const router = express.Router();
 
-//Register a user
+// /users
+
 router.post("/register", async (req, res) => {
   // retrieve data from request and make object
   const user = new User({
@@ -13,14 +15,25 @@ router.post("/register", async (req, res) => {
 
   // save object in db and respond
   try {
-    const savedUser = await user.save();
+    // save user
+    let savedUser = await user.save();
+
+    // create and save shoppinglist
+    const shoppinglist = new ShoppingList({
+      owner: savedUser._id,
+    });
+    const savedshl = await shoppinglist.save();
+
+    // update saved user with shoppinglist id and save again
+    savedUser.shoppinglist = savedshl._id;
+    savedUser = await savedUser.save();
+
     res.json(savedUser);
   } catch (error) {
     res.json({ message: error });
   }
 });
 
-//login a user
 router.post("/login", async (req, res) => {
   User.findOne(
     {
@@ -35,6 +48,12 @@ router.post("/login", async (req, res) => {
       }
     }
   );
+});
+
+router.get("/:username/shoppinglist", async (req, res) => {
+  User.find({ username: req.params.username })
+    .populate("shoppinglist")
+    .then((user) => res.json(user));
 });
 
 module.exports = router;

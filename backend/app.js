@@ -4,23 +4,25 @@ const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const port = 3001;
 require("dotenv/config");
-
 const cors = require("cors");
+
+// MIDDLEWARE
 const corsOptions = {
   origin: "*",
   credentials: true,
   optionSuccessStatus: 200,
 };
 app.use(cors(corsOptions));
-
-const usersRoute = require("./routes/users");
-const groceriesRoute = require("./routes/groceries");
-
 app.use(bodyParser.json());
 
-app.use("/users", usersRoute);
+// ROUTES
+const usersRoute = require("./routes/users");
+const groceriesRoute = require("./routes/groceries");
+const shoppinglistRoute = require("./routes/shoppinglists");
 
+app.use("/users", usersRoute);
 app.use("/groceries", groceriesRoute);
+app.use("/shoppinglists", shoppinglistRoute);
 
 //CONNECT TO MONGODB
 mongoose.connect(process.env.MONGODB_URI, () => {
