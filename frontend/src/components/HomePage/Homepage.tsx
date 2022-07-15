@@ -33,9 +33,7 @@ export const Homepage: React.FC<Props> = () => {
         <div className={styles.homepageContainer}>
             <SearchField placeholder={'Søk på matvarer eller merker...'} />
             <Slideshow />
-            <Card className={styles.contentContainer}>
-                <ShoppingList />
-            </Card>
+            <ShoppingList />
         </div>
     )
 }

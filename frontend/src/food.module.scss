@@ -5,7 +5,9 @@ $font-text: 'Inter', sans-serif;
 
 $primary-200: hsl(243, 100%, 69%);
 $primary-100: hsl(243, 100%, 74%);
+$primary-50: rgba(105, 97, 255, 0.5);
 $secondary: hsl(163, 91%, 39%);
+$secondary-100: rgba(9, 190, 139, 0.5);
 $text: #3f3d56;
 $placeholder: #cccccc;
 $alert: #ff6363;
@@ -56,7 +58,7 @@ $size-spacing-3: 30px;
     justify-content: center;
     width: 100%;
     height: auto;
-    background-color: $secondary;
+    background-color: white;
     border-left: solid $border-thickness $border-color;
     border-right: solid $border-thickness $border-color;
 }
