@@ -7,12 +7,15 @@ import {
     useNavigate,
 } from 'react-router-dom'
 import { useRecoilState } from 'recoil'
+import { getUser } from './api/main'
 import { Authentication } from './components/Authentication'
 import { Input } from './components/common/Input'
 import { SearchField } from './components/common/SearchField'
 import { Header, HeaderItemProps } from './components/Header'
+import { Homepage } from './components/HomePage/Homepage'
+import { Slideshow } from './components/HomePage/Slideshow'
 import styles from './food.module.scss'
-import { userState } from './state/user'
+import { User, userState } from './state/user'
 
 export const LocationToNavNameMap: Record<string, string> = {
     Hjem: 'Hjem',
@@ -78,16 +81,7 @@ export const FoodleApp: React.FunctionComponent = () => {
                             </div>
                         }
                     >
-                        <Route
-                            path="hjem"
-                            element={
-                                <SearchField
-                                    placeholder={
-                                        'Søk på matvarer eller merker...'
-                                    }
-                                />
-                            }
-                        />
+                        <Route path="hjem" element={<Homepage />} />
                         <Route path="kjoleskap" element={'Kjøleskap'} />
                         <Route path="kjokken" element={'Kjøkken'} />
                         <Route path="profil" element={'Profil'} />

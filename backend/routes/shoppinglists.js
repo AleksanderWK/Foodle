@@ -2,6 +2,17 @@ const express = require("express");
 const ShoppingList = require("../models/ShoppingList");
 const router = express.Router();
 
+// get shoppinglist by user id
+router.get("/:id", async (req, res) => {
+  try {
+    ShoppingList.findOne({ owner: req.params.id })
+      .populate("groceries")
+      .then((shl) => res.json(shl));
+  } catch (error) {
+    res.json({ message: error });
+  }
+});
+
 // add a grocery to a shoppinglist
 router.post("/add", async (req, res) => {
   try {
@@ -13,9 +24,11 @@ router.post("/add", async (req, res) => {
       {
         new: true,
       }
-    ).then((shl) => {
-      res.json(shl);
-    });
+    )
+      .populate("groceries")
+      .then((shl) => {
+        res.json(shl);
+      });
   } catch (error) {
     res.json({ message: error });
   }
@@ -31,14 +44,15 @@ router.post("/delete", async (req, res) => {
     if (index > -1) {
       shl_groceries.splice(index, 1);
     }
-    const updated_shl = await ShoppingList.findByIdAndUpdate(
+    ShoppingList.findByIdAndUpdate(
       req.body.shoppinglistId,
       { groceries: shl_groceries },
       {
         new: true,
       }
-    );
-    res.json(updated_shl);
+    )
+      .populate("groceries")
+      .then((ushl) => res.json(ushl));
   } catch (error) {
     res.json({ message: error });
   }

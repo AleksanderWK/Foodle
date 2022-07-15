@@ -5,6 +5,14 @@ const router = express.Router();
 
 // /users
 
+router.get("/:id", async (req, res) => {
+  try {
+    User.findById(req.params.id).then((user) => res.json(user));
+  } catch (error) {
+    res.json({ message: error });
+  }
+});
+
 router.post("/register", async (req, res) => {
   // retrieve data from request and make object
   const user = new User({
@@ -35,19 +43,14 @@ router.post("/register", async (req, res) => {
 });
 
 router.post("/login", async (req, res) => {
-  User.findOne(
-    {
+  try {
+    User.findOne({
       username: req.body.username,
       password: req.body.password,
-    },
-    (error, user) => {
-      if (error) {
-        res.json(error);
-      } else {
-        res.json(user);
-      }
-    }
-  );
+    }).then((user) => res.json(user));
+  } catch (error) {
+    res.json(error);
+  }
 });
 
 router.get("/:username/shoppinglist", async (req, res) => {

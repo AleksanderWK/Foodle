@@ -10,6 +10,7 @@ export interface Credentials {
 }
 
 export interface Grocery {
+    _id: string
     Matvare: string
     Vann: string
     Kilojoule: string
