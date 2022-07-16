@@ -1,0 +1,7 @@
+@use '../../food.module.scss';
+
+.icon {
+    &.disabled {
+        opacity: 0.5;
+    }
+}

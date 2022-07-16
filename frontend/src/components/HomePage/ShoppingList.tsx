@@ -11,15 +11,19 @@ import { Checkbox } from '../common/Checkbox'
 interface Props {
     grocery: Grocery
     onRemove: (id: string) => void
+    onAddToKjoleskap: (groceryId: string, checked: boolean) => void
 }
 
-const ShoppingListItem = ({ grocery, onRemove }: Props) => {
+const ShoppingListItem = ({ grocery, onRemove, onAddToKjoleskap }: Props) => {
+    const addItemToKjoleskap = (checked: boolean) => {
+        onAddToKjoleskap(grocery._id, checked)
+    }
+
     return (
         <tr className={styles.listItem}>
             <td>{grocery.Matvare}</td>
-            <td>1</td>
             <td>
-                <Checkbox />
+                <Checkbox onCheck={addItemToKjoleskap} />
             </td>
             <Button
                 onClick={() => onRemove(grocery._id)}
@@ -42,19 +46,19 @@ export const ShoppingList: React.FC = () => {
             )
     }
 
-    const addToKjoleskap = (groceryId: string) => {
-        if (shoppingList) {
+    const addToKjoleskap = (groceryId: string, checked: boolean) => {
+        if (shoppingList && checked) {
             // Delete from shoppinglist
-            manageShoppingList('delete', groceryId, shoppingList._id).then(
-                (shl) => setShoppingList(shl)
-            )
+            // manageShoppingList('delete', groceryId, shoppingList._id).then(
+            //     (shl) => setShoppingList(shl)
+            // )
 
             // Add to kjøleskap
             console.log('Added to kjøleskap')
         }
     }
 
-    const columns = ['Beskrivelse', 'Antall', 'Kjøpt']
+    const columns = ['Beskrivelse', 'Kjøpt']
 
     return (
         <Card className={styles.card}>
@@ -64,12 +68,13 @@ export const ShoppingList: React.FC = () => {
                     <table className={styles.table}>
                         <tr>
                             {columns.map((text) => (
-                                <th>{text}</th>
+                                <th key={text}>{text}</th>
                             ))}
                         </tr>
                         {shoppingList &&
                             shoppingList.groceries.map((grocery) => (
                                 <ShoppingListItem
+                                    onAddToKjoleskap={addToKjoleskap}
                                     onRemove={removeFromList}
                                     key={grocery.Matvare}
                                     grocery={grocery}
