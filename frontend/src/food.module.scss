@@ -55,4 +55,26 @@ body {
 
 .footer {
     height: 250px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: $size-spacing-2;
+}
+
+.footerTitle {
+    font-family: $font-title;
+    font-size: 40px;
+}
+.links {
+    display: flex;
+    gap: $size-spacing-2;
+}
+
+.linkIcon {
+    cursor: pointer;
+    & > svg {
+        width: 40px;
+        height: 40px;
+    }
 }

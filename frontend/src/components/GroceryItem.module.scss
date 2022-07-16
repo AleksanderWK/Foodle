@@ -13,14 +13,14 @@
     cursor: pointer;
 
     &.selected {
-        background-color: food.$primary-100;
+        background-color: food.$primary-50;
     }
 
     &:hover {
         .button {
             outline-color: food.$primary-100;
         }
-        background-color: food.$primary-100;
+        background-color: food.$primary-50;
     }
 }
 
