@@ -10,7 +10,6 @@ import { Card } from '../common/Card'
 import { SearchField } from '../common/SearchField'
 import styles from './Homepage.module.scss'
 import { ShoppingList } from './ShoppingList'
-import { Slideshow } from './Slideshow'
 
 interface Props {}
 export const Homepage: React.FC<Props> = () => {
@@ -31,9 +30,11 @@ export const Homepage: React.FC<Props> = () => {
 
     return (
         <div className={styles.homepageContainer}>
-            <SearchField placeholder={'Søk på matvarer eller merker...'} />
-            <Slideshow />
-            <ShoppingList />
+            <div className={styles.shoppinglist}>
+                <ShoppingList />
+            </div>
+
+            <Card className={styles.placeholder} />
         </div>
     )
 }

@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
     Outlet,
     Route,
@@ -7,15 +7,11 @@ import {
     useNavigate,
 } from 'react-router-dom'
 import { useRecoilState } from 'recoil'
-import { getUser } from './api/main'
 import { Authentication } from './components/Authentication'
-import { Input } from './components/common/Input'
-import { SearchField } from './components/common/SearchField'
 import { Header, HeaderItemProps } from './components/Header'
 import { Homepage } from './components/HomePage/Homepage'
-import { Slideshow } from './components/HomePage/Slideshow'
 import styles from './food.module.scss'
-import { User, userState } from './state/user'
+import { userState } from './state/user'
 
 export const LocationToNavNameMap: Record<string, string> = {
     Hjem: 'Hjem',
@@ -68,17 +64,16 @@ export const FoodleApp: React.FunctionComponent = () => {
                     <Route
                         path="/"
                         element={
-                            <div className={styles.pageContainer}>
+                            <>
                                 <Header
                                     headerItems={headerItems}
                                     onHeaderItemClick={onHeaderItemClicked}
                                 />
-                                <div className={styles.pageSectionBackdrop}>
-                                    <div className={styles.pageSection}>
-                                        <Outlet />
-                                    </div>
+                                <div className={styles.pageSection}>
+                                    <Outlet />
                                 </div>
-                            </div>
+                                <div className={styles.footer}></div>
+                            </>
                         }
                     >
                         <Route path="hjem" element={<Homepage />} />

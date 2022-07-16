@@ -5,6 +5,7 @@ import { useSetRecoilState } from 'recoil'
 import { LocationToNavNameMap } from '../FoodleApp'
 import { userState } from '../state/user'
 import { Button } from './common/Button'
+import { SearchField } from './common/SearchField'
 import styles from './Header.module.scss'
 
 export interface HeaderItemProps {
@@ -61,7 +62,7 @@ export const Header: React.FC<HeaderProps> = ({
 
     const logout = () => {
         setIsLogout(true)
-        setTimeout(() => setUserState(null), 450)
+        setTimeout(() => setUserState(null), 500)
     }
 
     return (
@@ -87,6 +88,9 @@ export const Header: React.FC<HeaderProps> = ({
                 <Button onClick={() => logout()} type={'Secondary'}>
                     Logg ut
                 </Button>
+            </div>
+            <div className={styles.searchFieldContainer}>
+                <SearchField placeholder={'Søk på matvarer eller merker...'} />
             </div>
         </div>
     )

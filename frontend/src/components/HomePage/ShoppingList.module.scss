@@ -3,16 +3,17 @@
 .card {
     padding: food.$size-spacing-3;
     width: 100%;
+    height: 100%;
     box-sizing: border-box;
 }
 
 .content {
-    height: 300px;
+    height: 600px;
     overflow-y: scroll;
 }
 
 .noContent {
-    height: 300px;
+    height: 100%;
     font-style: italic;
     display: flex;
     align-items: center;
@@ -23,7 +24,7 @@
 .table {
     table-layout: fixed;
     padding-top: food.$size-spacing-1;
-    width: 97%;
+    width: 90%;
     border-collapse: collapse;
 }
 
