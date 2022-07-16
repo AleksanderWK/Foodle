@@ -1,0 +1,9 @@
+@use '../../food.module.scss';
+
+.card {
+    background-color: white;
+    padding: food.$size-spacing-2;
+    border-radius: food.$size-spacing-3;
+    outline: solid food.$border-color food.$border-thickness;
+    box-shadow: food.$shaodw;
+}

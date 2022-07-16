@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
     Outlet,
     Route,
@@ -8,9 +8,8 @@ import {
 } from 'react-router-dom'
 import { useRecoilState } from 'recoil'
 import { Authentication } from './components/Authentication'
-import { Input } from './components/common/Input'
-import { SearchField } from './components/common/SearchField'
 import { Header, HeaderItemProps } from './components/Header'
+import { Homepage } from './components/HomePage/Homepage'
 import styles from './food.module.scss'
 import { userState } from './state/user'
 
@@ -65,29 +64,19 @@ export const FoodleApp: React.FunctionComponent = () => {
                     <Route
                         path="/"
                         element={
-                            <div className={styles.pageContainer}>
+                            <>
                                 <Header
                                     headerItems={headerItems}
                                     onHeaderItemClick={onHeaderItemClicked}
                                 />
-                                <div className={styles.pageSectionBackdrop}>
-                                    <div className={styles.pageSection}>
-                                        <Outlet />
-                                    </div>
+                                <div className={styles.pageSection}>
+                                    <Outlet />
                                 </div>
-                            </div>
+                                <div className={styles.footer}></div>
+                            </>
                         }
                     >
-                        <Route
-                            path="hjem"
-                            element={
-                                <SearchField
-                                    placeholder={
-                                        'Søk på matvarer eller merker...'
-                                    }
-                                />
-                            }
-                        />
+                        <Route path="hjem" element={<Homepage />} />
                         <Route path="kjoleskap" element={'Kjøleskap'} />
                         <Route path="kjokken" element={'Kjøkken'} />
                         <Route path="profil" element={'Profil'} />

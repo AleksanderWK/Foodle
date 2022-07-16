@@ -46,7 +46,13 @@ export const SearchField: React.FC<Props> = ({
                     : { height: '55px' }
             }
         >
-            <span className={classNames(styles.inputWrapper, className)}>
+            <span
+                className={classNames(
+                    styles.inputWrapper,
+                    className,
+                    searchResult && styles.hasResults
+                )}
+            >
                 <input
                     type={'text'}
                     className={classNames(styles.input, error && styles.error)}

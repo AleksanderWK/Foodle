@@ -4,24 +4,24 @@ $input-button-width: 75px;
 
 .searchContainer {
     position: relative;
-    width: 60%;
+    width: 50%;
     height: 50px;
     background-color: white;
     border-radius: food.$size-spacing-3;
     transition: height 400ms;
     display: flex;
     flex-direction: column;
+    box-shadow: 0px 0px 10px 5px rgba(0, 0, 0, 0.15);
 
     &.hasResults {
         overflow-y: scroll;
-        box-shadow: 0px 0px 10px 5px rgba(0, 0, 0, 0.15);
     }
 }
 
 .inputWrapper {
     z-index: 1;
     background-color: white;
-    box-shadow: 0px 0px 10px 5px rgba(0, 0, 0, 0.15);
+
     position: sticky;
     top: 0;
     left: 0;

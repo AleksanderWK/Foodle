@@ -4,6 +4,9 @@ import { Button } from './common/Button'
 import styles from './GroceryItem.module.scss'
 import { PlusOutlined, MinusOutlined } from '@ant-design/icons'
 import classNames from 'classnames'
+import { shoppingListState } from '../state/shoppinglist'
+import { useRecoilState } from 'recoil'
+import { manageShoppingList } from '../api/main'
 
 interface Props {
     grocery: Grocery
@@ -11,14 +14,23 @@ interface Props {
 
 export const GroceryItem: React.FC<Props> = ({ grocery }: Props) => {
     const [isAdded, setIsAdded] = useState(false)
+    const [shoppingList, setShoppingList] = useRecoilState(shoppingListState)
 
-    const onGroceryAdd = () => {
-        if (!isAdded) {
-            console.log('la til')
-        } else {
-            console.log('tok vekk')
+    const onGroceryClick = () => {
+        if (shoppingList) {
+            if (!isAdded) {
+                manageShoppingList('add', grocery._id, shoppingList._id).then(
+                    (shl) => setShoppingList(shl)
+                )
+            } else {
+                manageShoppingList(
+                    'delete',
+                    grocery._id,
+                    shoppingList._id
+                ).then((shl) => setShoppingList(shl))
+            }
+            setIsAdded((prevState) => !prevState)
         }
-        setIsAdded((prevState) => !prevState)
     }
 
     return (
@@ -27,7 +39,7 @@ export const GroceryItem: React.FC<Props> = ({ grocery }: Props) => {
                 styles.groceryContainer,
                 isAdded && styles.selected
             )}
-            onClick={onGroceryAdd}
+            onClick={onGroceryClick}
         >
             {grocery.Matvare}
             <Button

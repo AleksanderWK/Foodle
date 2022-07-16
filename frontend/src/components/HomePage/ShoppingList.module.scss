@@ -1,0 +1,88 @@
+@use '../../food.module.scss';
+
+.card {
+    padding: food.$size-spacing-3;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+}
+
+.content {
+    height: 600px;
+    overflow-y: scroll;
+}
+
+.noContent {
+    height: 100%;
+    font-style: italic;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: food.$placeholder;
+}
+
+.table {
+    table-layout: fixed;
+    padding-top: food.$size-spacing-1;
+    width: 90%;
+    border-collapse: collapse;
+}
+
+th {
+    text-align: left;
+    &:first-child {
+        width: 60%;
+    }
+    &:not(:first-child) {
+        width: 40%;
+        text-align: center;
+    }
+}
+
+td {
+    align-items: center;
+    &:not(:first-child) {
+        text-align: center;
+    }
+}
+
+.title {
+    font-size: large;
+    font-weight: bold;
+    padding-bottom: food.$size-spacing-3;
+}
+
+.listItem {
+    height: 55px;
+    border-right: solid white 3px;
+    position: relative;
+    cursor: pointer;
+
+    .button {
+        visibility: hidden;
+    }
+    &:hover {
+        .button {
+            visibility: visible;
+        }
+        background-color: food.$primary-50;
+        border-right: solid food.$primary-200 3px;
+    }
+}
+
+.button {
+    position: absolute;
+    top: 10px;
+    right: -21px;
+    width: 35px;
+    height: 35px;
+    border-radius: 40px;
+}
+
+.icon {
+    & > svg {
+        fill: food.$primary-200;
+        width: 15px;
+        height: 15px;
+    }
+}

@@ -1,7 +1,8 @@
 const express = require("express");
-const { Error } = require("mongoose");
 const Grocery = require("../models/Grocery");
 const router = express.Router();
+
+// /groceries
 
 router.get("/", async (req, res) => {
   try {
