@@ -12,6 +12,7 @@ import { Header, HeaderItemProps } from './components/Header'
 import { Homepage } from './components/HomePage/Homepage'
 import styles from './food.module.scss'
 import { userState } from './state/user'
+import { GithubFilled, LinkedinFilled } from '@ant-design/icons'
 
 export const LocationToNavNameMap: Record<string, string> = {
     Hjem: 'Hjem',
@@ -72,7 +73,32 @@ export const FoodleApp: React.FunctionComponent = () => {
                                 <div className={styles.pageSection}>
                                     <Outlet />
                                 </div>
-                                <div className={styles.footer}></div>
+                                <div className={styles.footer}>
+                                    <div className={styles.footerTitle}>
+                                        Foodle
+                                    </div>
+                                    <div className={styles.links}>
+                                        <GithubFilled
+                                            className={styles.linkIcon}
+                                            onClick={() => {
+                                                window.location.replace(
+                                                    'https://github.com/AleksanderWK'
+                                                )
+                                            }}
+                                        />
+                                        <LinkedinFilled
+                                            className={styles.linkIcon}
+                                            onClick={() => {
+                                                window.location.replace(
+                                                    'https://www.linkedin.com/in/aleksawk/'
+                                                )
+                                            }}
+                                        />
+                                    </div>
+                                    <div className={styles.credits}>
+                                        Aleksander W. Karlsen, 2022
+                                    </div>
+                                </div>
                             </>
                         }
                     >
