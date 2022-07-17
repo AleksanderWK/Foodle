@@ -13,6 +13,7 @@ import { Homepage } from './components/HomePage/Homepage'
 import styles from './food.module.scss'
 import { userState } from './state/user'
 import { GithubFilled, LinkedinFilled } from '@ant-design/icons'
+import { ExpandingContainer } from './components/KitchenPage/ExpandingContainer'
 
 export const LocationToNavNameMap: Record<string, string> = {
     Hjem: 'Hjem',
@@ -104,7 +105,10 @@ export const FoodleApp: React.FunctionComponent = () => {
                     >
                         <Route path="hjem" element={<Homepage />} />
                         <Route path="kjoleskap" element={'Kjøleskap'} />
-                        <Route path="kjokken" element={'Kjøkken'} />
+                        <Route
+                            path="kjokken"
+                            element={<ExpandingContainer />}
+                        />
                         <Route path="profil" element={'Profil'} />
                         <Route path="*" element={'404 not found'} />
                     </Route>

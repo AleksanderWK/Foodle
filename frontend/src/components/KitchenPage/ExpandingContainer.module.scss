@@ -1,0 +1,90 @@
+@use '../../food.module.scss';
+
+.container {
+    width: 60px;
+    border-radius: 30px;
+    background-color: food.$primary-200;
+    box-shadow: food.$shadow;
+    cursor: pointer;
+    height: 60px;
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    transition: height 300ms ease-in, width 300ms ease-in,
+        background-color 300ms ease-in;
+
+    &.expanded {
+        background-color: white;
+        width: 450px;
+        height: 75vh;
+        cursor: auto;
+    }
+}
+
+.content {
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    padding: food.$size-spacing-2 food.$size-spacing-2 60px food.$size-spacing-2;
+    display: flex;
+    flex-direction: column;
+    gap: food.$size-spacing-2;
+
+    &.hidden {
+        visibility: hidden;
+    }
+}
+
+.title {
+    padding-left: 10px;
+    padding-bottom: 5px;
+    border-bottom: solid 1px black;
+}
+
+.groceriesList {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.noGroceries {
+    height: 100%;
+    padding: 50px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: food.$size-spacing-3;
+    font-style: italic;
+    color: food.$placeholder;
+}
+
+.searchIcon {
+    & > svg {
+        fill: food.$placeholder;
+        width: 40px;
+        height: 40px;
+    }
+}
+
+.icon {
+    position: absolute;
+    transition: position 300ms ease-in, transform ease-in 300ms,
+        fill 300ms ease-in;
+    bottom: 20.5px;
+    right: 20.5px;
+    & > svg {
+        fill: white;
+        width: 20px;
+        height: 20px;
+    }
+
+    &.expanded {
+        & > svg {
+            fill: food.$primary-200;
+        }
+
+        transform: rotate(45deg);
+        cursor: pointer;
+    }
+}
