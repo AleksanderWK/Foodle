@@ -10,18 +10,13 @@
     padding: food.$size-spacing-1;
     padding-left: food.$size-spacing-2;
     padding-right: food.$size-spacing-2;
-    cursor: pointer;
+}
 
-    &.selected {
-        background-color: food.$primary-50;
-    }
-
-    &:hover {
-        .button {
-            outline-color: food.$primary-100;
-        }
-        background-color: food.$primary-50;
-    }
+.optionsGroup {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: food.$size-spacing-2;
 }
 
 .button {
@@ -30,9 +25,17 @@
 }
 
 .icon {
-    & > svg {
+    & > * {
         fill: food.$primary-200;
-        width: 15px;
-        height: 15px;
     }
+
+    &:hover {
+        & > * {
+            fill: food.$primary-100;
+        }
+    }
+
+    cursor: pointer;
+    width: 35px;
+    height: 35px;
 }

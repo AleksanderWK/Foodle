@@ -1,25 +1,85 @@
-import React, { ChangeEvent, useState } from 'react'
+import React, { useState } from 'react'
 import styles from './ExpandingContainer.module.scss'
 import { PlusOutlined, SearchOutlined } from '@ant-design/icons'
 import classNames from 'classnames'
 import { Input } from '../common/Input'
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 import { Button } from '../common/Button'
-import { useRecoilValue } from 'recoil'
+import { createMeal } from '../../api/kitchen'
+import { currentMealState, mealsState } from '../../state/kitchen'
+import { Icon } from '@iconify/react'
+import { userState } from '../../state/user'
+import { Grocery } from '../../api/types'
+import { CaretDownFilled } from '@ant-design/icons'
 
-interface Props {}
+interface Props {
+    grocery: Grocery
+}
 
-export const ExpandingContainer: React.FC<Props> = () => {
+const MealListItem = ({ grocery }: Props) => {
     const [expanded, setExpanded] = useState(false)
 
-    const [mealData, setMealData] = useState({
-        name: '',
-        groceries: [],
-    })
+    return (
+        <div className={styles.listItem}>
+            <div className={styles.header}>
+                {grocery.Matvare}
+                <CaretDownFilled
+                    className={classNames(
+                        styles.moreInfoIcon,
+                        expanded && styles.expanded
+                    )}
+                    onClick={() => setExpanded((prevState) => !prevState)}
+                />
+            </div>
+
+            <div
+                className={classNames(
+                    styles.nutritionsGroup,
+                    expanded && styles.expanded
+                )}
+            >
+                {'Næringsinnhold (per 100g):'}
+                <ul>
+                    <li>Protein: {grocery.Protein}</li>
+                    <li> Fett: {grocery.Fett}</li>
+                    <li>Karbohydrater: {grocery.Karbohydrat}</li>
+                </ul>
+            </div>
+        </div>
+    )
+}
+
+export const ExpandingContainer: React.FC = () => {
+    const [expanded, setExpanded] = useState(false)
+
+    const setMealsState = useSetRecoilState(mealsState)
+    const user = useRecoilValue(userState)
+    const [currentMeal, setCurrentMeal] = useRecoilState(currentMealState)
 
     const handleMealDataChange = (property: string, value: string) => {
         if (property == 'name') {
-            setMealData((prevState) => ({ ...prevState, [property]: value }))
+            setCurrentMeal((prevState) => ({ ...prevState, [property]: value }))
         }
+    }
+
+    const saveMeal = async () => {
+        if (user) {
+            const newMeal = await createMeal({
+                owner: user._id,
+                mealName: currentMeal.name,
+                groceryIds: currentMeal.groceries.map((grocery) => grocery._id),
+            })
+            console.log(newMeal)
+            setMealsState((prevState) => prevState.concat([newMeal]))
+            setCurrentMeal({
+                name: '',
+                groceries: [],
+            })
+        }
+    }
+
+    const resetMeal = () => {
+        setCurrentMeal({ name: '', groceries: [] })
     }
 
     return (
@@ -39,21 +99,44 @@ export const ExpandingContainer: React.FC<Props> = () => {
                 )}
             >
                 <Input
-                    value={mealData.name}
+                    value={currentMeal.name}
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                         handleMealDataChange('name', e.target.value)
                     }}
                     placeholder={'Ny matrett...'}
                 />
 
-                <div className={styles.title}>Ingredienser</div>
-                <div className={styles.groceriesList}>
-                    <div className={styles.noGroceries}>
-                        Du har ingen ingredienser enda! Bruk søk for å legge til
-                        noen.
-                        <SearchOutlined className={styles.searchIcon} />
-                    </div>
+                <div className={styles.title}>
+                    Ingredienser
+                    <Icon icon="mdi:food-drumstick-outline" />
                 </div>
+                <div className={styles.groceriesList}>
+                    {currentMeal.groceries.length > 0 ? (
+                        currentMeal.groceries.map((grocery) => (
+                            <MealListItem key={grocery._id} grocery={grocery} />
+                        ))
+                    ) : (
+                        <div className={styles.noGroceries}>
+                            Du har ingen ingredienser enda! Bruk søk for å legge
+                            til noen.
+                            <SearchOutlined className={styles.searchIcon} />
+                        </div>
+                    )}
+                </div>
+                <Button
+                    onClick={() => saveMeal()}
+                    type={'Primary'}
+                    className={styles.saveButton}
+                >
+                    Lagre
+                </Button>
+                <Button
+                    onClick={() => resetMeal()}
+                    type={'Secondary'}
+                    className={styles.resetButton}
+                >
+                    Nullstill
+                </Button>
             </div>
 
             <PlusOutlined

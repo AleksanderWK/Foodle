@@ -19,10 +19,12 @@ app.use(bodyParser.json());
 const usersRoute = require("./routes/users");
 const groceriesRoute = require("./routes/groceries");
 const shoppinglistRoute = require("./routes/shoppinglists");
+const mealsRoute = require("./routes/meals");
 
 app.use("/users", usersRoute);
 app.use("/groceries", groceriesRoute);
 app.use("/shoppinglists", shoppinglistRoute);
+app.use("/meals", mealsRoute);
 
 //CONNECT TO MONGODB
 mongoose.connect(process.env.MONGODB_URI, () => {

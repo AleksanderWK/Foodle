@@ -36,15 +36,23 @@
 }
 
 .title {
-    padding-left: 10px;
     padding-bottom: 5px;
     border-bottom: solid 1px black;
+    display: flex;
+    gap: 5px;
+    & > svg {
+        fill: food.$text;
+        width: 20px;
+        height: 20px;
+    }
 }
 
 .groceriesList {
     height: 100%;
     display: flex;
     flex-direction: column;
+    overflow-y: scroll;
+    margin-bottom: food.$size-spacing-1;
 }
 
 .noGroceries {
@@ -86,5 +94,76 @@
 
         transform: rotate(45deg);
         cursor: pointer;
+    }
+}
+
+.saveButton {
+    background-color: food.$save-200;
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+
+    &:hover {
+        background-color: food.$save-100;
+    }
+}
+
+.resetButton {
+    position: absolute;
+    bottom: 20px;
+    left: 170px;
+}
+
+.listItem {
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    padding-right: 20px;
+}
+
+.header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 55px;
+}
+
+.nutritionsGroup {
+    height: 0px;
+    font-size: small;
+    display: flex;
+    justify-content: space-evenly;
+    flex-direction: column;
+    overflow: hidden;
+    transition: height 200ms ease-out;
+
+    &.expanded {
+        height: 65px;
+    }
+
+    & > ul {
+        margin: 0;
+        margin-top: 5px;
+    }
+}
+
+.moreInfoIcon {
+    cursor: pointer;
+    transition: transform 200ms ease-in-out;
+    & > svg {
+        fill: food.$primary-200;
+        width: 25px;
+        height: 25px;
+    }
+
+    &:hover {
+        & > svg {
+            fill: food.$primary-100;
+        }
+    }
+
+    &.expanded {
+        transform: rotate(180deg);
     }
 }
