@@ -1,7 +1,7 @@
 import { Credentials, Grocery, RegisterValues } from './types'
 import { User } from '../state/user'
 import { ShoppingList } from '../state/shoppinglist'
-const PATH = 'http://localhost:3001'
+export const PATH = 'http://localhost:3001'
 
 export const registerUser = async (
     user: RegisterValues
