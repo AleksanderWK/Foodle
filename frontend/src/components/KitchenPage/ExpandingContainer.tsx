@@ -11,6 +11,7 @@ import { Icon } from '@iconify/react'
 import { userState } from '../../state/user'
 import { Grocery } from '../../api/types'
 import { CaretDownFilled } from '@ant-design/icons'
+import { Feedback, FeedbackTypes } from '../common/Feedback'
 
 interface Props {
     grocery: Grocery
@@ -51,7 +52,7 @@ const MealListItem = ({ grocery }: Props) => {
 
 export const ExpandingContainer: React.FC = () => {
     const [expanded, setExpanded] = useState(false)
-
+    const [feedback, setFeedback] = useState<null | Feedback>()
     const setMealsState = useSetRecoilState(mealsState)
     const user = useRecoilValue(userState)
     const [currentMeal, setCurrentMeal] = useRecoilState(currentMealState)
@@ -74,6 +75,10 @@ export const ExpandingContainer: React.FC = () => {
             setCurrentMeal({
                 name: '',
                 groceries: [],
+            })
+            setFeedback({
+                type: FeedbackTypes.SUCCESS,
+                message: 'Matrett opprettet!',
             })
         }
     }
@@ -122,6 +127,12 @@ export const ExpandingContainer: React.FC = () => {
                             <SearchOutlined className={styles.searchIcon} />
                         </div>
                     )}
+                    {feedback && (
+                        <Feedback
+                            type={FeedbackTypes.SUCCESS}
+                            message={'Matrett lagt til!'}
+                        />
+                    )}
                 </div>
                 <Button
                     onClick={() => saveMeal()}
@@ -143,6 +154,7 @@ export const ExpandingContainer: React.FC = () => {
                 className={classNames(styles.icon, expanded && styles.expanded)}
                 onClick={() => {
                     expanded && setExpanded(false)
+                    setFeedback(null)
                 }}
             />
         </div>

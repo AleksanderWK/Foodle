@@ -16,9 +16,10 @@ export enum FeedbackTypes {
 export interface Feedback {
     type: FeedbackTypes
     message: string
+    className?: string
 }
 
-export const Feedback: React.FC<Feedback> = ({ type, message }) => {
+export const Feedback: React.FC<Feedback> = ({ type, message, className }) => {
     const feedbackTypeToIconMap: Record<string, ReactNode> = {
         Information: <InfoCircleOutlined className={styles.icon} />,
         Error: <AlertOutlined className={styles.icon} />,
@@ -29,6 +30,7 @@ export const Feedback: React.FC<Feedback> = ({ type, message }) => {
         <div
             className={classNames(
                 styles.feedback,
+                className,
                 type == 'Information'
                     ? styles.information
                     : type == 'Error'
