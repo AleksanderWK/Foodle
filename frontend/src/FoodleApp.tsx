@@ -14,6 +14,7 @@ import styles from './food.module.scss'
 import { userState } from './state/user'
 import { GithubFilled, LinkedinFilled } from '@ant-design/icons'
 import { ExpandingContainer } from './components/KitchenPage/ExpandingContainer'
+import classNames from 'classnames'
 
 export const LocationToNavNameMap: Record<string, string> = {
     Hjem: 'Hjem',
@@ -71,7 +72,13 @@ export const FoodleApp: React.FunctionComponent = () => {
                                     headerItems={headerItems}
                                     onHeaderItemClick={onHeaderItemClicked}
                                 />
-                                <div className={styles.pageSection}>
+                                <div
+                                    className={classNames(
+                                        styles.pageSection,
+                                        location.pathname != '/Hjem' &&
+                                            styles.noSearchField
+                                    )}
+                                >
                                     <Outlet />
                                 </div>
                                 <div className={styles.footer}>

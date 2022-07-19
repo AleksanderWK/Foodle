@@ -59,6 +59,7 @@ export const Header: React.FC<HeaderProps> = ({
 }: HeaderProps) => {
     const setUserState = useSetRecoilState(userState)
     const [isLogout, setIsLogout] = useState<boolean>(false)
+    const currentTab = useLocation()
 
     const logout = () => {
         setIsLogout(true)
@@ -89,7 +90,12 @@ export const Header: React.FC<HeaderProps> = ({
                     Logg ut
                 </Button>
             </div>
-            <div className={styles.searchFieldContainer}>
+            <div
+                className={classNames(
+                    styles.searchFieldContainer,
+                    currentTab.pathname != '/Hjem' && styles.hidden
+                )}
+            >
                 <SearchField placeholder={'Søk på matvarer eller merker...'} />
             </div>
         </div>
