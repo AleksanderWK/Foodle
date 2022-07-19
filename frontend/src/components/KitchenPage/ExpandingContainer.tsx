@@ -70,7 +70,6 @@ export const ExpandingContainer: React.FC = () => {
                 mealName: currentMeal.name,
                 groceryIds: currentMeal.groceries.map((grocery) => grocery._id),
             })
-            console.log(newMeal)
             setMealsState((prevState) => prevState.concat([newMeal]))
             setCurrentMeal({
                 name: '',

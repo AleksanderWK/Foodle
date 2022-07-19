@@ -90,7 +90,6 @@ router.post("/send", async (req, res) => {
       )}`,
     };
     transporter.sendMail(mailOptions);
-    console.log(mailOptions);
     res.json({ message: "mail sent!", successful: true });
   } catch (error) {
     res.json({ message: error });

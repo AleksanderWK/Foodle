@@ -27,7 +27,6 @@ export const SearchField: React.FC<Props> = ({
                 query: searchValue,
             }
             const searchResult = await searchGroceries(searchObject)
-            console.log(searchResult)
             setSearchResult(searchResult)
         }
     }
