@@ -4,6 +4,11 @@ export interface RegisterValues {
     password: string
 }
 
+export interface DefaultResponse {
+    message: string
+    successful: boolean
+}
+
 export interface Credentials {
     username: string
     password: string

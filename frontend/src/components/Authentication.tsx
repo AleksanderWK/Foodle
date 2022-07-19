@@ -79,7 +79,6 @@ export const Authentication: React.FunctionComponent = () => {
 
     const submitRegisterForm = async () => {
         if (registerValues.password1 != registerValues.password2) {
-            console.log('ERROR PASSORD MATCHER IKKE')
             setFeedback({
                 type: FeedbackTypes.ERROR,
                 message: 'Passordene er ikke like!',

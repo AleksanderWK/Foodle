@@ -27,7 +27,6 @@ router.post("/search", async (req, res) => {
         },
       });
     });
-    console.log(queries);
     const matchedGroceries = await Grocery.find({ $and: queries });
     res.json(matchedGroceries);
   } catch (error) {

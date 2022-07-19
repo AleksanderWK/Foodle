@@ -6,7 +6,7 @@ import {
     useLocation,
     useNavigate,
 } from 'react-router-dom'
-import { useRecoilState } from 'recoil'
+import { useRecoilState, useRecoilValue } from 'recoil'
 import { Authentication } from './components/Authentication'
 import { Header, HeaderItemProps } from './components/Header'
 import { Homepage } from './components/HomePage/Homepage'
@@ -14,6 +14,8 @@ import styles from './food.module.scss'
 import { userState } from './state/user'
 import { GithubFilled, LinkedinFilled } from '@ant-design/icons'
 import { ExpandingContainer } from './components/KitchenPage/ExpandingContainer'
+import { Feedback, FeedbackTypes } from './components/common/Feedback'
+import { globalFeedbackState } from './state/main'
 
 export const LocationToNavNameMap: Record<string, string> = {
     Hjem: 'Hjem',
@@ -25,6 +27,7 @@ export const LocationToNavNameMap: Record<string, string> = {
 export const FoodleApp: React.FunctionComponent = () => {
     const [user, setUserState] = useRecoilState(userState)
     const [currentTab, setCurrentTab] = useState('Hjem')
+    const feedback = useRecoilValue(globalFeedbackState)
     const navigate = useNavigate()
     const location = useLocation()
 
@@ -73,7 +76,15 @@ export const FoodleApp: React.FunctionComponent = () => {
                                 />
                                 <div className={styles.pageSection}>
                                     <Outlet />
+                                    {feedback && (
+                                        <Feedback
+                                            type={feedback.type}
+                                            message={feedback.message}
+                                            className={styles.globalFeedback}
+                                        />
+                                    )}
                                 </div>
+
                                 <div className={styles.footer}>
                                     <div className={styles.footerTitle}>
                                         Foodle
