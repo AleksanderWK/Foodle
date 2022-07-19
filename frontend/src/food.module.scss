@@ -57,6 +57,13 @@ body {
     &.noSearchField {
         padding-top: calc(65px + $size-spacing-3);
     }
+    position: relative;
+}
+
+.globalFeedback {
+    position: fixed;
+    width: auto;
+    top: calc(100vh - 100px);
 }
 
 .footer {

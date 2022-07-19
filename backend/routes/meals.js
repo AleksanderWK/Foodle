@@ -15,7 +15,6 @@ router.get("/:id", async (req, res) => {
 
 // create meal
 router.post("/create", async (req, res) => {
-  console.log(req.body);
   try {
     const newMeal = new Meal({
       owner: req.body.owner,

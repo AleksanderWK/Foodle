@@ -23,11 +23,6 @@ export const Homepage: React.FC<Props> = () => {
             )
         }
     }, [])
-
-    useEffect(() => {
-        console.log(shoppingList)
-    }, [shoppingList])
-
     return (
         <div className={styles.homepageContainer}>
             <div className={styles.shoppinglist}>
