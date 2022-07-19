@@ -34,9 +34,6 @@ export const FoodleApp: React.FunctionComponent = () => {
             navName: 'Hjem',
         },
         {
-            navName: 'Kjoleskap',
-        },
-        {
             navName: 'Kjokken',
         },
         {
@@ -111,7 +108,6 @@ export const FoodleApp: React.FunctionComponent = () => {
                         }
                     >
                         <Route path="hjem" element={<Homepage />} />
-                        <Route path="kjoleskap" element={'Kjøleskap'} />
                         <Route
                             path="kjokken"
                             element={<ExpandingContainer />}

@@ -194,8 +194,8 @@ export const ExpandingContainer: React.FC = () => {
                             <>
                                 <div className={styles.editName}>
                                     {currentMeal.name == ''
-                                        ? 'Ny matrett'
-                                        : currentMeal.name}
+                                        ? 'Navn: Ny matrett'
+                                        : 'Navn: ' + currentMeal.name}
                                     <EditOutlined
                                         className={styles.headerIcon}
                                         onClick={() =>
