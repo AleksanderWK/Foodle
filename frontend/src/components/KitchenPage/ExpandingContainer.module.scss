@@ -51,7 +51,7 @@
 }
 
 .searchContent {
-    padding: 0;
+    padding: food.$size-spacing-2;
 }
 
 .searchResultContainer {
@@ -211,6 +211,10 @@
 
 .check {
     position: absolute;
+    & > svg {
+        fill: food.$primary-200;
+    }
+
     top: 20px;
     right: 10px;
     cursor: pointer;
