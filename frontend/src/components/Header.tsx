@@ -69,11 +69,18 @@ export const Header: React.FC<HeaderProps> = ({
     return (
         <div
             className={classNames(
-                styles.headerContainer,
+                currentTab.pathname == '/Hjem'
+                    ? styles.headerContainer
+                    : styles.headerContainerNoSearch,
                 isLogout && styles.logout
             )}
         >
-            <div className={styles.header}>
+            <div
+                className={classNames(
+                    styles.header,
+                    currentTab.pathname != '/Hjem' && styles.noSearch
+                )}
+            >
                 <div className={styles.title}>Foodle</div>
                 <div className={styles.headerItemsContainer}>
                     {headerItems.map((item) => (
