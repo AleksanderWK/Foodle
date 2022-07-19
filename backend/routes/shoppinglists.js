@@ -84,14 +84,14 @@ router.post("/send", async (req, res) => {
       from: serviceEmailAddress,
       to: req.body.email,
       subject: "Din Foodle handleliste!",
-      html: `<p>Hei ${username}!, her er handlelisten din: </p> \n ${groceryList.replaceAll(
+      html: `<p>Hei ${username}! Her er handlelisten din: </p> \n ${groceryList.replaceAll(
         ",",
         ""
       )}`,
     };
     transporter.sendMail(mailOptions);
     console.log(mailOptions);
-    res.json({ message: true });
+    res.json({ message: "mail sent!", successful: true });
   } catch (error) {
     res.json({ message: error });
   }

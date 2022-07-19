@@ -2,7 +2,8 @@
 
 .feedback {
     width: 100%;
-    padding: food.$size-spacing-1 0 food.$size-spacing-1 0;
+    padding: food.$size-spacing-2;
+    box-sizing: border-box;
     color: white;
     border-radius: food.$size-spacing-1;
     display: flex;

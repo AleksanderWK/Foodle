@@ -53,6 +53,13 @@ body {
     height: 100vh;
     background-color: white;
     border: solid $border-thickness $border-color;
+    position: relative;
+}
+
+.globalFeedback {
+    position: fixed;
+    width: auto;
+    top: calc(100vh - 100px);
 }
 
 .footer {

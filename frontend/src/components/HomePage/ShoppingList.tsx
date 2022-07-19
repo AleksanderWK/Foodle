@@ -1,4 +1,4 @@
-import { useRecoilState, useRecoilValue } from 'recoil'
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 import { Grocery } from '../../api/types'
 import { shoppingListState } from '../../state/shoppinglist'
 import { Card } from '../common/Card'
@@ -10,6 +10,7 @@ import { Checkbox } from '../common/Checkbox'
 import { userState } from '../../state/user'
 import { Feedback, FeedbackTypes } from '../common/Feedback'
 import { useState } from 'react'
+import { globalFeedbackState } from '../../state/main'
 
 interface Props {
     grocery: Grocery
@@ -42,7 +43,7 @@ const ShoppingListItem = ({ grocery, onRemove, onAddToKjoleskap }: Props) => {
 export const ShoppingList: React.FC = () => {
     const [shoppingList, setShoppingList] = useRecoilState(shoppingListState)
     const user = useRecoilValue(userState)
-    const [feedback, setFeedback] = useState<null | Feedback>()
+    const setGlobalFeedback = useSetRecoilState(globalFeedbackState)
 
     const removeFromList = (groceryId: string) => {
         if (shoppingList)
@@ -55,16 +56,19 @@ export const ShoppingList: React.FC = () => {
         if (user) {
             const response = await sendShoppingList(user)
             if (response.successful) {
-                setFeedback({
-                    message: 'Epost sendt! Sjekk eposten din.',
+                setGlobalFeedback({
+                    message: 'Handleliste sendt! Sjekk eposten din.',
                     type: FeedbackTypes.SUCCESS,
                 })
             } else {
-                setFeedback({
+                setGlobalFeedback({
                     message: 'Det skjedde en feil',
                     type: FeedbackTypes.ERROR,
                 })
             }
+            setTimeout(() => {
+                setGlobalFeedback(null)
+            }, 5000)
         }
     }
 
