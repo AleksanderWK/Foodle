@@ -1,4 +1,4 @@
-import { Credentials, Grocery, RegisterValues } from './types'
+import { Credentials, DefaultResponse, Grocery, RegisterValues } from './types'
 import { User } from '../state/user'
 import { ShoppingList } from '../state/shoppinglist'
 export const PATH = 'http://localhost:3001'
@@ -132,6 +132,26 @@ export const manageShoppingList = async (
             groceryId: groceryId,
             shoppinglistId: shoppinglistId,
         }),
+    })
+        .then((response) => {
+            if (response.ok) {
+                return response.json()
+            } else return null
+        })
+        .then((response) => {
+            return response
+        })
+}
+
+export const sendShoppingList = async (
+    user: User
+): Promise<DefaultResponse> => {
+    return await fetch(PATH.concat(`/shoppinglists/send`), {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(user),
     })
         .then((response) => {
             if (response.ok) {

@@ -23,8 +23,9 @@
 
 .table {
     table-layout: fixed;
+    box-sizing: border-box;
     padding-top: food.$size-spacing-1;
-    width: 90%;
+    width: 95%;
     border-collapse: collapse;
 }
 
@@ -46,10 +47,37 @@ td {
     }
 }
 
+.header {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: food.$size-spacing-3;
+}
+
+.optionsGroup {
+    display: flex;
+    gap: food.$size-spacing-1;
+}
+
+.iconButton {
+    cursor: pointer;
+    & > svg {
+        fill: food.$primary-200;
+        width: 25px;
+        height: 25px;
+    }
+
+    &:hover {
+        & > svg {
+            fill: food.$primary-100;
+        }
+    }
+}
+
 .title {
     font-size: large;
     font-weight: bold;
-    padding-bottom: food.$size-spacing-3;
 }
 
 .listItem {
@@ -84,5 +112,11 @@ td {
         fill: food.$primary-200;
         width: 15px;
         height: 15px;
+    }
+
+    &:hover {
+        & > svg {
+            fill: food.$primary-100;
+        }
     }
 }
