@@ -2,7 +2,7 @@
 
 .container {
     width: 60px;
-    border-radius: 30px;
+    border-radius: food.$size-spacing-3;
     background-color: food.$primary-200;
     box-shadow: food.$shadow;
     cursor: pointer;
@@ -16,8 +16,22 @@
     &.expanded {
         background-color: white;
         width: 450px;
-        height: 75vh;
+        height: 85vh;
         cursor: auto;
+    }
+}
+
+.headerIcon {
+    cursor: pointer;
+    & > svg {
+        height: 20px;
+        width: 20px;
+        fill: food.$primary-200;
+    }
+    &:hover {
+        & > svg {
+            fill: food.$primary-100;
+        }
     }
 }
 
@@ -25,6 +39,7 @@
     width: 100%;
     height: 100%;
     box-sizing: border-box;
+
     padding: food.$size-spacing-2 food.$size-spacing-2 60px food.$size-spacing-2;
     display: flex;
     flex-direction: column;
@@ -35,6 +50,15 @@
     }
 }
 
+.searchContent {
+    padding: 0;
+}
+
+.searchResultContainer {
+    overflow-y: scroll;
+    border-radius: food.$size-spacing-3;
+    height: 80%;
+}
 .title {
     padding-bottom: 5px;
     border-bottom: solid 1px black;
@@ -68,10 +92,17 @@
 }
 
 .searchIcon {
+    cursor: pointer;
     & > svg {
-        fill: food.$placeholder;
-        width: 40px;
-        height: 40px;
+        fill: food.$primary-200;
+        width: 20px;
+        height: 20px;
+    }
+
+    &:hover {
+        & > svg {
+            fill: food.$primary-100;
+        }
     }
 }
 
@@ -97,21 +128,16 @@
     }
 }
 
+.buttonGroup {
+    display: flex;
+    gap: food.$size-spacing-1;
+}
+
 .saveButton {
     background-color: food.$save-200;
-    position: absolute;
-    bottom: 20px;
-    left: 20px;
-
     &:hover {
         background-color: food.$save-100;
     }
-}
-
-.resetButton {
-    position: absolute;
-    bottom: 20px;
-    left: 170px;
 }
 
 .listItem {
@@ -148,6 +174,12 @@
     }
 }
 
+.leftContent {
+    display: flex;
+    gap: food.$size-spacing-1;
+    color: grey;
+}
+
 .moreInfoIcon {
     cursor: pointer;
     transition: transform 200ms ease-in-out;
@@ -166,4 +198,42 @@
     &.expanded {
         transform: rotate(180deg);
     }
+}
+
+.checkInput {
+    width: 100%;
+    position: relative;
+
+    & > span > input {
+        padding-right: 30px;
+    }
+}
+
+.check {
+    position: absolute;
+    top: 20px;
+    right: 10px;
+    cursor: pointer;
+    &:hover {
+        & > svg {
+            fill: food.$primary-100;
+        }
+    }
+}
+
+.information {
+    height: 55px;
+    padding: food.$size-spacing-1;
+    padding-left: food.$size-spacing-2;
+    padding-right: food.$size-spacing-2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-style: italic;
+    font-size: small;
+}
+
+.editName {
+    display: flex;
+    gap: food.$size-spacing-1;
 }

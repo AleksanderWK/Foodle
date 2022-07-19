@@ -70,30 +70,30 @@ export const GroceryItem: React.FC<Props> = ({ grocery }: Props) => {
                     (!isMealAdded ? (
                         <Icon
                             onClick={() => onManageCurrentMeal('add')}
-                            icon="mdi:food-drumstick-outline"
+                            icon="ant-design:plus-outlined"
                             className={styles.icon}
                         />
                     ) : (
                         <Icon
                             onClick={() => onManageCurrentMeal('delete')}
-                            icon="mdi:food-drumstick-off-outline"
+                            icon="ant-design:minus-outlined"
                             className={styles.icon}
                         />
                     ))}
-
-                {!isShoppingListAdded ? (
-                    <Icon
-                        onClick={onShoppingListClick}
-                        icon="carbon:shopping-cart-plus"
-                        className={styles.icon}
-                    />
-                ) : (
-                    <Icon
-                        onClick={onShoppingListClick}
-                        icon="carbon:shopping-cart-minus"
-                        className={styles.icon}
-                    />
-                )}
+                {location.pathname == '/Hjem' &&
+                    (!isShoppingListAdded ? (
+                        <Icon
+                            onClick={onShoppingListClick}
+                            icon="carbon:shopping-cart-plus"
+                            className={styles.icon}
+                        />
+                    ) : (
+                        <Icon
+                            onClick={onShoppingListClick}
+                            icon="carbon:shopping-cart-minus"
+                            className={styles.icon}
+                        />
+                    ))}
             </div>
         </div>
     )

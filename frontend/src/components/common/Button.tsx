@@ -6,7 +6,7 @@ interface Props {
     className?: string
     onClick: () => void
     children?: ReactNode
-    type: 'Primary' | 'Secondary'
+    type: 'Primary' | 'Secondary' | 'Save' | 'Delete'
 }
 
 export const Button: React.FunctionComponent<Props> = ({
@@ -19,7 +19,10 @@ export const Button: React.FunctionComponent<Props> = ({
         <button
             className={classNames(
                 styles.button,
+                type == 'Primary' && styles.primary,
                 type == 'Secondary' && styles.secondary,
+                type == 'Save' && styles.save,
+                type == 'Delete' && styles.delete,
                 className
             )}
             onClick={onClick}
