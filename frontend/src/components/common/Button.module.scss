@@ -4,19 +4,34 @@
     cursor: pointer;
     width: 135px;
     height: 40px;
-    border: none;
-    background-color: food.$primary-200;
-    color: white;
+
     font-weight: bold;
     border-radius: 15px;
 
     &:hover {
-        background-color: food.$primary-100;
-
         &.secondary {
             outline: solid 3px food.$primary-100;
             color: food.$primary-100;
         }
+
+        &.primary {
+            background-color: food.$primary-100;
+        }
+
+        &.delete {
+            outline-color: #ffb1b1;
+            color: #ffb1b1;
+        }
+
+        &.save {
+            background-color: food.$save-100;
+        }
+    }
+
+    &.primary {
+        border: none;
+        background-color: food.$primary-200;
+        color: white;
     }
 
     &.secondary {
@@ -24,5 +39,19 @@
         outline: solid 3px food.$primary-200;
         outline-offset: -3px;
         color: food.$primary-200;
+    }
+
+    &.delete {
+        border: none;
+        outline-offset: -3px;
+        background-color: white;
+        color: #ff7b7b;
+        outline: solid 3px #ff7b7b;
+    }
+
+    &.save {
+        border: none;
+        background-color: food.$save-200;
+        color: white;
     }
 }

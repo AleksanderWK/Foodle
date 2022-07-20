@@ -1,6 +1,11 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import styles from './ExpandingContainer.module.scss'
-import { PlusOutlined, SearchOutlined } from '@ant-design/icons'
+import {
+    PlusOutlined,
+    SearchOutlined,
+    EditOutlined,
+    CheckOutlined,
+} from '@ant-design/icons'
 import classNames from 'classnames'
 import { Input } from '../common/Input'
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
@@ -12,6 +17,8 @@ import { userState } from '../../state/user'
 import { Grocery } from '../../api/types'
 import { CaretDownFilled } from '@ant-design/icons'
 import { Feedback, FeedbackTypes } from '../common/Feedback'
+import { searchGroceries } from '../../api/main'
+import { GroceryItem } from '../GroceryItem'
 
 interface Props {
     grocery: Grocery
@@ -56,10 +63,29 @@ export const ExpandingContainer: React.FC = () => {
     const setMealsState = useSetRecoilState(mealsState)
     const user = useRecoilValue(userState)
     const [currentMeal, setCurrentMeal] = useRecoilState(currentMealState)
+    const [nameInputShowing, setNameInputShowing] = useState(false)
+    const [showSearch, setShowSearch] = useState(false)
+
+    const [searchValue, setSearchValue] = useState<string>('')
+    const [searchResult, setSearchResult] = useState<Grocery[] | null>(null)
 
     const handleMealDataChange = (property: string, value: string) => {
         if (property == 'name') {
             setCurrentMeal((prevState) => ({ ...prevState, [property]: value }))
+        }
+    }
+
+    const search = async (value: string) => {
+        setSearchValue(value)
+        if (value.length > 0) {
+            const searchObject = {
+                query: value,
+            }
+            const searchResult = await searchGroceries(searchObject)
+            setSearchResult(searchResult)
+        }
+        if (value == '') {
+            setSearchResult(null)
         }
     }
 
@@ -96,58 +122,138 @@ export const ExpandingContainer: React.FC = () => {
                 !expanded && setExpanded(true)
             }}
         >
-            <div
-                className={classNames(
-                    styles.content,
-                    !expanded && styles.hidden
-                )}
-            >
-                <Input
-                    value={currentMeal.name}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                        handleMealDataChange('name', e.target.value)
-                    }}
-                    placeholder={'Ny matrett...'}
-                />
-
-                <div className={styles.title}>
-                    Ingredienser
-                    <Icon icon="mdi:food-drumstick-outline" />
-                </div>
-                <div className={styles.groceriesList}>
-                    {currentMeal.groceries.length > 0 ? (
-                        currentMeal.groceries.map((grocery) => (
-                            <MealListItem key={grocery._id} grocery={grocery} />
-                        ))
-                    ) : (
-                        <div className={styles.noGroceries}>
-                            Du har ingen ingredienser enda! Bruk søk for å legge
-                            til noen.
-                            <SearchOutlined className={styles.searchIcon} />
-                        </div>
+            {showSearch ? (
+                <div
+                    className={classNames(
+                        styles.content,
+                        styles.searchContent,
+                        !expanded && styles.hidden
                     )}
-                    {feedback && (
-                        <Feedback
-                            type={FeedbackTypes.SUCCESS}
-                            message={'Matrett lagt til!'}
+                >
+                    <span className={styles.checkInput}>
+                        <Input
+                            value={searchValue}
+                            onChange={(
+                                e: React.ChangeEvent<HTMLInputElement>
+                            ) => {
+                                search(e.target.value)
+                            }}
+                            placeholder={'Søk på produkter...'}
+                            className={styles.searchBar}
                         />
-                    )}
+                        <CheckOutlined
+                            className={styles.check}
+                            onClick={() => {
+                                setShowSearch(false)
+                                setSearchValue('')
+                                setSearchResult(null)
+                            }}
+                        />
+                    </span>
+
+                    <div className={styles.searchResultContainer}>
+                        {searchResult?.map((grocery) => (
+                            <GroceryItem grocery={grocery} />
+                        ))}
+                        <div className={styles.information}>
+                            {searchResult && searchResult.length > 0
+                                ? 'Ingen flere resultater'
+                                : 'Ingen resultater'}
+                        </div>
+                    </div>
                 </div>
-                <Button
-                    onClick={() => saveMeal()}
-                    type={'Primary'}
-                    className={styles.saveButton}
+            ) : (
+                <div
+                    className={classNames(
+                        styles.content,
+                        !expanded && styles.hidden
+                    )}
                 >
-                    Lagre
-                </Button>
-                <Button
-                    onClick={() => resetMeal()}
-                    type={'Secondary'}
-                    className={styles.resetButton}
-                >
-                    Nullstill
-                </Button>
-            </div>
+                    <div className={styles.header}>
+                        {nameInputShowing ? (
+                            <span className={styles.checkInput}>
+                                <Input
+                                    value={currentMeal.name}
+                                    onChange={(
+                                        e: React.ChangeEvent<HTMLInputElement>
+                                    ) => {
+                                        handleMealDataChange(
+                                            'name',
+                                            e.target.value
+                                        )
+                                    }}
+                                    placeholder={'Ny matrett...'}
+                                />
+                                <CheckOutlined
+                                    className={styles.check}
+                                    onClick={() => setNameInputShowing(false)}
+                                />
+                            </span>
+                        ) : (
+                            <>
+                                <div className={styles.editName}>
+                                    {currentMeal.name == ''
+                                        ? 'Navn: Ny matrett'
+                                        : 'Navn: ' + currentMeal.name}
+                                    <EditOutlined
+                                        className={styles.headerIcon}
+                                        onClick={() =>
+                                            setNameInputShowing(true)
+                                        }
+                                    />
+                                </div>
+                                <SearchOutlined
+                                    className={styles.headerIcon}
+                                    onClick={() => setShowSearch(true)}
+                                />
+                            </>
+                        )}
+                    </div>
+                    <div className={styles.title}>Ingredienser</div>
+                    <div className={styles.groceriesList}>
+                        {currentMeal.groceries.length > 0 ? (
+                            currentMeal.groceries.map((grocery) => (
+                                <MealListItem
+                                    key={grocery._id}
+                                    grocery={grocery}
+                                />
+                            ))
+                        ) : (
+                            <div className={styles.noGroceries}>
+                                Du har ingen ingredienser enda! Bruk søk for å
+                                legge til noen.
+                            </div>
+                        )}
+                        {feedback && (
+                            <Feedback
+                                type={FeedbackTypes.SUCCESS}
+                                message={'Matrett lagt til!'}
+                            />
+                        )}
+                    </div>
+                    <div
+                        className={classNames(
+                            styles.buttonGroup,
+                            expanded && styles.visible
+                        )}
+                    >
+                        <Button
+                            onClick={() => saveMeal()}
+                            type={'Save'}
+                            className={styles.saveButton}
+                        >
+                            Lagre
+                        </Button>
+                        <Button
+                            onClick={() => resetMeal()}
+                            type={'Delete'}
+                            className={styles.resetButton}
+                        >
+                            Nullstill
+                        </Button>
+                    </div>
+                </div>
+            )}
 
             <PlusOutlined
                 className={classNames(styles.icon, expanded && styles.expanded)}

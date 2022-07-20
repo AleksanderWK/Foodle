@@ -53,6 +53,10 @@ body {
     height: 100vh;
     background-color: white;
     border: solid $border-thickness $border-color;
+
+    &.noSearchField {
+        padding-top: calc(65px + $size-spacing-3);
+    }
     position: relative;
 }
 

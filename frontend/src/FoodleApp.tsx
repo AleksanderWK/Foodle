@@ -14,6 +14,7 @@ import styles from './food.module.scss'
 import { userState } from './state/user'
 import { GithubFilled, LinkedinFilled } from '@ant-design/icons'
 import { ExpandingContainer } from './components/KitchenPage/ExpandingContainer'
+import classNames from 'classnames'
 import { Feedback, FeedbackTypes } from './components/common/Feedback'
 import { globalFeedbackState } from './state/main'
 
@@ -34,9 +35,6 @@ export const FoodleApp: React.FunctionComponent = () => {
     const headerItems: HeaderItemProps[] = [
         {
             navName: 'Hjem',
-        },
-        {
-            navName: 'Kjoleskap',
         },
         {
             navName: 'Kjokken',
@@ -74,7 +72,13 @@ export const FoodleApp: React.FunctionComponent = () => {
                                     headerItems={headerItems}
                                     onHeaderItemClick={onHeaderItemClicked}
                                 />
-                                <div className={styles.pageSection}>
+                                <div
+                                    className={classNames(
+                                        styles.pageSection,
+                                        location.pathname != '/Hjem' &&
+                                            styles.noSearchField
+                                    )}
+                                >
                                     <Outlet />
                                     {feedback && (
                                         <Feedback
@@ -115,7 +119,6 @@ export const FoodleApp: React.FunctionComponent = () => {
                         }
                     >
                         <Route path="hjem" element={<Homepage />} />
-                        <Route path="kjoleskap" element={'Kjøleskap'} />
                         <Route
                             path="kjokken"
                             element={<ExpandingContainer />}

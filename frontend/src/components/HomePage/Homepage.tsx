@@ -28,8 +28,6 @@ export const Homepage: React.FC<Props> = () => {
             <div className={styles.shoppinglist}>
                 <ShoppingList />
             </div>
-
-            <Card className={styles.placeholder} />
         </div>
     )
 }
