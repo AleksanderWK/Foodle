@@ -2,6 +2,7 @@ import { atom, selector } from 'recoil'
 
 export interface User {
     _id: string
+    dateCreated: Date
     username: string
     email: string
     password: string
