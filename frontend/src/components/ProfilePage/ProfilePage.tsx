@@ -3,7 +3,7 @@ import { useRecoilValue } from 'recoil'
 import {
     getProfilePictureByUserId,
     uploadProfilePicture,
-} from '../../api/users'
+} from '../../api/profile'
 import { userState } from '../../state/user'
 import styles from './ProfilePage.module.scss'
 
