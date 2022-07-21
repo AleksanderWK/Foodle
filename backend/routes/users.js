@@ -60,10 +60,12 @@ router.get("/:username/shoppinglist", async (req, res) => {
     .then((user) => res.json(user));
 });
 
+// upload file with metadat set as user id
 router.post("/upload", upload.single("file"), async (req, res) => {
   res.json({ file: req.file });
 });
 
+// get file
 router.get("/:userid/picture", async (req, res) => {
   const gfs = req.app.locals.gfs;
   const gridfsBucket = req.app.locals.gridfsBucket;
@@ -71,8 +73,10 @@ router.get("/:userid/picture", async (req, res) => {
     userId: req.body.userId,
   });
   try {
-    const rs = gridfsBucket.openDownloadStream(file._id);
-    rs.pipe(res);
+    if ((file.contentType == "image/png") | (file.contentType == "image.jpg")) {
+      const rs = gridfsBucket.openDownloadStream(file._id);
+      rs.pipe(res);
+    } else throw new Error();
   } catch (error) {
     console.log(error);
   }
