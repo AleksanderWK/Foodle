@@ -17,6 +17,7 @@ import { ExpandingContainer } from './components/KitchenPage/ExpandingContainer'
 import classNames from 'classnames'
 import { Feedback, FeedbackTypes } from './components/common/Feedback'
 import { globalFeedbackState } from './state/main'
+import { ProfilePage } from './components/ProfilePage/ProfilePage'
 
 export const LocationToNavNameMap: Record<string, string> = {
     Hjem: 'Hjem',
@@ -123,7 +124,7 @@ export const FoodleApp: React.FunctionComponent = () => {
                             path="kjokken"
                             element={<ExpandingContainer />}
                         />
-                        <Route path="profil" element={'Profil'} />
+                        <Route path="profil" element={<ProfilePage />} />
                         <Route path="*" element={'404 not found'} />
                     </Route>
                 </Routes>

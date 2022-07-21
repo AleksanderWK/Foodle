@@ -1,4 +1,5 @@
 const express = require("express");
+const { upload } = require("../app");
 const ShoppingList = require("../models/ShoppingList");
 const User = require("../models/User");
 const router = express.Router();
@@ -57,6 +58,11 @@ router.get("/:username/shoppinglist", async (req, res) => {
   User.find({ username: req.params.username })
     .populate("shoppinglist")
     .then((user) => res.json(user));
+});
+
+router.post("/upload", upload.single("file"), async (req, res) => {
+  console.log(req.file);
+  res.json({ file: req.file });
 });
 
 module.exports = router;
