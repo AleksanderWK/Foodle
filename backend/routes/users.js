@@ -72,16 +72,16 @@ router.get("/:userid/picture", async (req, res) => {
   const file = await gfs.files.findOne({
     metadata: { userId: req.params.userid },
   });
-  if (file == null) {
-    res.json(null);
-  }
   try {
+    if (file == null) {
+      throw new Error();
+    }
     if ((file.contentType == "image/png") | (file.contentType == "image.jpg")) {
       const rs = gridfsBucket.openDownloadStream(file._id);
       rs.pipe(res);
     } else throw new Error();
   } catch (error) {
-    res.json({ message: error });
+    res.status(404).json(null);
   }
 });
 
