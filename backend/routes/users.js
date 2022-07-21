@@ -1,5 +1,5 @@
 const express = require("express");
-const { upload } = require("../app");
+const { upload, gfs } = require("../app");
 const ShoppingList = require("../models/ShoppingList");
 const User = require("../models/User");
 const router = express.Router();
@@ -61,8 +61,21 @@ router.get("/:username/shoppinglist", async (req, res) => {
 });
 
 router.post("/upload", upload.single("file"), async (req, res) => {
-  console.log(req.file);
   res.json({ file: req.file });
+});
+
+router.get("/:userid/picture", async (req, res) => {
+  const gfs = req.app.locals.gfs;
+  const gridfsBucket = req.app.locals.gridfsBucket;
+  const file = await gfs.files.findOne({
+    userId: req.body.userId,
+  });
+  try {
+    const rs = gridfsBucket.openDownloadStream(file._id);
+    rs.pipe(res);
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 module.exports = router;

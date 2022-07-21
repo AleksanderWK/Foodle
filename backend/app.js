@@ -22,12 +22,15 @@ app.use(bodyParser.json());
 
 //CONNECT TO MONGODB
 
-// INIT GridFs
-let gfs;
 mongoose.connect(process.env.MONGODB_URI, () => {
   console.log("Connected to MongoDB!");
-  gfs = Grid(mongoose.connection.db, mongoose.mongo);
+  const gridfsBucket = new mongoose.mongo.GridFSBucket(mongoose.connection.db, {
+    bucketName: "uploads",
+  });
+  const gfs = Grid(mongoose.connection.db, mongoose.mongo);
   gfs.collection("uploads");
+  app.locals.gfs = gfs;
+  app.locals.gridfsBucket = gridfsBucket;
 });
 
 const storage = new GridFsStorage({
@@ -42,6 +45,7 @@ const storage = new GridFsStorage({
         const fileInfo = {
           filename: filename,
           bucketName: "uploads",
+          metadata: { userId: req.body.userId },
         };
         resolve(fileInfo);
       });
