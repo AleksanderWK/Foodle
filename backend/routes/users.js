@@ -76,7 +76,11 @@ router.get("/:userid/picture", async (req, res) => {
     if (file == null) {
       throw new Error();
     }
-    if ((file.contentType == "image/png") | (file.contentType == "image.jpg")) {
+    if (
+      (file.contentType == "image/png") |
+      (file.contentType == "image/jpeg") |
+      (file.contentType == "image/jpg")
+    ) {
       const rs = gridfsBucket.openDownloadStream(file._id);
       rs.pipe(res);
     } else throw new Error();
