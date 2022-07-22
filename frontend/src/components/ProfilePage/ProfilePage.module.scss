@@ -70,7 +70,7 @@
     &:hover {
         .uploadIcon {
             & > * {
-                fill: food.$primary-100;
+                fill: food.$grey-100;
             }
         }
     }
@@ -86,7 +86,7 @@
     width: 60px;
     height: 60px;
     & > * {
-        fill: food.$primary-200;
+        fill: food.$grey-200;
     }
 }
 
