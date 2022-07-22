@@ -1,6 +1,11 @@
 import { Icon } from '@iconify/react'
 import React, { useEffect, useState } from 'react'
-import { useRecoilValue } from 'recoil'
+import {
+    useRecoilState,
+    useRecoilValue,
+    useResetRecoilState,
+    useSetRecoilState,
+} from 'recoil'
 import {
     getProfilePictureByUserId,
     uploadProfilePicture,
@@ -9,10 +14,15 @@ import { userState } from '../../state/user'
 import { Card } from '../common/Card'
 import { SettingOutlined } from '@ant-design/icons'
 import styles from './ProfilePage.module.scss'
+import { modalContent, modalOpen } from '../../state/main'
+import { ProfileSettings } from './ProfileSettings'
 
 export const ProfilePage: React.FC = () => {
     const [image, setImage] = useState<any>('')
     const user = useRecoilValue(userState)
+    const [modalVisible, setModalVisible] = useRecoilState(modalOpen)
+    const setModalContent = useSetRecoilState(modalContent)
+    const resetModal = useResetRecoilState(modalContent)
 
     useEffect(() => {
         getProfilePicture()
@@ -64,6 +74,16 @@ export const ProfilePage: React.FC = () => {
             return monthNamesNor[date.getMonth()] + ' ' + date.getFullYear()
         }
     }
+
+    useEffect(() => {
+        console.log(modalVisible)
+        if (modalVisible) {
+            setModalContent(<ProfileSettings />)
+        } else {
+            resetModal()
+        }
+    }, [modalVisible])
+
     return (
         <div className={styles.grid}>
             <Card className={styles.profileCard}>
@@ -103,7 +123,10 @@ export const ProfilePage: React.FC = () => {
                         </span>
                     </div>
                 </div>
-                <SettingOutlined className={styles.icon} />
+                <SettingOutlined
+                    className={styles.icon}
+                    onClick={() => setModalVisible(true)}
+                />
                 <div className={styles.content}></div>
             </Card>
             <Card className={styles.dailyGoalCard}></Card>

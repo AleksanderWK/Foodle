@@ -112,9 +112,13 @@
     cursor: pointer;
     z-index: 1;
     & > svg {
-        fill: #cccccc;
+        fill: food.$grey-200;
         width: 30px;
         height: 30px;
+
+        &:hover {
+            fill: food.$grey-100;
+        }
     }
 }
 

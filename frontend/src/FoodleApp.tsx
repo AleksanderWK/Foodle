@@ -16,8 +16,10 @@ import { GithubFilled, LinkedinFilled } from '@ant-design/icons'
 import { ExpandingContainer } from './components/KitchenPage/ExpandingContainer'
 import classNames from 'classnames'
 import { Feedback, FeedbackTypes } from './components/common/Feedback'
-import { globalFeedbackState } from './state/main'
+import { globalFeedbackState, modalContent, modalOpen } from './state/main'
 import { ProfilePage } from './components/ProfilePage/ProfilePage'
+import { Card } from './components/common/Card'
+import { Modal } from './components/common/Modal'
 
 export const LocationToNavNameMap: Record<string, string> = {
     Hjem: 'Hjem',
@@ -116,6 +118,8 @@ export const FoodleApp: React.FunctionComponent = () => {
                                         Aleksander W. Karlsen, 2022
                                     </div>
                                 </div>
+
+                                <Modal />
                             </>
                         }
                     >
