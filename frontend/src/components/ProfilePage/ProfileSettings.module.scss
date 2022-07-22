@@ -1,0 +1,23 @@
+@use '../../food.module.scss';
+
+.settingsContainer {
+    width: 40vw;
+    height: 70vh;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.icon {
+    & > svg {
+        fill: food.$grey-200;
+
+        &:hover {
+            fill: food.$grey-100;
+        }
+    }
+}
