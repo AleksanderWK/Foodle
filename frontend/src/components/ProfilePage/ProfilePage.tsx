@@ -7,6 +7,7 @@ import {
 } from '../../api/profile'
 import { userState } from '../../state/user'
 import { Card } from '../common/Card'
+import { SettingOutlined } from '@ant-design/icons'
 import styles from './ProfilePage.module.scss'
 
 export const ProfilePage: React.FC = () => {
@@ -102,6 +103,8 @@ export const ProfilePage: React.FC = () => {
                         </span>
                     </div>
                 </div>
+                <SettingOutlined className={styles.icon} />
+                <div className={styles.content}></div>
             </Card>
             <Card className={styles.dailyGoalCard}></Card>
             <Card className={styles.nutritionHistoryCard}></Card>
