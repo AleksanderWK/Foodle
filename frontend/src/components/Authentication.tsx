@@ -68,7 +68,14 @@ export const Authentication: React.FunctionComponent = () => {
         }
         const result = await loginUser(credentials)
         if (result != null) {
-            setUserState(result)
+            if (!result) {
+                setFeedback({
+                    type: FeedbackTypes.ERROR,
+                    message: 'Bruker er ikke verifisert. Sjekk eposten din!',
+                })
+            } else {
+                setUserState(result)
+            }
         } else {
             setFeedback({
                 type: FeedbackTypes.ERROR,

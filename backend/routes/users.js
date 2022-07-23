@@ -2,7 +2,11 @@ const express = require("express");
 const { upload, gfs } = require("../app");
 const ShoppingList = require("../models/ShoppingList");
 const User = require("../models/User");
+const Token = require("../models/token");
 const router = express.Router();
+const nodemailer = require("nodemailer");
+const { sendEmail } = require("../utils");
+const crypto = require("crypto");
 
 // /users
 
@@ -37,6 +41,24 @@ router.post("/register", async (req, res) => {
     savedUser.shoppinglist = savedshl._id;
     savedUser = await savedUser.save();
 
+    // Create verification token
+    const randomToken = crypto.randomBytes(128).toString("hex");
+    const verification_token = new Token({
+      userId: savedUser._id,
+      token: randomToken,
+    });
+    await verification_token.save();
+    // Send verification email to user
+    sendEmail(
+      req.body,
+      "Velkommen til Foodle!",
+      `<p>Hei ${req.body.username}! Verifiser deg for å starte å bruke Foodle.</p> \n
+    <form action="http://localhost:3001/users/verify/${randomToken}">
+    <input type="submit" value="Verifiser" />
+</form>
+    `
+    );
+
     res.json(savedUser);
   } catch (error) {
     res.json({ message: error });
@@ -45,10 +67,26 @@ router.post("/register", async (req, res) => {
 
 router.post("/login", async (req, res) => {
   try {
-    User.findOne({
+    const foundUser = await User.findOne({
       username: req.body.username,
       password: req.body.password,
-    }).then((user) => res.json(user));
+    });
+    if (foundUser.verified) {
+      res.json(foundUser);
+    } else if (foundUser && !foundUser.verified) {
+      res.json(false);
+    }
+  } catch (error) {
+    res.status(404).json(error);
+  }
+});
+
+router.get("/verify/:token", async (req, res) => {
+  try {
+    Token.findOneAndDelete({ token: req.params.token }).then((result) =>
+      User.findByIdAndUpdate(result.userId, { verified: true })
+    );
+    res.redirect("http://localhost:3000");
   } catch (error) {
     res.json(error);
   }
