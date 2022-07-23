@@ -2,6 +2,7 @@ const express = require("express");
 const ShoppingList = require("../models/ShoppingList");
 const router = express.Router();
 const nodemailer = require("nodemailer");
+const { sendEmail } = require("../utils");
 
 // get shoppinglist by user id
 router.get("/:id", async (req, res) => {
@@ -63,15 +64,6 @@ router.post("/delete", async (req, res) => {
 
 router.post("/send", async (req, res) => {
   try {
-    const serviceEmailAddress = "foodle.web.noreply@gmail.com";
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        user: serviceEmailAddress,
-        pass: process.env.EMAIL_PASSWORD,
-      },
-    });
-
     const content = await ShoppingList.findOne({ owner: req.body._id })
       .populate("groceries")
       .populate("owner");
@@ -80,16 +72,14 @@ router.post("/send", async (req, res) => {
       ${content.groceries.map((grocery) => `<li>${grocery.Matvare}</li>`)}
     </ul>`;
 
-    const mailOptions = {
-      from: serviceEmailAddress,
-      to: req.body.email,
-      subject: "Din Foodle handleliste!",
-      html: `<p>Hei ${username}! Her er handlelisten din: </p> \n ${groceryList.replaceAll(
+    sendEmail(
+      content.owner,
+      "Din Foodle handleliste!",
+      `<p>Hei ${username}! Her er handlelisten din: </p> \n ${groceryList.replaceAll(
         ",",
         ""
-      )}`,
-    };
-    transporter.sendMail(mailOptions);
+      )}`
+    );
     res.json({ message: "mail sent!", successful: true });
   } catch (error) {
     res.json({ message: error });
