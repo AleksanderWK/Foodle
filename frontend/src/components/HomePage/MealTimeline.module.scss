@@ -1,0 +1,118 @@
+@use '../../food.module.scss';
+.mealTimeline {
+    height: 100%;
+    box-sizing: border-box;
+}
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 600;
+    padding-bottom: food.$size-spacing-2;
+}
+
+.icon {
+    cursor: pointer;
+    width: 25px;
+    height: 25px;
+    & > * {
+        fill: food.$grey-200;
+
+        &:hover {
+            & > * {
+                fill: food.$grey-100;
+            }
+        }
+    }
+}
+
+.line {
+    height: 60px;
+    border-left: 3px dotted food.$border-color;
+    margin: 22px;
+}
+
+.circle {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    outline-offset: -3px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &.completed {
+        background-color: food.$primary-200;
+    }
+
+    &.current {
+        outline: solid food.$primary-200 3px;
+    }
+
+    &.subsequent {
+        outline: solid food.$primary-200 3px;
+    }
+}
+
+.innercircle {
+    width: 37px;
+    height: 37px;
+    border-radius: 50%;
+    background-color: food.$primary-200;
+}
+
+.meal {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+    gap: food.$size-spacing-1;
+}
+.information {
+    padding: food.$size-spacing-1;
+    box-sizing: border-box;
+    flex-grow: 1;
+    border-radius: food.$size-spacing-1;
+    &.completed {
+        background-color: rgba(242, 242, 242);
+        opacity: 0.5;
+    }
+
+    &.current {
+        background-color: rgba(108, 99, 255, 0.25);
+    }
+
+    &.subsequent {
+        background-color: rgba(204, 204, 204, 0.25);
+    }
+}
+.nameAndTime {
+    display: flex;
+    justify-content: space-between;
+}
+
+.contents {
+    font-size: 12px;
+}
+
+.createButton {
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+}
+.addIcon {
+    & > svg {
+        fill: white;
+    }
+}
+
+.noContentText {
+    color: food.$placeholder;
+    font-size: 15px;
+    text-align: center;
+}
+
+.newMeal {
+    display: flex;
+    align-items: center;
+}
