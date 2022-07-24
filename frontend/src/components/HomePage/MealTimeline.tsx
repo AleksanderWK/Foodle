@@ -16,7 +16,12 @@ interface Meal {
 const MealIndicator = ({ name, time, contents, state }: Meal) => {
     return (
         <div>
-            <div className={styles.line}></div>
+            <div
+                className={classNames(
+                    styles.line,
+                    state != TimelineState.SUBSEQUENT && styles.solid
+                )}
+            ></div>
             <div className={styles.meal}>
                 <div
                     className={classNames(
@@ -68,6 +73,12 @@ export const MealTimeline: React.FC = () => {
             time: '12.00',
             contents: 'Makrell i tomat, Brød',
             state: TimelineState.CURRENT,
+        },
+        {
+            name: 'Middag',
+            time: '18.00',
+            contents: 'Stekt ris med kylling',
+            state: TimelineState.SUBSEQUENT,
         },
     ])
 
