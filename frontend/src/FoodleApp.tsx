@@ -20,6 +20,7 @@ import { globalFeedbackState, modalContent, modalOpen } from './state/main'
 import { ProfilePage } from './components/ProfilePage/ProfilePage'
 import { Card } from './components/common/Card'
 import { Modal } from './components/common/Modal'
+import { KitchenPage } from './components/KitchenPage/KitchenPage'
 
 export const LocationToNavNameMap: Record<string, string> = {
     Hjem: 'Hjem',
@@ -124,10 +125,7 @@ export const FoodleApp: React.FunctionComponent = () => {
                         }
                     >
                         <Route path="hjem" element={<Homepage />} />
-                        <Route
-                            path="kjokken"
-                            element={<ExpandingContainer />}
-                        />
+                        <Route path="kjokken" element={<KitchenPage />} />
                         <Route path="profil" element={<ProfilePage />} />
                         <Route path="*" element={'404 not found'} />
                     </Route>
