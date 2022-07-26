@@ -1,7 +1,7 @@
 import { Icon } from '@iconify/react'
 import { Button } from '../common/Button'
 import classNames from 'classnames'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { Card } from '../common/Card'
 import styles from './MealTimeline.module.scss'
 import { PlusOutlined } from '@ant-design/icons'
@@ -14,6 +14,7 @@ import { getLastThirtyDaysConsumption } from '../../api/consumptions'
 import { userState } from '../../state/user'
 import { Consumption, Grocery } from '../../api/types'
 import { Meal } from '../../state/kitchen'
+import { ExpandingContainer } from '../KitchenPage/ExpandingContainer'
 
 interface MealIndicatorProps {
     name: string
@@ -73,6 +74,7 @@ export const MealTimeline: React.FC = () => {
     const user = useRecoilValue(userState)
     const [consumptions, setConsumptions] = useRecoilState(consumptionsState)
     const todaysConsumptions = useRecoilValue(dailyConsumptionsState)
+    const [expanded, setExpanded] = useState(false)
 
     useEffect(() => {
         if (user) {
@@ -132,13 +134,12 @@ export const MealTimeline: React.FC = () => {
                 <div>
                     <div className={styles.line}></div>
                     <div className={styles.newMeal}>
-                        <Button
-                            onClick={() => {}}
-                            type={'Primary'}
-                            className={styles.createButton}
+                        <ExpandingContainer
+                            expanded={expanded}
+                            setExpanded={setExpanded}
                         >
-                            <PlusOutlined className={styles.addIcon} />
-                        </Button>
+                            <div></div>
+                        </ExpandingContainer>
                         {todaysConsumptions.length == 0 && (
                             <div
                                 className={classNames(
