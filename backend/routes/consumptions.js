@@ -10,11 +10,17 @@ router.post("/add", async (req, res) => {
   try {
     const newConsumption = new Consumption({
       owner: req.body.owner,
+      name: req.body.name,
       groceries: req.body.groceries,
       meals: req.body.meals,
     });
     await newConsumption.save();
-    Consumption.find({ owner: req.body.owner })
+    const currentDate = new Date();
+    const thirtyDaysAgo = new Date().setDate(currentDate.getDate() - 30);
+    Consumption.find({
+      owner: req.params.userId,
+      currentDate: { $gte: thirtyDaysAgo },
+    })
       .populate("groceries")
       .populate("meals")
       .then((consumptions) => res.json(consumptions));

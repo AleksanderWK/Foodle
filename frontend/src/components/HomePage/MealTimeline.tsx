@@ -1,19 +1,28 @@
 import { Icon } from '@iconify/react'
 import { Button } from '../common/Button'
 import classNames from 'classnames'
-import { useState } from 'react'
+import { useEffect } from 'react'
 import { Card } from '../common/Card'
 import styles from './MealTimeline.module.scss'
 import { PlusOutlined } from '@ant-design/icons'
+import {
+    consumptionsState,
+    dailyConsumptionsState,
+} from '../../state/consumption'
+import { useRecoilState, useRecoilValue } from 'recoil'
+import { getLastThirtyDaysConsumption } from '../../api/consumptions'
+import { userState } from '../../state/user'
+import { Consumption, Grocery } from '../../api/types'
+import { Meal } from '../../state/kitchen'
 
-interface Meal {
+interface MealIndicatorProps {
     name: string
     time: string
-    contents: string
+    contents: string | undefined
     state: TimelineState
 }
 
-const MealIndicator = ({ name, time, contents, state }: Meal) => {
+const MealIndicator = ({ name, time, contents, state }: MealIndicatorProps) => {
     return (
         <div>
             <div
@@ -61,26 +70,49 @@ enum TimelineState {
 }
 
 export const MealTimeline: React.FC = () => {
-    const [meals, setMeals] = useState([
-        {
-            name: 'Frokost',
-            time: '08.00',
-            contents: 'Egg, Røkt kalkunfilet, Brød',
-            state: TimelineState.COMPLETED,
-        },
-        {
-            name: 'Lunsj',
-            time: '12.00',
-            contents: 'Makrell i tomat, Brød',
-            state: TimelineState.CURRENT,
-        },
-        {
-            name: 'Middag',
-            time: '18.00',
-            contents: 'Stekt ris med kylling',
-            state: TimelineState.SUBSEQUENT,
-        },
-    ])
+    const user = useRecoilValue(userState)
+    const [consumptions, setConsumptions] = useRecoilState(consumptionsState)
+    const todaysConsumptions = useRecoilValue(dailyConsumptionsState)
+
+    useEffect(() => {
+        if (user) {
+            getLastThirtyDaysConsumption(user._id).then((consumptions) =>
+                setConsumptions(consumptions)
+            )
+        }
+    }, [])
+
+    const resolveMealState = (consumptionDate: Date): TimelineState => {
+        const date = new Date(consumptionDate)
+        const now = new Date()
+        if (date.getHours() == now.getHours()) {
+            return TimelineState.CURRENT
+        } else if (date.getHours() > now.getHours()) {
+            return TimelineState.SUBSEQUENT
+        } else {
+            return TimelineState.COMPLETED
+        }
+    }
+
+    const formatMealContent = (
+        groceries?: Grocery[],
+        meals?: Meal[]
+    ): string => {
+        let content = []
+
+        if (groceries != undefined) {
+            content.push(groceries.map((grocery) => grocery.Matvare))
+        }
+        if (meals != undefined) {
+            content.push(meals.map((meal) => meal.name))
+        }
+        return content.join(', ')
+    }
+
+    const getTime = (meal: Consumption): string => {
+        const t = new Date(meal.consumptionDate)
+        return t.getHours().toString() + ':' + t.getMinutes().toString()
+    }
 
     return (
         <Card className={styles.mealTimeline}>
@@ -89,12 +121,12 @@ export const MealTimeline: React.FC = () => {
                 <Icon icon="iwwa:option" className={styles.icon} />
             </div>
             <div className={styles.timeline}>
-                {meals.map((meal) => (
+                {todaysConsumptions.map((meal: Consumption) => (
                     <MealIndicator
                         name={meal.name}
-                        time={meal.time}
-                        contents={meal.contents}
-                        state={meal.state}
+                        time={getTime(meal)}
+                        contents={formatMealContent(meal.groceries, meal.meals)}
+                        state={resolveMealState(meal.consumptionDate)}
                     />
                 ))}
                 <div>
@@ -107,7 +139,7 @@ export const MealTimeline: React.FC = () => {
                         >
                             <PlusOutlined className={styles.addIcon} />
                         </Button>
-                        {meals.length == 0 && (
+                        {todaysConsumptions.length == 0 && (
                             <div
                                 className={classNames(
                                     styles.noContentText,

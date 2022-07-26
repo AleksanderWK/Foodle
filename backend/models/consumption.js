@@ -6,6 +6,10 @@ const ConsumptionSchema = mongoose.Schema({
     type: Schema.Types.ObjectId,
     required: true,
   },
+  name: {
+    type: String,
+    required: true,
+  },
   groceries: [
     {
       type: Schema.Types.ObjectId,
