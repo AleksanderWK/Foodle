@@ -188,10 +188,13 @@ export const MealCreator: React.FC = () => {
                             </span>
                         ) : (
                             <>
-                                <div className={styles.editName}>
-                                    {currentMeal.name == ''
-                                        ? 'Navn: Ny matrett'
-                                        : 'Navn: ' + currentMeal.name}
+                                <div
+                                    className={classNames(
+                                        styles.editName,
+                                        currentMeal.name != '' && styles.hasName
+                                    )}
+                                >
+                                    {currentMeal.name != '' && currentMeal.name}
                                     <EditOutlined
                                         className={styles.headerIcon}
                                         onClick={() =>

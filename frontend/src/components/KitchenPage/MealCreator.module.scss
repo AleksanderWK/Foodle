@@ -40,7 +40,8 @@
 }
 .title {
     padding-bottom: 5px;
-    border-bottom: solid 1px black;
+    font-weight: 600;
+    border-bottom: solid food.$border-color food.$border-thickness;
     display: flex;
     gap: 5px;
     & > svg {
@@ -86,6 +87,7 @@
 }
 .buttonGroup {
     display: flex;
+    justify-content: center;
     gap: food.$size-spacing-1;
 }
 
@@ -195,5 +197,12 @@
 
 .editName {
     display: flex;
+    justify-content: flex-end;
+    width: 50%;
     gap: food.$size-spacing-1;
+    border-bottom: solid food.$border-color food.$border-thickness;
+
+    &.hasName {
+        justify-content: space-between;
+    }
 }
