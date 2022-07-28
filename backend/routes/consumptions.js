@@ -18,7 +18,7 @@ router.post("/add", async (req, res) => {
     const currentDate = new Date();
     const thirtyDaysAgo = new Date().setDate(currentDate.getDate() - 30);
     Consumption.find({
-      owner: req.params.userId,
+      owner: req.body.owner,
       currentDate: { $gte: thirtyDaysAgo },
     })
       .populate("groceries")

@@ -14,7 +14,6 @@ import { getLastThirtyDaysConsumption } from '../../api/consumptions'
 import { userState } from '../../state/user'
 import { Consumption, Grocery } from '../../api/types'
 import { Meal } from '../../state/kitchen'
-import { ExpandingContainer } from '../KitchenPage/ExpandingContainer'
 
 interface MealIndicatorProps {
     name: string
@@ -134,12 +133,6 @@ export const MealTimeline: React.FC = () => {
                 <div>
                     <div className={styles.line}></div>
                     <div className={styles.newMeal}>
-                        <ExpandingContainer
-                            expanded={expanded}
-                            setExpanded={setExpanded}
-                        >
-                            <div></div>
-                        </ExpandingContainer>
                         {todaysConsumptions.length == 0 && (
                             <div
                                 className={classNames(
