@@ -133,6 +133,13 @@ export const MealTimeline: React.FC = () => {
                 <div>
                     <div className={styles.line}></div>
                     <div className={styles.newMeal}>
+                        <Button
+                            onClick={() => {}}
+                            className={styles.createButton}
+                            type={'Primary'}
+                        >
+                            <PlusOutlined className={styles.addIcon} />
+                        </Button>
                         {todaysConsumptions.length == 0 && (
                             <div
                                 className={classNames(
