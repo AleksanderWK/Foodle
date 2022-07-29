@@ -9,6 +9,8 @@ import { Consumption, Grocery } from '../../api/types'
 import { useRecoilValue } from 'recoil'
 import { userState } from '../../state/user'
 import { Meal } from '../../state/kitchen'
+import { searchGroceries } from '../../api/main'
+import { GroceryItem } from '../GroceryItem'
 
 interface Props {
     visible: boolean
@@ -18,6 +20,8 @@ interface Props {
 export const MaaltidCreator = ({ visible, onSetVisible }: Props) => {
     const [searchShowing, setSearchShowing] = useState(false)
     const user = useRecoilValue(userState)
+    const [searchValue, setSearchValue] = useState<string>('')
+    const [searchResult, setSearchResult] = useState<Grocery[] | null>(null)
     const [consumption, setConsumption] = useState<Consumption>({
         name: '',
         owner: user ? user?._id : '',
@@ -25,6 +29,20 @@ export const MaaltidCreator = ({ visible, onSetVisible }: Props) => {
         meals: [],
         consumptionDate: new Date(),
     })
+
+    const search = async (value: string) => {
+        setSearchValue(value)
+        if (value.length > 0) {
+            const searchObject = {
+                query: value,
+            }
+            const searchResult = await searchGroceries(searchObject)
+            setSearchResult(searchResult)
+        }
+        if (value == '') {
+            setSearchResult(null)
+        }
+    }
 
     const resetState = () => {
         setConsumption({
@@ -91,11 +109,14 @@ export const MaaltidCreator = ({ visible, onSetVisible }: Props) => {
                             Innhold:
                         </div>
                         <div className={styles.maaltidContents}>
-                            Du har ikke innhold i måltidet ditt enda! Trykk på
-                            søk for å legge til noe.
-                            <SearchOutlined
-                                onClick={() => setSearchShowing(true)}
-                            />
+                            <div className={styles.noContents}>
+                                Du har ikke innhold i måltidet ditt enda! Trykk
+                                på søk for å legge til noe.
+                                <SearchOutlined
+                                    className={styles.showSearchIcon}
+                                    onClick={() => setSearchShowing(true)}
+                                />
+                            </div>
                         </div>
                     </div>
                     <div className={styles.buttonGroup}>
@@ -118,13 +139,13 @@ export const MaaltidCreator = ({ visible, onSetVisible }: Props) => {
                             onChange={(
                                 e: React.ChangeEvent<HTMLInputElement>
                             ) => {
-                                //search(e.target.value)
+                                search(e.target.value)
                             }}
                             placeholder={
                                 'Søk på produkter og matretter til måltidet...'
                             }
                             className={styles.searchBar}
-                            value={''}
+                            value={searchValue}
                         />
                         <CheckOutlined
                             className={styles.check}
@@ -135,6 +156,14 @@ export const MaaltidCreator = ({ visible, onSetVisible }: Props) => {
                             }}
                         />
                     </span>
+                    <div className={styles.searchResultContainer}>
+                        {searchResult?.map((grocery) => grocery.Matvare)}
+                        <div className={styles.information}>
+                            {searchResult && searchResult.length > 0
+                                ? 'Ingen flere resultater'
+                                : 'Ingen resultater'}
+                        </div>
+                    </div>
                 </div>
             </div>
         </Card>
