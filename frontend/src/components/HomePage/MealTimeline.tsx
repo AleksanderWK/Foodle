@@ -1,10 +1,15 @@
 import { Icon } from '@iconify/react'
 import { Button } from '../common/Button'
 import classNames from 'classnames'
-import { useEffect, useState } from 'react'
+import { ChangeEvent, useEffect, useState } from 'react'
 import { Card } from '../common/Card'
 import styles from './MealTimeline.module.scss'
-import { PlusOutlined } from '@ant-design/icons'
+import {
+    PlusOutlined,
+    CloseOutlined,
+    SearchOutlined,
+    CheckOutlined,
+} from '@ant-design/icons'
 import {
     consumptionsState,
     dailyConsumptionsState,
@@ -14,6 +19,8 @@ import { getLastThirtyDaysConsumption } from '../../api/consumptions'
 import { userState } from '../../state/user'
 import { Consumption, Grocery } from '../../api/types'
 import { Meal } from '../../state/kitchen'
+import { Input } from '../common/Input'
+import { MaaltidCreator } from './MaaltidCreator'
 
 interface MealIndicatorProps {
     name: string
@@ -73,7 +80,7 @@ export const MealTimeline: React.FC = () => {
     const user = useRecoilValue(userState)
     const [consumptions, setConsumptions] = useRecoilState(consumptionsState)
     const todaysConsumptions = useRecoilValue(dailyConsumptionsState)
-    const [expanded, setExpanded] = useState(false)
+    const [visible, setVisible] = useState(false)
 
     useEffect(() => {
         if (user) {
@@ -100,7 +107,6 @@ export const MealTimeline: React.FC = () => {
         meals?: Meal[]
     ): string => {
         let content = []
-
         if (groceries != undefined) {
             content.push(groceries.map((grocery) => grocery.Matvare))
         }
@@ -134,7 +140,7 @@ export const MealTimeline: React.FC = () => {
                     <div className={styles.line}></div>
                     <div className={styles.newMeal}>
                         <Button
-                            onClick={() => {}}
+                            onClick={() => setVisible(true)}
                             className={styles.createButton}
                             type={'Primary'}
                         >
@@ -153,6 +159,7 @@ export const MealTimeline: React.FC = () => {
                     </div>
                 </div>
             </div>
+            <MaaltidCreator visible={visible} onSetVisible={setVisible} />
         </Card>
     )
 }

@@ -9,11 +9,11 @@
 }
 .input {
     padding: food.$size-spacing-1;
-    border: none;
+    border: solid food.$border-color food.$border-thickness;
     height: 35px;
     width: 100%;
     border-radius: food.$size-spacing-2;
-    box-shadow: 0px 0px 10px 5px rgba(0, 0, 0, 0.15);
+    //box-shadow: 0px 0px 10px 5px rgba(0, 0, 0, 0.15);
     font-weight: bold;
     caret-color: food.$text;
 
@@ -27,7 +27,7 @@
 
     &:focus {
         outline: none;
-        border: none;
+        border: solid food.$border-color food.$border-thickness;
         resize: none;
     }
 
@@ -37,7 +37,10 @@
 }
 
 .inputIcon {
+    & > span > svg {
+        fill: food.$grey-200;
+    }
     position: absolute;
-    top: 17.5px;
+    top: 20px;
     left: 10px;
 }

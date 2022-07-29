@@ -163,7 +163,7 @@
     position: relative;
 
     & > span > input {
-        padding-right: 30px;
+        padding-right: 40px;
     }
 }
 
@@ -173,8 +173,8 @@
         fill: food.$primary-200;
     }
 
-    top: 20px;
-    right: 10px;
+    top: 22.5px;
+    right: 20px;
     cursor: pointer;
     &:hover {
         & > svg {
