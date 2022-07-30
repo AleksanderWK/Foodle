@@ -9,6 +9,7 @@ import { userState } from '../../state/user'
 import { Card } from '../common/Card'
 import { SearchField } from '../common/SearchField'
 import styles from './Homepage.module.scss'
+import { MealTimeline } from './MealTimeline'
 import { ShoppingList } from './ShoppingList'
 
 interface Props {}
@@ -27,6 +28,9 @@ export const Homepage: React.FC<Props> = () => {
         <div className={styles.homepageContainer}>
             <div className={styles.shoppinglist}>
                 <ShoppingList />
+            </div>
+            <div className={styles.mealTimeline}>
+                <MealTimeline />
             </div>
         </div>
     )

@@ -1,10 +1,5 @@
 import { atom } from 'recoil'
-import { Grocery } from '../api/types'
-
-export interface Meal {
-    name: string
-    groceries: Grocery[]
-}
+import { Meal } from '../api/types'
 
 export const mealsState = atom<Meal[]>({
     key: 'mealsState',
@@ -13,5 +8,11 @@ export const mealsState = atom<Meal[]>({
 
 export const currentMealState = atom<Meal>({
     key: 'currentMealState',
-    default: { name: '', groceries: [] },
+    default: {
+        _id: '',
+        owner: '',
+        mealName: '',
+        groceries: [],
+        dateCreated: new Date(),
+    },
 })

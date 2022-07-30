@@ -72,8 +72,9 @@ export const MealCreator: React.FC = () => {
     const [searchResult, setSearchResult] = useState<Grocery[] | null>(null)
 
     const handleMealDataChange = (property: string, value: string) => {
-        if (property == 'name') {
+        if (property == 'mealName') {
             setCurrentMeal((prevState) => ({ ...prevState, [property]: value }))
+            console.log(currentMeal)
         }
     }
 
@@ -95,14 +96,11 @@ export const MealCreator: React.FC = () => {
         if (user) {
             const newMeal = await createMeal({
                 owner: user._id,
-                mealName: currentMeal.name,
+                mealName: currentMeal.mealName,
                 groceryIds: currentMeal.groceries.map((grocery) => grocery._id),
             })
             setMealsState((prevState) => prevState.concat([newMeal]))
-            setCurrentMeal({
-                name: '',
-                groceries: [],
-            })
+            resetMeal()
             setGlobalFeedback({
                 type: FeedbackTypes.SUCCESS,
                 message: 'Matrett opprettet!',
@@ -114,7 +112,13 @@ export const MealCreator: React.FC = () => {
     }
 
     const resetMeal = () => {
-        setCurrentMeal({ name: '', groceries: [] })
+        setCurrentMeal({
+            _id: '',
+            owner: '',
+            mealName: '',
+            groceries: [],
+            dateCreated: new Date(),
+        })
     }
 
     return (
@@ -170,12 +174,12 @@ export const MealCreator: React.FC = () => {
                         {nameInputShowing ? (
                             <span className={styles.checkInput}>
                                 <Input
-                                    value={currentMeal.name}
+                                    value={currentMeal.mealName}
                                     onChange={(
                                         e: React.ChangeEvent<HTMLInputElement>
                                     ) => {
                                         handleMealDataChange(
-                                            'name',
+                                            'mealName',
                                             e.target.value
                                         )
                                     }}
@@ -191,10 +195,12 @@ export const MealCreator: React.FC = () => {
                                 <div
                                     className={classNames(
                                         styles.editName,
-                                        currentMeal.name != '' && styles.hasName
+                                        currentMeal.mealName != '' &&
+                                            styles.hasName
                                     )}
                                 >
-                                    {currentMeal.name != '' && currentMeal.name}
+                                    {currentMeal.mealName != '' &&
+                                        currentMeal.mealName}
                                     <EditOutlined
                                         className={styles.headerIcon}
                                         onClick={() =>

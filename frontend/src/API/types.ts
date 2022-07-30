@@ -58,3 +58,19 @@ export interface Grocery {
     Fosfor: string
     Jod: string
 }
+
+export interface Consumption {
+    owner: string
+    name: string
+    groceries: Grocery[]
+    meals: Meal[]
+    consumptionDate: Date
+}
+
+export interface Meal {
+    _id: string
+    owner: string
+    mealName: string
+    dateCreated: Date
+    groceries: Grocery[]
+}

@@ -30,4 +30,26 @@ router.post("/create", async (req, res) => {
   }
 });
 
+// returns all meals by all users
+router.post("/search", async (req, res) => {
+  try {
+    const queryWords = req.body.query.split(" ");
+    const queries = [];
+    queryWords.forEach((word) => {
+      const lowerCaseWord = word.toLowerCase();
+      const formattedWord =
+        lowerCaseWord.charAt(0).toUpperCase() + lowerCaseWord.slice(1);
+      queries.push({
+        mealName: {
+          $regex: String(formattedWord),
+        },
+      });
+    });
+    const matchedMeals = await Meal.find({ $and: queries });
+    res.json(matchedMeals);
+  } catch (error) {
+    res.status(500).send();
+  }
+});
+
 module.exports = router;

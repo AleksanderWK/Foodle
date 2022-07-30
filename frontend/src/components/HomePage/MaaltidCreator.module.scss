@@ -1,0 +1,176 @@
+@use '../../food.module.scss';
+
+.addMealContainer {
+    position: absolute;
+    box-sizing: border-box;
+    overflow: hidden;
+    padding: 0;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    background-color: white;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 200ms;
+
+    &.visible {
+        opacity: 1;
+        visibility: visible;
+    }
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 600;
+    padding-bottom: food.$size-spacing-2;
+}
+
+.addMealWrapper {
+    width: 200%;
+    height: 100%;
+    display: flex;
+    padding: food.$size-spacing-2;
+    box-sizing: border-box;
+    gap: 43px;
+    transition: transform 400ms ease-in-out;
+}
+
+.addMaaltidInfo {
+    width: 50%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: food.$size-spacing-2;
+}
+
+.searchMaaltidContents {
+    width: 50%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: food.$size-spacing-2;
+}
+
+.closeIcon {
+    float: right;
+    cursor: pointer;
+    & > svg {
+        width: 20px;
+        height: 20px;
+        fill: food.$grey-200;
+
+        &:hover {
+            fill: food.$grey-100;
+        }
+    }
+}
+
+.timeGroup {
+    display: flex;
+    justify-content: space-between;
+    font-weight: 500;
+}
+
+.buttonGroup {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: food.$size-spacing-2;
+}
+
+.maaltidContentsWrapper {
+    flex-grow: 1;
+}
+
+.maaltidContentsHeader {
+    font-weight: 500;
+    border-bottom: solid food.$border-color food.$border-thickness;
+}
+
+.maaltidContents {
+    height: 95%;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.checkInput {
+    width: 100%;
+    position: relative;
+
+    & > span > input {
+        padding-right: 40px;
+    }
+}
+
+.check {
+    position: absolute;
+    & > svg {
+        fill: food.$primary-200;
+    }
+
+    top: 22.5px;
+    right: 20px;
+    cursor: pointer;
+    &:hover {
+        & > svg {
+            fill: food.$primary-100;
+        }
+    }
+}
+
+.searchResultContainer {
+    max-width: 100%;
+    overflow-y: scroll;
+    flex-grow: 1;
+}
+
+.categoryHeader {
+    font-weight: 500;
+    border-bottom: solid food.$border-color food.$border-thickness;
+}
+
+.noContents {
+    color: food.$placeholder;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-style: italic;
+    height: 100%;
+}
+
+.showSearchIcon {
+    & > svg {
+        fill: food.$primary-200;
+        width: 30px;
+        height: 30px;
+        &:hover {
+            fill: food.$primary-100;
+        }
+    }
+}
+
+.actionIcon {
+    & > svg {
+        width: 20px;
+        height: 20px;
+        fill: food.$primary-200;
+
+        &:hover {
+            fill: food.$primary-100;
+        }
+    }
+}
+
+.information {
+    font-style: italic;
+    color: food.$placeholder;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: food.$size-spacing-2;
+}

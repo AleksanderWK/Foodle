@@ -1,0 +1,21 @@
+@use '../../food.module.scss';
+
+.searchResultContainer {
+    display: flex;
+    justify-content: space-between;
+    padding-top: food.$size-spacing-2;
+    padding-bottom: food.$size-spacing-2;
+    padding-right: food.$size-spacing-2;
+    background-color: white;
+}
+
+.titleContainer {
+    width: 70%;
+}
+
+.resultOptionsContainer {
+    width: 30%;
+    display: flex;
+    justify-content: flex-end;
+    gap: food.$size-spacing-1;
+}
