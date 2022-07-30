@@ -1,24 +1,16 @@
-import { Meal } from '../state/kitchen'
+import { Meal } from './types'
 import { PATH } from './main'
-import { Consumption, Grocery } from './types'
+import { Consumption } from './types'
 
 export const addConsumption = async (
-    userId: string,
-    name: string,
-    groceries: Grocery[],
-    meals: Meal[]
+    consumption: Consumption
 ): Promise<Consumption[]> => {
     return await fetch(PATH.concat('/consumptions/add'), {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-            owner: userId,
-            name: name,
-            groceries: groceries,
-            meals: meals,
-        }),
+        body: JSON.stringify(consumption),
     })
         .then((response) => {
             if (response.ok) {

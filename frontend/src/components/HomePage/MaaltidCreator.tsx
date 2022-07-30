@@ -2,26 +2,44 @@ import classNames from 'classnames'
 import { ChangeEvent, useEffect, useState } from 'react'
 import { Card } from '../common/Card'
 import styles from './MaaltidCreator.module.scss'
-import { CloseOutlined, SearchOutlined, CheckOutlined } from '@ant-design/icons'
+import {
+    CloseOutlined,
+    SearchOutlined,
+    CheckOutlined,
+    PlusOutlined,
+    MinusOutlined,
+} from '@ant-design/icons'
 import { Input } from '../common/Input'
 import { Button } from '../common/Button'
 import { Consumption, Grocery } from '../../api/types'
-import { useRecoilValue } from 'recoil'
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 import { userState } from '../../state/user'
-import { Meal } from '../../state/kitchen'
+import { Meal } from '../../api/types'
 import { searchGroceries } from '../../api/main'
-import { GroceryItem } from '../GroceryItem'
+import { searchMeals } from '../../api/kitchen'
+import { ListItem } from '../common/ListItem'
+import { addConsumption } from '../../api/consumptions'
+import { consumptionsState } from '../../state/consumption'
+import { globalFeedbackState } from '../../state/main'
+import { FeedbackTypes } from '../common/Feedback'
 
 interface Props {
     visible: boolean
     onSetVisible: (visible: boolean) => void
 }
 
+interface multiSearchResult {
+    groceries: Grocery[] | null
+    meals: Meal[] | null
+}
+
 export const MaaltidCreator = ({ visible, onSetVisible }: Props) => {
     const [searchShowing, setSearchShowing] = useState(false)
     const user = useRecoilValue(userState)
     const [searchValue, setSearchValue] = useState<string>('')
-    const [searchResult, setSearchResult] = useState<Grocery[] | null>(null)
+    const [searchResult, setSearchResult] = useState<multiSearchResult | null>(
+        null
+    )
     const [consumption, setConsumption] = useState<Consumption>({
         name: '',
         owner: user ? user?._id : '',
@@ -29,6 +47,23 @@ export const MaaltidCreator = ({ visible, onSetVisible }: Props) => {
         meals: [],
         consumptionDate: new Date(),
     })
+    const setConsumptions = useSetRecoilState(consumptionsState)
+    const setGlobalFeedback = useSetRecoilState(globalFeedbackState)
+
+    const handleMaaltidContents = (
+        type: 'groceries' | 'meals',
+        value: Grocery | Meal,
+        action: 'remove' | 'add'
+    ) => {
+        const updatedList = consumption[type]
+        if (action == 'add') {
+            updatedList.push(value as Grocery & Meal)
+        }
+        if (action == 'remove') {
+            updatedList.splice(updatedList.indexOf(value as Grocery & Meal), 1)
+        }
+        setConsumption((prevState) => ({ ...prevState, [type]: updatedList }))
+    }
 
     const search = async (value: string) => {
         setSearchValue(value)
@@ -36,7 +71,13 @@ export const MaaltidCreator = ({ visible, onSetVisible }: Props) => {
             const searchObject = {
                 query: value,
             }
-            const searchResult = await searchGroceries(searchObject)
+            const searchResultGrocery = await searchGroceries(searchObject)
+            const searchResultMeal = await searchMeals(searchObject)
+            console.log(searchResultMeal)
+            const searchResult: multiSearchResult = {
+                groceries: searchResultGrocery,
+                meals: searchResultMeal,
+            }
             setSearchResult(searchResult)
         }
         if (value == '') {
@@ -52,6 +93,58 @@ export const MaaltidCreator = ({ visible, onSetVisible }: Props) => {
             meals: [],
             consumptionDate: new Date(),
         })
+    }
+
+    const saveMaaltid = async () => {
+        const newConsumptions = await addConsumption(consumption)
+        if (newConsumptions != null) {
+            setConsumptions(newConsumptions)
+            resetState()
+            setGlobalFeedback({
+                type: FeedbackTypes.SUCCESS,
+                message: 'Måltid lagt til!',
+            })
+        } else {
+            setGlobalFeedback({
+                type: FeedbackTypes.ERROR,
+                message: 'Det skjedde en feil!',
+            })
+        }
+        setTimeout(() => setGlobalFeedback(null), 5000)
+    }
+
+    const groceryOptions = (grocery: Grocery) => {
+        return consumption.groceries
+            .map((grocery) => grocery._id)
+            .includes(grocery._id) ? (
+            <MinusOutlined
+                className={styles.actionIcon}
+                onClick={() =>
+                    handleMaaltidContents('groceries', grocery, 'remove')
+                }
+            />
+        ) : (
+            <PlusOutlined
+                className={styles.actionIcon}
+                onClick={() =>
+                    handleMaaltidContents('groceries', grocery, 'add')
+                }
+            />
+        )
+    }
+
+    const mealOptions = (meal: Meal) => {
+        return consumption.meals.map((meal) => meal._id).includes(meal._id) ? (
+            <MinusOutlined
+                className={styles.actionIcon}
+                onClick={() => handleMaaltidContents('meals', meal, 'remove')}
+            />
+        ) : (
+            <PlusOutlined
+                className={styles.actionIcon}
+                onClick={() => handleMaaltidContents('meals', meal, 'add')}
+            />
+        )
     }
 
     useEffect(() => {
@@ -93,14 +186,19 @@ export const MaaltidCreator = ({ visible, onSetVisible }: Props) => {
                         <div> Tidspunkt:</div>{' '}
                         <input
                             type={'time'}
-                            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                            onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                                let maaltidTime = new Date()
+                                maaltidTime.setHours(
+                                    parseInt(e.target.value.split(':')[0]),
+                                    parseInt(e.target.value.split(':')[1]),
+                                    0,
+                                    0
+                                )
                                 setConsumption((prevState) => ({
                                     ...prevState,
-                                    ['consumptionDate']: new Date(
-                                        e.target.value
-                                    ),
+                                    ['consumptionDate']: maaltidTime,
                                 }))
-                            }
+                            }}
                         />
                     </div>
 
@@ -108,24 +206,65 @@ export const MaaltidCreator = ({ visible, onSetVisible }: Props) => {
                         <div className={styles.maaltidContentsHeader}>
                             Innhold:
                         </div>
-                        <div className={styles.maaltidContents}>
-                            <div className={styles.noContents}>
-                                Du har ikke innhold i måltidet ditt enda! Trykk
-                                på søk for å legge til noe.
-                                <SearchOutlined
-                                    className={styles.showSearchIcon}
-                                    onClick={() => setSearchShowing(true)}
-                                />
+                        {consumption.groceries.length > 0 ||
+                        consumption.meals.length > 0 ? (
+                            <div className={styles.maaltidContents}>
+                                <div>
+                                    {consumption.groceries.map((grocery) => (
+                                        <ListItem
+                                            title={grocery.Matvare}
+                                            ListOptions={
+                                                <MinusOutlined
+                                                    className={
+                                                        styles.actionIcon
+                                                    }
+                                                    onClick={() =>
+                                                        handleMaaltidContents(
+                                                            'groceries',
+                                                            grocery,
+                                                            'remove'
+                                                        )
+                                                    }
+                                                />
+                                            }
+                                        />
+                                    ))}
+                                    {consumption.meals.map((meal) => (
+                                        <ListItem
+                                            title={meal.mealName}
+                                            ListOptions={
+                                                <MinusOutlined
+                                                    className={
+                                                        styles.actionIcon
+                                                    }
+                                                    onClick={() =>
+                                                        handleMaaltidContents(
+                                                            'meals',
+                                                            meal,
+                                                            'remove'
+                                                        )
+                                                    }
+                                                />
+                                            }
+                                        />
+                                    ))}
+                                </div>
                             </div>
-                        </div>
+                        ) : (
+                            <div className={styles.noContents}>
+                                <div className={styles.information}>
+                                    Du har ikke innhold i måltidet ditt enda!
+                                    Trykk på søk for å legge til noe.
+                                    <SearchOutlined
+                                        className={styles.showSearchIcon}
+                                        onClick={() => setSearchShowing(true)}
+                                    />
+                                </div>
+                            </div>
+                        )}
                     </div>
                     <div className={styles.buttonGroup}>
-                        <Button
-                            onClick={function (): void {
-                                throw new Error('Function not implemented.')
-                            }}
-                            type={'Save'}
-                        >
+                        <Button onClick={() => saveMaaltid()} type={'Save'}>
                             Lagre
                         </Button>
                         <Button onClick={() => resetState()} type={'Delete'}>
@@ -151,18 +290,50 @@ export const MaaltidCreator = ({ visible, onSetVisible }: Props) => {
                             className={styles.check}
                             onClick={() => {
                                 setSearchShowing(false)
-                                // setSearchValue('')
-                                // setSearchResult(null)
+                                setSearchValue('')
+                                setSearchResult(null)
                             }}
                         />
                     </span>
                     <div className={styles.searchResultContainer}>
-                        {searchResult?.map((grocery) => grocery.Matvare)}
-                        <div className={styles.information}>
-                            {searchResult && searchResult.length > 0
-                                ? 'Ingen flere resultater'
-                                : 'Ingen resultater'}
-                        </div>
+                        {searchResult != null ? (
+                            <>
+                                {searchResult.groceries != null && (
+                                    <div>
+                                        <div className={styles.categoryHeader}>
+                                            Produkter
+                                        </div>
+                                        {searchResult?.groceries?.map(
+                                            (grocery) => (
+                                                <ListItem
+                                                    title={grocery.Matvare}
+                                                    ListOptions={groceryOptions(
+                                                        grocery
+                                                    )}
+                                                />
+                                            )
+                                        )}
+                                    </div>
+                                )}
+                                {searchResult.meals != null && (
+                                    <div>
+                                        <div className={styles.categoryHeader}>
+                                            Matretter
+                                        </div>
+                                        {searchResult?.meals?.map((meal) => (
+                                            <ListItem
+                                                title={meal.mealName}
+                                                ListOptions={mealOptions(meal)}
+                                            />
+                                        ))}
+                                    </div>
+                                )}
+                            </>
+                        ) : (
+                            <div className={styles.information}>
+                                Ingen resultater
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>

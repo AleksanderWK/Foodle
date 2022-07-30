@@ -1,5 +1,3 @@
-import { Meal } from '../state/kitchen'
-
 export interface RegisterValues {
     username: string
     email: string
@@ -67,4 +65,12 @@ export interface Consumption {
     groceries: Grocery[]
     meals: Meal[]
     consumptionDate: Date
+}
+
+export interface Meal {
+    _id: string
+    owner: string
+    mealName: string
+    dateCreated: Date
+    groceries: Grocery[]
 }

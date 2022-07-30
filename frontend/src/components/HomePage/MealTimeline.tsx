@@ -18,7 +18,7 @@ import { useRecoilState, useRecoilValue } from 'recoil'
 import { getLastThirtyDaysConsumption } from '../../api/consumptions'
 import { userState } from '../../state/user'
 import { Consumption, Grocery } from '../../api/types'
-import { Meal } from '../../state/kitchen'
+import { Meal } from '../../api/types'
 import { Input } from '../common/Input'
 import { MaaltidCreator } from './MaaltidCreator'
 
@@ -111,14 +111,20 @@ export const MealTimeline: React.FC = () => {
             content.push(groceries.map((grocery) => grocery.Matvare))
         }
         if (meals != undefined) {
-            content.push(meals.map((meal) => meal.name))
+            content.push(meals.map((meal) => meal.mealName))
         }
         return content.join(', ')
     }
 
     const getTime = (meal: Consumption): string => {
         const t = new Date(meal.consumptionDate)
-        return t.getHours().toString() + ':' + t.getMinutes().toString()
+        console.log(t)
+        const hours = t.getHours().toString()
+        const minutes =
+            t.getMinutes().toString().length == 1
+                ? '0'.concat(t.getMinutes().toString())
+                : t.getMinutes().toString()
+        return hours + ':' + minutes
     }
 
     return (

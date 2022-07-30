@@ -1,4 +1,4 @@
-import { Meal } from '../state/kitchen'
+import { Meal } from './types'
 import { PATH } from './main'
 
 interface MealData {
@@ -31,6 +31,26 @@ export const getUserMeals = async (userId: string) => {
         headers: {
             'Content-Type': 'application/json',
         },
+    })
+        .then((response) => {
+            if (response.ok) {
+                return response.json()
+            } else return null
+        })
+        .then((response) => {
+            return response
+        })
+}
+
+export const searchMeals = async (
+    searchObject: Object
+): Promise<Meal[] | null> => {
+    return await fetch(PATH.concat('/meals/search'), {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(searchObject),
     })
         .then((response) => {
             if (response.ok) {

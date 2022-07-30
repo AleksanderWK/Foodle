@@ -93,8 +93,8 @@
 .maaltidContents {
     height: 95%;
     display: flex;
-    justify-content: center;
-    align-items: center;
+    flex-direction: column;
+    width: 100%;
 }
 
 .checkInput {
@@ -128,14 +128,19 @@
     flex-grow: 1;
 }
 
+.categoryHeader {
+    font-weight: 500;
+    border-bottom: solid food.$border-color food.$border-thickness;
+}
+
 .noContents {
     color: food.$placeholder;
     display: flex;
-    flex-direction: column;
-    gap: food.$size-spacing-2;
-    font-style: italic;
+    justify-content: center;
+    align-items: center;
     text-align: center;
-    align-self: center;
+    font-style: italic;
+    height: 100%;
 }
 
 .showSearchIcon {
@@ -147,4 +152,25 @@
             fill: food.$primary-100;
         }
     }
+}
+
+.actionIcon {
+    & > svg {
+        width: 20px;
+        height: 20px;
+        fill: food.$primary-200;
+
+        &:hover {
+            fill: food.$primary-100;
+        }
+    }
+}
+
+.information {
+    font-style: italic;
+    color: food.$placeholder;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: food.$size-spacing-2;
 }

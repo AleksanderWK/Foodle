@@ -11,6 +11,7 @@ router.post("/add", async (req, res) => {
     const newConsumption = new Consumption({
       owner: req.body.owner,
       name: req.body.name,
+      consumptionDate: req.body.consumptionDate,
       groceries: req.body.groceries,
       meals: req.body.meals,
     });
