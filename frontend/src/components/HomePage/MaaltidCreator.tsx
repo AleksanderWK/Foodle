@@ -100,6 +100,7 @@ export const MaaltidCreator = ({ visible, onSetVisible }: Props) => {
         if (newConsumptions != null) {
             setConsumptions(newConsumptions)
             resetState()
+            onSetVisible(false)
             setGlobalFeedback({
                 type: FeedbackTypes.SUCCESS,
                 message: 'Måltid lagt til!',
@@ -146,10 +147,6 @@ export const MaaltidCreator = ({ visible, onSetVisible }: Props) => {
             />
         )
     }
-
-    useEffect(() => {
-        console.log(consumption)
-    }, [consumption])
 
     return (
         <Card
