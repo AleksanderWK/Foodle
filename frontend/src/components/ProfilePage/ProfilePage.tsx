@@ -16,6 +16,7 @@ import { SettingOutlined } from '@ant-design/icons'
 import styles from './ProfilePage.module.scss'
 import { modalContent, modalOpen } from '../../state/main'
 import { ProfileSettings } from './ProfileSettings'
+import { NutritionGoal } from './NutritionGoal'
 
 export const ProfilePage: React.FC = () => {
     const [image, setImage] = useState<any>('')
@@ -129,7 +130,9 @@ export const ProfilePage: React.FC = () => {
                 />
                 <div className={styles.content}></div>
             </Card>
-            <Card className={styles.dailyGoalCard}></Card>
+            <Card className={styles.dailyGoalCard}>
+                <NutritionGoal />
+            </Card>
             <Card className={styles.nutritionHistoryCard}></Card>
         </div>
     )

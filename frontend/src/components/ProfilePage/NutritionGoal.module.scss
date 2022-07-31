@@ -1,0 +1,42 @@
+@use '../../food.module.scss';
+
+.nutritionGoalWrapper {
+    height: 200%;
+    width: 100%;
+    transition: transform 400ms ease-in-out;
+}
+
+.nutritionGoal {
+    height: 50%;
+    width: 100%;
+    padding: food.$size-spacing-2;
+    box-sizing: border-box;
+}
+
+.createNutritionGoal {
+    height: 50%;
+    width: 100%;
+    padding: food.$size-spacing-2;
+    box-sizing: border-box;
+}
+
+.cardHeader {
+    display: flex;
+    justify-content: space-between;
+    font-weight: 600;
+}
+
+.optionsIcon {
+    cursor: pointer;
+    width: 25px;
+    height: 25px;
+    & > * {
+        fill: food.$grey-200;
+
+        &:hover {
+            & > * {
+                fill: food.$grey-100;
+            }
+        }
+    }
+}
