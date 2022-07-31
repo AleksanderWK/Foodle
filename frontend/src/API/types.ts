@@ -74,3 +74,15 @@ export interface Meal {
     dateCreated: Date
     groceries: Grocery[]
 }
+
+export interface GoalData {
+    owner: string
+    calories: number
+    protein: string
+    fat: string
+    carbohydrates: string
+}
+
+export interface Goal extends GoalData {
+    _id: string
+}

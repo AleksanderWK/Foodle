@@ -18,6 +18,8 @@
     width: 100%;
     padding: food.$size-spacing-2;
     box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
 }
 
 .cardHeader {
@@ -39,4 +41,36 @@
             }
         }
     }
+}
+
+.content {
+    flex-grow: 1;
+    display: flex;
+    gap: food.$size-spacing-2;
+}
+
+.leftContent {
+    width: 30%;
+    margin-top: food.$size-spacing-1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.rightContent {
+    width: 70%;
+
+    &:not(:last-child) {
+        margin-bottom: food.$size-spacing-2;
+    }
+}
+
+.sliderContainer {
+    width: 100%;
+}
+
+.sliderHeader {
+    display: flex;
+    justify-content: space-between;
+    font-size: small;
+    margin-bottom: food.$size-spacing-1;
 }
