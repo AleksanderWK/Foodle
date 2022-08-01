@@ -4,7 +4,7 @@ import { Icon } from '@iconify/react'
 import { Input } from '../common/Input'
 import { GoalData } from '../../api/types'
 import { userState } from '../../state/user'
-import { useRecoilValue, useSetRecoilState } from 'recoil'
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 import { Button } from '../common/Button'
 import { Slider } from '../common/Slider'
 import { addGoal } from '../../api/goals'
@@ -22,9 +22,15 @@ export const NutritionGoal = () => {
         fat: '33',
         carbohydrates: '33',
     })
-    const setGoalState = useSetRecoilState(goalState)
+    const [goalstate, setGoalState] = useRecoilState(goalState)
     const setGlobalFeedback = useSetRecoilState(globalFeedbackState)
     const macros = ['protein', 'fat', 'carbohydrates']
+
+    useEffect(() => {
+        if (goalstate != null) {
+            setGoal(goalstate)
+        }
+    }, [])
 
     const handleGoalChange = (property: string, value: string) => {
         setGoal((prevState) => ({ ...prevState, [property]: value }))

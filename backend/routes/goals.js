@@ -8,16 +8,22 @@ const router = express.Router();
 
 router.post("/add", async (req, res) => {
   try {
-    new Goal({
+    const goal = new Goal({
       owner: req.body.owner,
       calories: req.body.calories,
       protein: req.body.protein,
       fat: req.body.fat,
       carbohydrates: req.body.carbohydrates,
-    })
-      .save()
-      .then((goal) => res.json(goal));
+    });
+    let newGoal = goal.toObject();
+    delete newGoal._id;
+    Goal.findOneAndUpdate({ owner: goal.owner }, newGoal, {
+      upsert: true,
+      setDefaultsOnInsert: true,
+      new: true,
+    }).then((goal) => res.json(goal));
   } catch (error) {
+    console.log(error);
     res.status(500).json({ message: error });
   }
 });
