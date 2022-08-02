@@ -1,0 +1,21 @@
+@use '../../food.module.scss';
+
+.circle {
+    stroke: food.$secondary;
+    fill: none;
+    stroke-linecap: round;
+    stroke-width: 2.6;
+    animation: progress 1s ease-out forwards;
+}
+
+@keyframes progress {
+    0% {
+        stroke-dasharray: 0 100;
+    }
+}
+
+.percentage {
+    fill: food.$secondary;
+    font-size: 3.5px;
+    text-anchor: middle;
+}

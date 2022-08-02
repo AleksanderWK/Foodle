@@ -11,6 +11,7 @@ import { addGoal, getGoal } from '../../api/goals'
 import { goalState } from '../../state/goal'
 import { globalFeedbackState } from '../../state/main'
 import { FeedbackTypes } from '../common/Feedback'
+import { CircleDiagram } from '../common/CircleDiagram'
 
 export const NutritionGoal = () => {
     const [creatGoalVisible, setCreateGoalVisible] = useState(false)
@@ -135,7 +136,18 @@ export const NutritionGoal = () => {
                         />
                     </div>
                 </div>
-                <div className={styles.content}>{goal?.calories}</div>
+                <div className={styles.content}>
+                    {goal != null && (
+                        <>
+                            <CircleDiagram
+                                maxValue={goal.calories}
+                                currentValue={2000}
+                            />
+
+                            <div className={styles.lineChartsContainer}></div>
+                        </>
+                    )}
+                </div>
             </div>
             <div className={styles.createNutritionGoal}>
                 <div className={styles.cardHeader}>

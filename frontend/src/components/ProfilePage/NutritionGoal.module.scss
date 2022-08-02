@@ -44,7 +44,9 @@
 }
 
 .content {
-    flex-grow: 1;
+    height: calc(100% - 29px);
+    padding-top: 8px;
+    width: 100%;
     display: flex;
     gap: food.$size-spacing-2;
 }
