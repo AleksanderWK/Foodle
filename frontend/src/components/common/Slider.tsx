@@ -5,7 +5,6 @@ import styles from './Slider.module.scss'
 interface Props {
     max: number
     min: number
-    defaultValue: number
     value: number
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
     className?: string
@@ -14,7 +13,6 @@ interface Props {
 export const Slider: React.FC<Props> = ({
     max,
     min,
-    defaultValue,
     value,
     onChange,
     className,
@@ -25,7 +23,6 @@ export const Slider: React.FC<Props> = ({
             type={'range'}
             max={max}
             min={min}
-            defaultValue={defaultValue}
             value={value}
             onChange={onChange}
         />

@@ -28,4 +28,16 @@ router.post("/add", async (req, res) => {
   }
 });
 
+// get a users goal
+
+router.get("/:userid", async (req, res) => {
+  try {
+    Goal.findOne({ owner: req.params.userid }).then((goal) => {
+      res.json(goal);
+    });
+  } catch (error) {
+    res.status(500).json({ message: error });
+  }
+});
+
 module.exports = router;

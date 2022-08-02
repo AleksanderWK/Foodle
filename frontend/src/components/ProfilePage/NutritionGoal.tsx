@@ -2,12 +2,12 @@ import styles from './NutritionGoal.module.scss'
 import React, { useEffect, useState } from 'react'
 import { Icon } from '@iconify/react'
 import { Input } from '../common/Input'
-import { GoalData } from '../../api/types'
+import { Goal, GoalData } from '../../api/types'
 import { userState } from '../../state/user'
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 import { Button } from '../common/Button'
 import { Slider } from '../common/Slider'
-import { addGoal } from '../../api/goals'
+import { addGoal, getGoal } from '../../api/goals'
 import { goalState } from '../../state/goal'
 import { globalFeedbackState } from '../../state/main'
 import { FeedbackTypes } from '../common/Feedback'
@@ -15,25 +15,28 @@ import { FeedbackTypes } from '../common/Feedback'
 export const NutritionGoal = () => {
     const [creatGoalVisible, setCreateGoalVisible] = useState(false)
     const user = useRecoilValue(userState)
-    const [goal, setGoal] = useState<GoalData>({
+    const [createGoal, setCreateGoal] = useState<GoalData>({
         owner: user ? user._id : '',
         calories: 0,
         protein: '33',
         fat: '33',
         carbohydrates: '33',
     })
-    const [goalstate, setGoalState] = useRecoilState(goalState)
+    const [goal, setGoal] = useRecoilState(goalState)
     const setGlobalFeedback = useSetRecoilState(globalFeedbackState)
     const macros = ['protein', 'fat', 'carbohydrates']
 
     useEffect(() => {
-        if (goalstate != null) {
-            setGoal(goalstate)
+        if (user) {
+            getGoal(user._id).then((goal) => {
+                setGoal(goal)
+                setCreateGoal(goal)
+            })
         }
     }, [])
 
     const handleGoalChange = (property: string, value: string) => {
-        setGoal((prevState) => ({ ...prevState, [property]: value }))
+        setCreateGoal((prevState) => ({ ...prevState, [property]: value }))
     }
 
     const propertyToChangeMap = {
@@ -49,19 +52,24 @@ export const NutritionGoal = () => {
         let totalMacros: number = 0
         if (property == 'protein') {
             totalMacros =
-                value + parseInt(goal.fat) + parseInt(goal.carbohydrates)
+                value +
+                parseInt(createGoal.fat) +
+                parseInt(createGoal.carbohydrates)
         } else if (property == 'carbohydrates') {
-            totalMacros = value + parseInt(goal.protein) + parseInt(goal.fat)
+            totalMacros =
+                value + parseInt(createGoal.protein) + parseInt(createGoal.fat)
         } else if (property == 'fat') {
             totalMacros =
-                value + parseInt(goal.protein) + parseInt(goal.carbohydrates)
+                value +
+                parseInt(createGoal.protein) +
+                parseInt(createGoal.carbohydrates)
         }
         if (totalMacros > 100) {
             let prevDenominator = 2
             propertyToChangeMap[property].forEach((macro) => {
                 const newValue = Math.floor(
                     parseInt(
-                        goal[macro as 'protein' | 'fat' | 'carbohydrates']
+                        createGoal[macro as 'protein' | 'fat' | 'carbohydrates']
                     ) -
                         (totalMacros - 100) / prevDenominator
                 )
@@ -78,7 +86,9 @@ export const NutritionGoal = () => {
                     macro,
                     Math.floor(
                         parseInt(
-                            goal[macro as 'protein' | 'fat' | 'carbohydrates']
+                            createGoal[
+                                macro as 'protein' | 'fat' | 'carbohydrates'
+                            ]
                         ) +
                             remainder / 2
                     ).toString()
@@ -89,9 +99,9 @@ export const NutritionGoal = () => {
     }
 
     const saveGoalConfig = () => {
-        addGoal(goal).then((goal) => {
+        addGoal(createGoal).then((goal) => {
             if (goal != null) {
-                setGoalState(goal)
+                setGoal(goal)
                 setGlobalFeedback({
                     type: FeedbackTypes.SUCCESS,
                     message: 'Mål oppdatert!',
@@ -125,6 +135,7 @@ export const NutritionGoal = () => {
                         />
                     </div>
                 </div>
+                <div className={styles.content}>{goal?.calories}</div>
             </div>
             <div className={styles.createNutritionGoal}>
                 <div className={styles.cardHeader}>
@@ -133,7 +144,7 @@ export const NutritionGoal = () => {
                 <div className={styles.content}>
                     <div className={styles.leftContent}>
                         <Input
-                            value={goal.calories}
+                            value={createGoal.calories}
                             onChange={(
                                 e: React.ChangeEvent<HTMLInputElement>
                             ) => handleGoalChange('calories', e.target.value)}
@@ -146,14 +157,14 @@ export const NutritionGoal = () => {
                     </div>
                     <div className={styles.rightContent}>
                         {macros.map((macro) => (
-                            <div className={styles.sliderContainer}>
+                            <div className={styles.sliderContainer} key={macro}>
                                 <div className={styles.sliderHeader}>
                                     <div>
                                         {macro.charAt(0).toUpperCase() +
                                             macro.slice(1)}
                                     </div>
                                     <div>
-                                        {goal[
+                                        {createGoal[
                                             macro as
                                                 | 'protein'
                                                 | 'fat'
@@ -164,9 +175,8 @@ export const NutritionGoal = () => {
                                 <Slider
                                     max={100}
                                     min={0}
-                                    defaultValue={20}
                                     value={parseInt(
-                                        goal[
+                                        createGoal[
                                             macro as
                                                 | 'protein'
                                                 | 'fat'

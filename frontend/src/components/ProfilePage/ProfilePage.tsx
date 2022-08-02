@@ -77,7 +77,6 @@ export const ProfilePage: React.FC = () => {
     }
 
     useEffect(() => {
-        console.log(modalVisible)
         if (modalVisible) {
             setModalContent(<ProfileSettings />)
         } else {

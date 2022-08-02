@@ -1,5 +1,6 @@
 import { atom, selector } from 'recoil'
 import { Consumption } from '../api/types'
+import { MacroGrams } from './goal'
 
 export const consumptionsState = atom<Consumption[]>({
     key: 'consumptions',
@@ -20,5 +21,13 @@ export const dailyConsumptionsState = selector<Consumption[]>({
             a.consumptionDate > b.consumptionDate ? 1 : -1
         )
         return dailyConsumptions
+    },
+})
+
+export const dailyConsumptionsGramsState = selector<MacroGrams>({
+    key: 'dailyConsumtionsGrams',
+    get: ({ get }) => {
+        const dailyConsumptions = get(dailyConsumptionsState)
+        return {} as MacroGrams
     },
 })
