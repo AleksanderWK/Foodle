@@ -1,0 +1,28 @@
+@use '../../food.module.scss';
+
+.slider {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 20px;
+    background: food.$border-color;
+    border-radius: food.$size-spacing-1;
+    outline: none;
+    opacity: 0.8;
+    -webkit-transition: 0.2s;
+    transition: opacity 0.2s;
+    margin: 0;
+
+    &:hover {
+        opacity: 1;
+    }
+
+    &::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        border-radius: food.$size-spacing-1;
+        appearance: none;
+        width: 20px;
+        height: 20px;
+        background: food.$primary-200;
+        cursor: pointer;
+    }
+}

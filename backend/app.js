@@ -61,12 +61,14 @@ const groceriesRoute = require("./routes/groceries");
 const shoppinglistRoute = require("./routes/shoppinglists");
 const mealsRoute = require("./routes/meals");
 const consumptionsRoute = require("./routes/consumptions");
+const goalsRoute = require("./routes/goals");
 
 app.use("/users", usersRoute);
 app.use("/groceries", groceriesRoute);
 app.use("/shoppinglists", shoppinglistRoute);
 app.use("/meals", mealsRoute);
 app.use("/consumptions", consumptionsRoute);
+app.use("/goals", goalsRoute);
 
 //LISTENING
 app.listen(port);

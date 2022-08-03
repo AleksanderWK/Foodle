@@ -73,7 +73,6 @@ export const MaaltidCreator = ({ visible, onSetVisible }: Props) => {
             }
             const searchResultGrocery = await searchGroceries(searchObject)
             const searchResultMeal = await searchMeals(searchObject)
-            console.log(searchResultMeal)
             const searchResult: multiSearchResult = {
                 groceries: searchResultGrocery,
                 meals: searchResultMeal,

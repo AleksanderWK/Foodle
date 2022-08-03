@@ -1,0 +1,118 @@
+@use '../../food.module.scss';
+
+.nutritionGoalWrapper {
+    height: 200%;
+    width: 100%;
+    transition: transform 400ms ease-in-out;
+}
+
+.nutritionGoal {
+    height: 50%;
+    width: 100%;
+    padding: food.$size-spacing-2;
+    box-sizing: border-box;
+}
+
+.createNutritionGoal {
+    height: 50%;
+    width: 100%;
+    padding: food.$size-spacing-2;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+}
+
+.cardHeader {
+    display: flex;
+    justify-content: space-between;
+    font-weight: 600;
+}
+
+.optionsIcon {
+    cursor: pointer;
+    width: 25px;
+    height: 25px;
+    & > * {
+        fill: food.$grey-200;
+
+        &:hover {
+            & > * {
+                fill: food.$grey-100;
+            }
+        }
+    }
+}
+
+.content {
+    height: calc(100% - 29px);
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+    gap: food.$size-spacing-2;
+}
+
+.leftContent {
+    width: 30%;
+    margin-top: food.$size-spacing-1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.rightContent {
+    width: 70%;
+
+    &:not(:last-child) {
+        margin-bottom: food.$size-spacing-2;
+    }
+}
+
+.sliderContainer {
+    width: 100%;
+}
+
+.sliderHeader {
+    display: flex;
+    justify-content: space-between;
+    font-size: small;
+    margin-bottom: food.$size-spacing-1;
+}
+
+.progressBarHeader {
+    display: flex;
+    justify-content: space-between;
+}
+
+.lineChartsContainer {
+    display: flex;
+    width: 70%;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.errorText {
+    color: food.$alert;
+}
+
+.noGoalInformation {
+    display: flex;
+    flex-direction: column;
+    gap: food.$size-spacing-1;
+    justify-content: center;
+    align-items: center;
+    & > * {
+        color: food.$placeholder;
+    }
+}
+
+.createButton {
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+}
+.addIcon {
+    & > svg {
+        width: 20px;
+        height: 20px;
+        fill: white;
+    }
+}

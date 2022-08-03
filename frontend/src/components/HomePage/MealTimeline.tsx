@@ -118,7 +118,6 @@ export const MealTimeline: React.FC = () => {
 
     const getTime = (meal: Consumption): string => {
         const t = new Date(meal.consumptionDate)
-        console.log(t)
         const hours = t.getHours().toString()
         const minutes =
             t.getMinutes().toString().length == 1

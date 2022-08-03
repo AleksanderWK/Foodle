@@ -1,0 +1,30 @@
+@use '../../food.module.scss';
+
+.svgContainer {
+    margin-top: 15px;
+}
+.circle {
+    margin-top: 10px;
+    stroke: food.$secondary;
+    fill: none;
+    stroke-linecap: round;
+    stroke-width: 3;
+    animation: progress 1s ease-out forwards;
+}
+
+@keyframes progress {
+    0% {
+        stroke-dasharray: 0 100;
+    }
+}
+
+.percentage {
+    fill: food.$secondary;
+    font-size: 3.7px;
+    font-weight: 600;
+    text-anchor: middle;
+}
+
+.errorText {
+    fill: food.$alert;
+}

@@ -16,6 +16,8 @@ import { SettingOutlined } from '@ant-design/icons'
 import styles from './ProfilePage.module.scss'
 import { modalContent, modalOpen } from '../../state/main'
 import { ProfileSettings } from './ProfileSettings'
+import { NutritionGoal } from './NutritionGoal'
+import { monthNamesNor } from '../../utils/dateUtils'
 
 export const ProfilePage: React.FC = () => {
     const [image, setImage] = useState<any>('')
@@ -55,20 +57,6 @@ export const ProfilePage: React.FC = () => {
     }
 
     const getMemberSinceDate = () => {
-        const monthNamesNor = [
-            'januar',
-            'februar',
-            'mars',
-            'april',
-            'mai',
-            'juni',
-            'juli',
-            'august',
-            'septemer',
-            'oktober',
-            'november',
-            'desember',
-        ]
         if (user && user.dateCreated) {
             const date = new Date(user.dateCreated)
             return monthNamesNor[date.getMonth()] + ' ' + date.getFullYear()
@@ -76,7 +64,6 @@ export const ProfilePage: React.FC = () => {
     }
 
     useEffect(() => {
-        console.log(modalVisible)
         if (modalVisible) {
             setModalContent(<ProfileSettings />)
         } else {
@@ -129,7 +116,9 @@ export const ProfilePage: React.FC = () => {
                 />
                 <div className={styles.content}></div>
             </Card>
-            <Card className={styles.dailyGoalCard}></Card>
+            <Card className={styles.dailyGoalCard}>
+                <NutritionGoal />
+            </Card>
             <Card className={styles.nutritionHistoryCard}></Card>
         </div>
     )

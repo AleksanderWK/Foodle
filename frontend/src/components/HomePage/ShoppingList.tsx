@@ -78,9 +78,7 @@ export const ShoppingList: React.FC = () => {
             // manageShoppingList('delete', groceryId, shoppingList._id).then(
             //     (shl) => setShoppingList(shl)
             // )
-
             // Add to kjøleskap
-            console.log('Added to kjøleskap')
         }
     }
 

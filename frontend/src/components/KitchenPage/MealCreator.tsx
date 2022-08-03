@@ -74,7 +74,6 @@ export const MealCreator: React.FC = () => {
     const handleMealDataChange = (property: string, value: string) => {
         if (property == 'mealName') {
             setCurrentMeal((prevState) => ({ ...prevState, [property]: value }))
-            console.log(currentMeal)
         }
     }
 
