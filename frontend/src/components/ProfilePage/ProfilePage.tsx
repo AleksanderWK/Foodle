@@ -17,6 +17,7 @@ import styles from './ProfilePage.module.scss'
 import { modalContent, modalOpen } from '../../state/main'
 import { ProfileSettings } from './ProfileSettings'
 import { NutritionGoal } from './NutritionGoal'
+import { monthNamesNor } from '../../utils/dateUtils'
 
 export const ProfilePage: React.FC = () => {
     const [image, setImage] = useState<any>('')
@@ -56,20 +57,6 @@ export const ProfilePage: React.FC = () => {
     }
 
     const getMemberSinceDate = () => {
-        const monthNamesNor = [
-            'januar',
-            'februar',
-            'mars',
-            'april',
-            'mai',
-            'juni',
-            'juli',
-            'august',
-            'septemer',
-            'oktober',
-            'november',
-            'desember',
-        ]
         if (user && user.dateCreated) {
             const date = new Date(user.dateCreated)
             return monthNamesNor[date.getMonth()] + ' ' + date.getFullYear()

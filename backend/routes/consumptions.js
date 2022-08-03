@@ -23,7 +23,13 @@ router.post("/add", async (req, res) => {
       currentDate: { $gte: thirtyDaysAgo },
     })
       .populate("groceries")
-      .populate("meals")
+      .populate({
+        path: "meals",
+        populate: {
+          path: "groceries",
+          model: "Grocery",
+        },
+      })
       .then((consumptions) => res.json(consumptions));
   } catch (error) {
     res.status(500).json({ message: error });
@@ -41,7 +47,13 @@ router.get("/:userId/lastthirty", async (req, res) => {
       currentDate: { $gte: thirtyDaysAgo },
     })
       .populate("groceries")
-      .populate("meals")
+      .populate({
+        path: "meals",
+        populate: {
+          path: "groceries",
+          model: "Grocery",
+        },
+      })
       .then((consumptions) => res.json(consumptions));
   } catch (error) {
     console.log(error);

@@ -2,16 +2,20 @@ import styles from './NutritionGoal.module.scss'
 import React, { useEffect, useState } from 'react'
 import { Icon } from '@iconify/react'
 import { Input } from '../common/Input'
-import { Goal, GoalData } from '../../api/types'
+import { GoalData } from '../../api/types'
 import { userState } from '../../state/user'
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 import { Button } from '../common/Button'
 import { Slider } from '../common/Slider'
 import { addGoal, getGoal } from '../../api/goals'
-import { goalState } from '../../state/goal'
+import { goalCalculatedGramsState, goalState } from '../../state/goal'
 import { globalFeedbackState } from '../../state/main'
 import { FeedbackTypes } from '../common/Feedback'
 import { CircleDiagram } from '../common/CircleDiagram'
+import { ProgressBar } from '../common/ProgressBar'
+import { dailyConsumptionsTotalState } from '../../state/consumption'
+import classNames from 'classnames'
+import { monthNamesNor } from '../../utils/dateUtils'
 
 export const NutritionGoal = () => {
     const [creatGoalVisible, setCreateGoalVisible] = useState(false)
@@ -24,14 +28,18 @@ export const NutritionGoal = () => {
         carbohydrates: '33',
     })
     const [goal, setGoal] = useRecoilState(goalState)
+    const calculatedMacroGrams = useRecoilValue(goalCalculatedGramsState)
+    const calculatedDailyTotals = useRecoilValue(dailyConsumptionsTotalState)
     const setGlobalFeedback = useSetRecoilState(globalFeedbackState)
     const macros = ['protein', 'fat', 'carbohydrates']
 
     useEffect(() => {
         if (user) {
             getGoal(user._id).then((goal) => {
-                setGoal(goal)
-                setCreateGoal(goal)
+                if (goal != null) {
+                    setGoal(goal)
+                    setCreateGoal(goal)
+                }
             })
         }
     }, [])
@@ -118,6 +126,11 @@ export const NutritionGoal = () => {
         })
     }
 
+    const getHeaderDate = () => {
+        const today = new Date()
+        return today.getDate() + '. ' + monthNamesNor[today.getMonth()]
+    }
+
     return (
         <div
             className={styles.nutritionGoalWrapper}
@@ -127,7 +140,7 @@ export const NutritionGoal = () => {
         >
             <div className={styles.nutritionGoal}>
                 <div className={styles.cardHeader}>
-                    <div>Dagsmål 1. august</div>
+                    <div>Dagsmål {getHeaderDate()}</div>
                     <div>
                         <Icon
                             icon="iwwa:option"
@@ -137,14 +150,67 @@ export const NutritionGoal = () => {
                     </div>
                 </div>
                 <div className={styles.content}>
-                    {goal != null && (
+                    {goal != null && calculatedMacroGrams && (
                         <>
                             <CircleDiagram
                                 maxValue={goal.calories}
-                                currentValue={2000}
+                                currentValue={calculatedDailyTotals.calories}
+                                isError={
+                                    calculatedDailyTotals.calories >
+                                    goal.calories
+                                }
                             />
 
-                            <div className={styles.lineChartsContainer}></div>
+                            <div className={styles.lineChartsContainer}>
+                                {macros.map((macro) => {
+                                    const currentMacroValue =
+                                        calculatedDailyTotals[
+                                            macro as
+                                                | 'protein'
+                                                | 'fat'
+                                                | 'carbohydrates'
+                                        ]
+                                    const maxMacroValue =
+                                        calculatedMacroGrams[
+                                            macro as
+                                                | 'protein'
+                                                | 'fat'
+                                                | 'carbohydrates'
+                                        ]
+                                    return (
+                                        <div
+                                            key={macro}
+                                            className={
+                                                styles.progressBarContainer
+                                            }
+                                        >
+                                            <div
+                                                className={
+                                                    styles.progressBarHeader
+                                                }
+                                            >
+                                                <div>
+                                                    {macro
+                                                        .charAt(0)
+                                                        .toUpperCase() +
+                                                        macro.slice(1)}
+                                                </div>
+                                                <div
+                                                    className={classNames(
+                                                        currentMacroValue >
+                                                            maxMacroValue &&
+                                                            styles.errorText
+                                                    )}
+                                                >{`${currentMacroValue}/${maxMacroValue} g`}</div>
+                                            </div>
+                                            <ProgressBar
+                                                currentValue={currentMacroValue}
+                                                maxValue={maxMacroValue}
+                                            />
+                                        </div>
+                                    )
+                                })}
+                            </div>
                         </>
                     )}
                 </div>

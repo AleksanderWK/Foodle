@@ -18,10 +18,15 @@ export const goalCalculatedGramsState = selector<MacroGrams | null>({
         const goal = get(goalState)
         if (goal) {
             const macros: MacroGrams = {
-                protein: (goal.calories * parseInt(goal.protein)) / 4,
-                fat: (goal.calories * parseInt(goal.fat)) / 9,
-                carbohydrates:
-                    (goal.calories * parseInt(goal.carbohydrates)) / 4,
+                protein: Math.round(
+                    (goal.calories * (parseInt(goal.protein) / 100)) / 4
+                ),
+                fat: Math.round(
+                    (goal.calories * (parseInt(goal.fat) / 100)) / 9
+                ),
+                carbohydrates: Math.round(
+                    (goal.calories * (parseInt(goal.carbohydrates) / 100)) / 4
+                ),
             }
             return macros
         }

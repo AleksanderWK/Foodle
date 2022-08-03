@@ -1,0 +1,24 @@
+@use '../../food.module.scss';
+
+.progressBarContainer {
+    width: 100%;
+}
+
+.progressBar {
+    background-color: food.$border-color;
+    height: 12px;
+    border-radius: 12px;
+}
+
+.progress {
+    background-color: food.$secondary;
+    height: 100%;
+    border-radius: 12px;
+    animation: increase 1s forwards ease-out;
+}
+
+@keyframes increase {
+    from {
+        width: 0%;
+    }
+}

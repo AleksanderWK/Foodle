@@ -1,10 +1,14 @@
 @use '../../food.module.scss';
 
+.svgContainer {
+    margin-top: 15px;
+}
 .circle {
+    margin-top: 10px;
     stroke: food.$secondary;
     fill: none;
     stroke-linecap: round;
-    stroke-width: 2.6;
+    stroke-width: 3;
     animation: progress 1s ease-out forwards;
 }
 
@@ -16,6 +20,11 @@
 
 .percentage {
     fill: food.$secondary;
-    font-size: 3.5px;
+    font-size: 3.7px;
+    font-weight: 600;
     text-anchor: middle;
+}
+
+.errorText {
+    fill: food.$alert;
 }

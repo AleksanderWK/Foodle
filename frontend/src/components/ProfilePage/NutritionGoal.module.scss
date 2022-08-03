@@ -45,9 +45,9 @@
 
 .content {
     height: calc(100% - 29px);
-    padding-top: 8px;
     width: 100%;
     display: flex;
+    justify-content: space-evenly;
     gap: food.$size-spacing-2;
 }
 
@@ -75,4 +75,20 @@
     justify-content: space-between;
     font-size: small;
     margin-bottom: food.$size-spacing-1;
+}
+
+.progressBarHeader {
+    display: flex;
+    justify-content: space-between;
+}
+
+.lineChartsContainer {
+    display: flex;
+    width: 70%;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.errorText {
+    color: food.$alert;
 }
