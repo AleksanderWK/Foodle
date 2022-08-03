@@ -16,6 +16,7 @@ import { ProgressBar } from '../common/ProgressBar'
 import { dailyConsumptionsTotalState } from '../../state/consumption'
 import classNames from 'classnames'
 import { monthNamesNor } from '../../utils/dateUtils'
+import { PlusOutlined } from '@ant-design/icons'
 
 export const NutritionGoal = () => {
     const [creatGoalVisible, setCreateGoalVisible] = useState(false)
@@ -141,15 +142,32 @@ export const NutritionGoal = () => {
             <div className={styles.nutritionGoal}>
                 <div className={styles.cardHeader}>
                     <div>Dagsmål {getHeaderDate()}</div>
-                    <div>
-                        <Icon
-                            icon="iwwa:option"
-                            className={styles.optionsIcon}
-                            onClick={() => setCreateGoalVisible(true)}
-                        />
-                    </div>
+                    {goal != null && (
+                        <div>
+                            <Icon
+                                icon="iwwa:option"
+                                className={styles.optionsIcon}
+                                onClick={() => setCreateGoalVisible(true)}
+                            />
+                        </div>
+                    )}
                 </div>
                 <div className={styles.content}>
+                    {goal == null && (
+                        <div className={styles.noGoalInformation}>
+                            <div>
+                                Du har ikke opprettet et mål. Trykk på + for å
+                                fortsette!
+                            </div>
+                            <Button
+                                onClick={() => setCreateGoalVisible(true)}
+                                type={'Primary'}
+                                className={styles.createButton}
+                            >
+                                <PlusOutlined className={styles.addIcon} />
+                            </Button>
+                        </div>
+                    )}
                     {goal != null && calculatedMacroGrams && (
                         <>
                             <CircleDiagram

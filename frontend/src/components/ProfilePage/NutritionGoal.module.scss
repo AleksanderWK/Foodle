@@ -92,3 +92,27 @@
 .errorText {
     color: food.$alert;
 }
+
+.noGoalInformation {
+    display: flex;
+    flex-direction: column;
+    gap: food.$size-spacing-1;
+    justify-content: center;
+    align-items: center;
+    & > * {
+        color: food.$placeholder;
+    }
+}
+
+.createButton {
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+}
+.addIcon {
+    & > svg {
+        width: 20px;
+        height: 20px;
+        fill: white;
+    }
+}
