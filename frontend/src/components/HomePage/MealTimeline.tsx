@@ -135,6 +135,7 @@ export const MealTimeline: React.FC = () => {
             <div className={styles.timeline}>
                 {todaysConsumptions.map((meal: Consumption) => (
                     <MealIndicator
+                        key={meal.name}
                         name={meal.name}
                         time={getTime(meal)}
                         contents={formatMealContent(meal.groceries, meal.meals)}
