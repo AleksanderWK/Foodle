@@ -56,7 +56,6 @@ router.get("/:userId/lastthirty", async (req, res) => {
       })
       .then((consumptions) => res.json(consumptions));
   } catch (error) {
-    console.log(error);
     res.status(500).json({ message: error });
   }
 });

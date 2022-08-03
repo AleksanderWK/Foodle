@@ -32,7 +32,6 @@ interface Totals {
 }
 
 const getTotalsFromGroceries = (groceries: Grocery[]) => {
-    console.log(groceries)
     const totalProtein = groceries
         .map((grocery) => parseInt(grocery.Protein))
         .reduce((prevSum, newValue) => prevSum + newValue, 0)
