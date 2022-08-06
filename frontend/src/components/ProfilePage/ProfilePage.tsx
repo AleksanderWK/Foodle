@@ -18,6 +18,7 @@ import { modalContent, modalOpen } from '../../state/main'
 import { ProfileSettings } from './ProfileSettings'
 import { NutritionGoal } from './NutritionGoal'
 import { monthNamesNor } from '../../utils/dateUtils'
+import { ConsumptionHistory } from './ConsumptionHistory'
 
 export const ProfilePage: React.FC = () => {
     const [image, setImage] = useState<any>('')
@@ -119,7 +120,14 @@ export const ProfilePage: React.FC = () => {
             <Card className={styles.dailyGoalCard}>
                 <NutritionGoal />
             </Card>
-            <Card className={styles.nutritionHistoryCard}></Card>
+            <Card className={styles.nutritionHistoryCard}>
+                <div className={styles.nutritionHistoryContent}>
+                    <div className={styles.historyHeader}>
+                        Makroinntak siste 30 dager
+                    </div>
+                    <ConsumptionHistory />
+                </div>
+            </Card>
         </div>
     )
 }
