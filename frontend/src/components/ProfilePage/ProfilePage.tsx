@@ -121,7 +121,12 @@ export const ProfilePage: React.FC = () => {
                 <NutritionGoal />
             </Card>
             <Card className={styles.nutritionHistoryCard}>
-                <ConsumptionHistory />
+                <div className={styles.nutritionHistoryContent}>
+                    <div className={styles.historyHeader}>
+                        Makroinntak siste 30 dager
+                    </div>
+                    <ConsumptionHistory />
+                </div>
             </Card>
         </div>
     )

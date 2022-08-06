@@ -63,12 +63,11 @@ export const ConsumptionHistory: React.FC = () => {
         lastThirtyDaysMacrosState
     )
 
+    const formatter = (value: string) => `${value}g`
+
     return (
-        <ResponsiveContainer width={'100%'} height={'100%'}>
-            <AreaChart
-                data={lastThirtyDaysConsumptionMacros}
-                margin={{ left: 0 }}
-            >
+        <ResponsiveContainer width={'100%'} height={'85%'}>
+            <AreaChart data={lastThirtyDaysConsumptionMacros}>
                 <defs>
                     {Object.values(Macros).map((macro) => (
                         <linearGradient id={macro} x1="0" y1="0" x2="0" y2="2">
@@ -85,14 +84,17 @@ export const ConsumptionHistory: React.FC = () => {
                         </linearGradient>
                     ))}
                 </defs>
-                <XAxis dataKey="date" />
-                <YAxis />
+                <XAxis dataKey="date" padding={{ left: 10, right: 10 }} />
+                <YAxis
+                    tickFormatter={formatter}
+                    padding={{ top: 10, bottom: 10 }}
+                />
                 <Tooltip content={<CustomTooltip />} />
                 {Object.values(Macros).map((macro) => (
                     <Area
                         className={styles.area}
                         type="monotone"
-                        stroke={'hsl(243, 100%, 69%)'}
+                        stroke={'hsl(163, 91%, 39%)'}
                         dataKey={macro}
                         fill={`url(#${macro})`}
                     />
