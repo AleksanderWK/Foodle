@@ -1,1 +1,10 @@
 @use '../../food.module.scss';
+
+.color {
+    stop-color: food.$primary-200;
+}
+
+.area {
+    fill-opacity: 1;
+    stroke-width: 3px;
+}

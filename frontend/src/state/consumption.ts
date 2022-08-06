@@ -1,5 +1,7 @@
 import { atom, selector, selectorFamily } from 'recoil'
 import { Consumption, Grocery, Meal } from '../api/types'
+import { ChartMacrosData } from '../components/ProfilePage/ConsumptionHistory'
+import { getDayMonthFromDate } from '../utils/dateUtils'
 import { MacroGrams } from './goal'
 
 export const consumptionsState = atom<Consumption[]>({
@@ -70,10 +72,47 @@ export const dailyConsumptionsTotalState = selector<Totals>({
     },
 })
 
-// export const lastThirtyDaysMacrosState = selectorFamily({
-//     key: "lastThirtyDaysMacros",
-//     get: ({ get }) => {
-//         const consumptions = get(consumptionsState)
-//         return {}
-//     }
-// })
+export const lastThirtyDaysMacrosState = selector<ChartMacrosData[]>({
+    key: 'lastThirtyDaysMacros',
+    get: ({ get }) => {
+        const consumptions = get(consumptionsState)
+
+        const consumptionsByDay = consumptions.reduce((obj, consumption) => {
+            const dateKey = new Date(consumption.consumptionDate).setHours(
+                0,
+                0,
+                0,
+                0
+            )
+            if (dateKey in obj) {
+                obj[dateKey].push(consumption)
+            } else {
+                obj[dateKey] = [consumption]
+            }
+            return obj
+        }, Object.create({}))
+
+        const lastThirtyDaysMacros = Object.entries(consumptionsByDay).map(
+            ([date, day]) => {
+                const macros = getTotalsFromGroceries(
+                    (day as Consumption[])
+                        .map((consumption: Consumption) =>
+                            consumption.groceries.concat(
+                                consumption.meals
+                                    .map((meal) => meal.groceries)
+                                    .flat()
+                            )
+                        )
+                        .flat()
+                )
+                return {
+                    date: getDayMonthFromDate(new Date(parseInt(date))),
+                    protein: macros.protein,
+                    fat: macros.fat,
+                    carbohydrates: macros.carbohydrates,
+                }
+            }
+        )
+        return lastThirtyDaysMacros
+    },
+})
