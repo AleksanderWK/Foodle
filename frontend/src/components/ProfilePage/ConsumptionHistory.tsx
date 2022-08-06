@@ -14,6 +14,7 @@ import {
 } from 'recharts/src/component/DefaultTooltipContent'
 import { useRecoilValue } from 'recoil'
 import { lastThirtyDaysMacrosState } from '../../state/consumption'
+import { monthNamesNor } from '../../utils/dateUtils'
 
 const CustomTooltip = ({
     active,
@@ -21,7 +22,24 @@ const CustomTooltip = ({
     label,
 }: TooltipProps<ValueType, NameType>) => {
     if (active && payload && payload.length) {
-        return <div></div>
+        const formattedLable = (label: string) => {
+            const labelParts = label.split('.')
+            return label[1] + '. ' + monthNamesNor[parseInt(labelParts[1]) - 1]
+        }
+
+        return (
+            <div className={styles.tooltip}>
+                <div className={styles.tooltipHeader}>
+                    {formattedLable(label)}
+                </div>
+                {[0, 1, 2].map((index) => (
+                    <div className={styles.tooltipEntry}>
+                        <div>{payload[index].name}:</div>
+                        <div>{payload[index].value}g</div>
+                    </div>
+                ))}
+            </div>
+        )
     }
 
     return null

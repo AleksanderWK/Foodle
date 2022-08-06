@@ -8,3 +8,23 @@
     fill-opacity: 1;
     stroke-width: 3px;
 }
+
+.tooltip {
+    background-color: white;
+    border-radius: food.$size-spacing-1;
+    border: solid food.$border-color food.$border-thickness;
+    padding: food.$size-spacing-1;
+    box-sizing: border-box;
+}
+
+.tooltipHeader {
+    font-weight: bold;
+}
+
+.tooltipEntry {
+    display: flex;
+    padding: 2px 0 2px 0;
+    gap: food.$size-spacing-1;
+    justify-content: space-between;
+    align-items: center;
+}
