@@ -1,4 +1,4 @@
-import { atom, selector } from 'recoil'
+import { atom, selector, selectorFamily } from 'recoil'
 import { Consumption, Grocery, Meal } from '../api/types'
 import { MacroGrams } from './goal'
 
@@ -69,3 +69,11 @@ export const dailyConsumptionsTotalState = selector<Totals>({
         return totalAllDailyGroceries
     },
 })
+
+// export const lastThirtyDaysMacrosState = selectorFamily({
+//     key: "lastThirtyDaysMacros",
+//     get: ({ get }) => {
+//         const consumptions = get(consumptionsState)
+//         return {}
+//     }
+// })
