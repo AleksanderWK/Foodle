@@ -31,7 +31,6 @@ router.post("/add", async (req, res) => {
       res.json(fl);
     });
   } catch (error) {
-    console.log(error);
     res.status(500).json({ message: error });
   }
 });
@@ -62,7 +61,6 @@ router.post("/delete", async (req, res) => {
       }
     ).then((ufl) => res.json(ufl));
   } catch (error) {
-    console.log(error);
     res.status(500).json({ message: error });
   }
 });
