@@ -62,10 +62,10 @@ export const GroceryItem: React.FC<Props> = ({ grocery }: Props) => {
         <div className={classNames(styles.groceryContainer)}>
             {grocery.Matvare}
             <div className={styles.optionsGroup}>
-                {/* <Icon
+                <Icon
                     icon="ant-design:heart-outlined"
                     className={styles.icon}
-                /> */}
+                />
                 {location.pathname == '/Kjokken' &&
                     (!isMealAdded ? (
                         <Icon

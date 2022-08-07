@@ -62,6 +62,7 @@ const shoppinglistRoute = require("./routes/shoppinglists");
 const mealsRoute = require("./routes/meals");
 const consumptionsRoute = require("./routes/consumptions");
 const goalsRoute = require("./routes/goals");
+const favoriteRoute = require("./routes/favoritelists");
 
 app.use("/users", usersRoute);
 app.use("/groceries", groceriesRoute);
@@ -69,6 +70,7 @@ app.use("/shoppinglists", shoppinglistRoute);
 app.use("/meals", mealsRoute);
 app.use("/consumptions", consumptionsRoute);
 app.use("/goals", goalsRoute);
+app.use("/favoritelists", favoriteRoute);
 
 //LISTENING
 app.listen(port);

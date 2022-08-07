@@ -7,6 +7,7 @@ const router = express.Router();
 const nodemailer = require("nodemailer");
 const { sendEmail } = require("../utils");
 const crypto = require("crypto");
+const FavoriteList = require("../models/FavoriteList");
 
 // /users
 
@@ -37,8 +38,15 @@ router.post("/register", async (req, res) => {
     });
     const savedshl = await shoppinglist.save();
 
-    // update saved user with shoppinglist id and save again
+    // create and save favoriteslist
+    const favoriteslist = new FavoriteList({
+      owner: savedUser._id,
+    });
+    const savedfl = await favoriteslist.save();
+
+    // update saved user with shoppinglist id and favoriteslist id and save again
     savedUser.shoppinglist = savedshl._id;
+    savedUser.favoritelist = savedfl._id;
     savedUser = await savedUser.save();
 
     // Create verification token
