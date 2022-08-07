@@ -31,6 +31,7 @@ router.post("/add", async (req, res) => {
       res.json(fl);
     });
   } catch (error) {
+    console.log(error);
     res.status(500).json({ message: error });
   }
 });

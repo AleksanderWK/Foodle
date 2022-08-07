@@ -3,11 +3,14 @@ import { Grocery } from '../api/types'
 import styles from './GroceryItem.module.scss'
 import classNames from 'classnames'
 import { shoppingListState } from '../state/shoppinglist'
-import { useRecoilState, useSetRecoilState } from 'recoil'
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 import { manageShoppingList } from '../api/main'
 import { Icon } from '@iconify/react'
 import { useLocation } from 'react-router-dom'
 import { currentMealState } from '../state/kitchen'
+import { manageFavoriteList } from '../api/favorite'
+import { userState } from '../state/user'
+import { favoritelistState } from '../state/favoritelist'
 
 interface Props {
     grocery: Grocery
@@ -19,6 +22,11 @@ export const GroceryItem: React.FC<Props> = ({ grocery }: Props) => {
     const [shoppingList, setShoppingList] = useRecoilState(shoppingListState)
     const location = useLocation()
     const [currentMeal, setCurrentMeal] = useRecoilState(currentMealState)
+    const user = useRecoilValue(userState)
+    const [favoriteList, setFavoriteList] = useRecoilState(favoritelistState)
+    const [isFavorited, setIsFavoried] = useState(
+        favoriteList.groceries.indexOf(grocery._id) == -1 ? false : true
+    )
 
     const onShoppingListClick = () => {
         if (shoppingList) {
@@ -56,16 +64,41 @@ export const GroceryItem: React.FC<Props> = ({ grocery }: Props) => {
         setIsMealAdded((prevState) => !prevState)
     }
 
-    const onGroceryFavorite = () => {}
+    const handleGroceryFavorite = () => {
+        if (user) {
+            if (!isFavorited) {
+                manageFavoriteList('add', user.favoritelist, grocery._id).then(
+                    (favoritelist) => setFavoriteList(favoritelist)
+                )
+            } else {
+                manageFavoriteList(
+                    'delete',
+                    user.favoritelist,
+                    grocery._id
+                ).then((favoritelist) => setFavoriteList(favoritelist))
+            }
+            setIsFavoried((prevState) => !prevState)
+        }
+    }
 
     return (
         <div className={classNames(styles.groceryContainer)}>
             {grocery.Matvare}
             <div className={styles.optionsGroup}>
-                <Icon
-                    icon="ant-design:heart-outlined"
-                    className={styles.icon}
-                />
+                {isFavorited ? (
+                    <Icon
+                        icon="ant-design:heart-filled"
+                        className={styles.icon}
+                        onClick={() => handleGroceryFavorite()}
+                    />
+                ) : (
+                    <Icon
+                        icon="ant-design:heart-outlined"
+                        className={styles.icon}
+                        onClick={() => handleGroceryFavorite()}
+                    />
+                )}
+
                 {location.pathname == '/Kjokken' &&
                     (!isMealAdded ? (
                         <Icon
