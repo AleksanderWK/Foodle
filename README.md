@@ -21,13 +21,13 @@
 
 ...
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+<p align="right">(<a href="#readme-top">Til toppen</a>)</p>
 
-### Built With
+### Laget med
 
 - [![React][react.js]][react-url]
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+<p align="right">(<a href="#readme-top">Til toppen</a>)</p>
 
 <!-- CONTACT -->
 
@@ -35,7 +35,7 @@
 
 LinkedIn - [aleksawk](https://www.linkedin.com/in/aleksawk/)
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+<p align="right">(<a href="#readme-top">Til toppen</a>)</p>
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
