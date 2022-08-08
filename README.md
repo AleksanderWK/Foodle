@@ -4,7 +4,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/AleksanderWK/Foodle">
-    <img src="/images/FoodleFavicon.png)" alt="Logo" width="160" height="160">
+    <img src="./images/FoodleFavicon.png" alt="Logo" width="160" height="160">
   </a>
 
 <h3 align="center">Foodle</h3>
@@ -17,7 +17,7 @@
 
 ## Om prosjektet
 
-[![Product Name Screen Shot][product-screenshot]](/images/loginPage.png)
+<img src="./images/loginPage.png" >
 
 ...
 
