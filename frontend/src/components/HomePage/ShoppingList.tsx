@@ -11,6 +11,7 @@ import { userState } from '../../state/user'
 import { Feedback, FeedbackTypes } from '../common/Feedback'
 import { useState } from 'react'
 import { globalFeedbackState } from '../../state/main'
+import { Icon } from '@iconify/react'
 
 interface Props {
     grocery: Grocery
@@ -88,11 +89,12 @@ export const ShoppingList: React.FC = () => {
         <Card className={styles.card}>
             <div className={styles.header}>
                 <div className={styles.title}>Din handleliste</div>
-                <div className={styles.optionsGrouo}>
+                <div className={styles.optionsGroup}>
                     <SendOutlined
                         className={styles.iconButton}
                         onClick={() => mailShoppingList()}
                     />
+                    <Icon icon="iwwa:option" className={styles.optionsIcon} />
                 </div>
             </div>
 
