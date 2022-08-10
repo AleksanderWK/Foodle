@@ -1,0 +1,25 @@
+@use '../../food.module.scss';
+
+.pill {
+    border-radius: food.$size-spacing-2;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    font-size: small;
+    font-weight: bold;
+    display: inline-block;
+    box-sizing: border-box;
+    padding: 8px 14px 8px 14px;
+    cursor: pointer;
+    color: food.$primary-200;
+    border: solid food.$primary-200 food.$border-thickness;
+
+    &:hover {
+        background-color: rgba($color: food.$primary-200, $alpha: 0.1);
+    }
+
+    &.toggled {
+        background-color: food.$primary-200;
+        color: white;
+    }
+}
