@@ -15,7 +15,7 @@ export const monthNamesNor = [
 
 export const getDayMonthFromDate = (date: Date) => {
     const formattedDay =
-        date.getDay() < 10 ? '0' + date.getDay() : date.getDay()
+        date.getDate() < 10 ? '0' + date.getDate() : date.getDate()
     const formattedMonth =
         date.getUTCMonth() + 1 < 10
             ? '0' + (date.getUTCMonth() + 1)
