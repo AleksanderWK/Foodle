@@ -86,3 +86,10 @@ export interface GoalData {
 export interface Goal extends GoalData {
     _id: string
 }
+
+export interface FavoriteList {
+    _id?: string
+    owner: string
+    groceries: string[]
+    meals: string[]
+}

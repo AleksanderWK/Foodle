@@ -7,6 +7,7 @@ export interface User {
     email: string
     password: string
     shoppinglist: string
+    favoritelist: string
 }
 
 export const userState = atom<User | null>({

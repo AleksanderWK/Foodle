@@ -98,3 +98,19 @@ $input-button-width: 75px;
     font-style: italic;
     font-size: small;
 }
+
+.icon {
+    & > * {
+        fill: food.$primary-200;
+    }
+
+    &:hover {
+        & > * {
+            fill: food.$primary-100;
+        }
+    }
+
+    cursor: pointer;
+    width: 35px;
+    height: 35px;
+}

@@ -24,7 +24,14 @@ const CustomTooltip = ({
     if (active && payload && payload.length) {
         const formattedLable = (label: string) => {
             const labelParts = label.split('.')
-            return label[1] + '. ' + monthNamesNor[parseInt(labelParts[1]) - 1]
+            if (parseInt(labelParts[0]) <= 9) {
+                labelParts[0] = labelParts[0][1]
+            }
+            return (
+                labelParts[0] +
+                '. ' +
+                monthNamesNor[parseInt(labelParts[1]) - 1]
+            )
         }
 
         return (

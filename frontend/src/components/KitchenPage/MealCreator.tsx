@@ -1,6 +1,6 @@
 import { ExpandingContainer } from './ExpandingContainer'
 import styles from './MealCreator.module.scss'
-import React, { ReactNode, useRef, useState } from 'react'
+import React, { ReactNode, useEffect, useRef, useState } from 'react'
 import {
     PlusOutlined,
     SearchOutlined,
@@ -62,7 +62,7 @@ const MealListItem = ({ grocery }: Props) => {
 export const MealCreator: React.FC = () => {
     const [expanded, setExpanded] = useState(false)
     const [feedback, setGlobalFeedback] = useRecoilState(globalFeedbackState)
-    const setMealsState = useSetRecoilState(mealsState)
+    const [meals, setMealsState] = useRecoilState(mealsState)
     const user = useRecoilValue(userState)
     const [currentMeal, setCurrentMeal] = useRecoilState(currentMealState)
     const [nameInputShowing, setNameInputShowing] = useState(false)
@@ -110,6 +110,25 @@ export const MealCreator: React.FC = () => {
         }
     }
 
+    const onManageCurrentMeal = (
+        action: 'add' | 'delete',
+        grocery: Grocery
+    ) => {
+        if (action == 'add') {
+            setCurrentMeal((prevState) => ({
+                ...prevState,
+                groceries: prevState.groceries.concat([grocery]),
+            }))
+        } else if (action == 'delete') {
+            setCurrentMeal((prevState) => ({
+                ...prevState,
+                groceries: prevState.groceries.filter(
+                    (g) => grocery._id != g._id
+                ),
+            }))
+        }
+    }
+
     const resetMeal = () => {
         setCurrentMeal({
             _id: '',
@@ -153,7 +172,30 @@ export const MealCreator: React.FC = () => {
 
                     <div className={styles.searchResultContainer}>
                         {searchResult?.map((grocery) => (
-                            <GroceryItem grocery={grocery} />
+                            <GroceryItem grocery={grocery}>
+                                {currentMeal.groceries
+                                    .map((grocery) => grocery._id)
+                                    .indexOf(grocery._id) == -1 ? (
+                                    <Icon
+                                        onClick={() =>
+                                            onManageCurrentMeal('add', grocery)
+                                        }
+                                        icon="ant-design:plus-outlined"
+                                        className={styles.icon}
+                                    />
+                                ) : (
+                                    <Icon
+                                        onClick={() =>
+                                            onManageCurrentMeal(
+                                                'delete',
+                                                grocery
+                                            )
+                                        }
+                                        icon="ant-design:minus-outlined"
+                                        className={styles.icon}
+                                    />
+                                )}
+                            </GroceryItem>
                         ))}
                         <div className={styles.information}>
                             {searchResult && searchResult.length > 0

@@ -30,6 +30,10 @@ const UserSchema = mongoose.Schema({
     default: false,
     required: true,
   },
+  favoritelist: {
+    type: Schema.Types.ObjectId,
+    ref: "FavoriteList",
+  },
 });
 
 module.exports = mongoose.model("User", UserSchema, "users");
