@@ -10,7 +10,7 @@
 <h3 align="center">Foodle</h3>
 
   <p align="center">
-    Foodle er et hobbyprosjekt som hjelper deg med å planlegge og holde oversikt over matinntaket
+    Et hobbyprosjekt som hjelper deg med å planlegge og holde oversikt over matinntaket
     <br />
   </p>
 </div>
@@ -19,7 +19,14 @@
 
 <img src="./images/loginPage.png" >
 
-...
+Foodle er en webapp som hjelper deg med å holde oversikten over matprodukter og matinntak. Funksjonalitet:
+- Opprette bruker
+- Søke på produkter hentet fra [matvaretabellen](https://www.matportalen.no/)
+- Opprette og vedlikeholde en handleliste
+- Lage måltidsplan for dagen
+- Opprette et daglig mål for makroinntak
+- Overvåke makroinntak over tid
+- Opprette personlige matretter
 
 <p align="right">(<a href="#readme-top">Til toppen</a>)</p>
 
@@ -31,7 +38,7 @@
 
 <!-- CONTACT -->
 
-## Contact
+## Kontaktinformasjon
 
 LinkedIn - [aleksawk](https://www.linkedin.com/in/aleksawk/)
 
