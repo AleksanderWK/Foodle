@@ -1,0 +1,8 @@
+@use '../../food.module.scss';
+
+.barContainer {
+    padding: food.$size-spacing-1 food.$size-spacing-2 food.$size-spacing-1
+        food.$size-spacing-2;
+    display: flex;
+    gap: food.$size-spacing-1;
+}

@@ -4,7 +4,7 @@ import { Button } from './Button'
 import styles from './SearchField.module.scss'
 import { SearchOutlined, CloseOutlined } from '@ant-design/icons'
 import { manageShoppingList, searchGroceries } from '../../api/main'
-import { Grocery } from '../../api/types'
+import { Grocery, SearchObject } from '../../api/types'
 import { GroceryItem } from '../GroceryItem'
 import { Icon } from '@iconify/react'
 import { useRecoilState, useRecoilValue } from 'recoil'
@@ -12,6 +12,12 @@ import { shoppingListState } from '../../state/shoppinglist'
 import { manageFavoriteList } from '../../api/favorite'
 import { userState } from '../../state/user'
 import { favoritelistState } from '../../state/favoritelist'
+import { FilterBar } from './FilterBar'
+
+export enum SearchFilter {
+    FAVORITES = 'Favoritter',
+    ON_SHOPPINGLIST = 'Handleliste',
+}
 
 interface Props {
     className?: string
@@ -29,16 +35,24 @@ export const SearchField: React.FC<Props> = ({
     const [shoppingList, setShoppingList] = useRecoilState(shoppingListState)
     const user = useRecoilValue(userState)
     const [favoriteList, setFavoriteList] = useRecoilState(favoritelistState)
+    const [currentFilters, setCurrentFilters] = useState<SearchFilter[]>([])
 
     const search = async () => {
         if (searchValue.length > 0) {
             const searchObject = {
+                user_id: user?._id,
                 query: searchValue,
+                filters: currentFilters,
             }
+            console.log(searchObject)
             const searchResult = await searchGroceries(searchObject)
             setSearchResult(searchResult)
         }
     }
+
+    useEffect(() => {
+        search()
+    }, [currentFilters])
 
     const onShoppingListClick = (grocery: Grocery) => {
         if (shoppingList) {
@@ -73,6 +87,17 @@ export const SearchField: React.FC<Props> = ({
                     grocery._id
                 ).then((favoritelist) => setFavoriteList(favoritelist))
             }
+        }
+    }
+
+    const onFilterToggled = (filter: SearchFilter) => {
+        const index = currentFilters.indexOf(filter)
+        if (index != -1) {
+            setCurrentFilters((prevState) =>
+                prevState.filter((filter) => prevState.indexOf(filter) != index)
+            )
+        } else {
+            setCurrentFilters((prevState) => prevState.concat(filter))
         }
     }
 
@@ -128,6 +153,11 @@ export const SearchField: React.FC<Props> = ({
             </span>
             {searchResult && (
                 <>
+                    <FilterBar
+                        filters={Object.values(SearchFilter)}
+                        onFilterToggle={onFilterToggled}
+                        currentFilters={currentFilters}
+                    />
                     {searchResult.map((grocery: Grocery) => (
                         <GroceryItem key={grocery.Matvare} grocery={grocery}>
                             <>
