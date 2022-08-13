@@ -1,7 +1,6 @@
 const express = require("express");
 const ShoppingList = require("../models/ShoppingList");
 const router = express.Router();
-const nodemailer = require("nodemailer");
 const { sendEmail } = require("../utils");
 
 // get shoppinglist by user id
