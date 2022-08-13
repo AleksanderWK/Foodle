@@ -1,6 +1,13 @@
-import { Credentials, DefaultResponse, Grocery, RegisterValues } from './types'
+import {
+    Credentials,
+    DefaultResponse,
+    Grocery,
+    RegisterValues,
+    SearchObject,
+} from './types'
 import { User } from '../state/user'
 import { ShoppingList } from '../state/shoppinglist'
+import { SearchFilter } from '../components/common/SearchField'
 export const PATH = 'http://localhost:3001'
 
 export const registerUser = async (
@@ -61,7 +68,7 @@ export const getUser = async (userId: string): Promise<User> => {
 }
 
 export const searchGroceries = async (
-    searchObject: Object
+    searchObject: SearchObject
 ): Promise<Grocery[] | null> => {
     return await fetch(PATH.concat('/groceries/search'), {
         method: 'POST',

@@ -1,3 +1,5 @@
+import { SearchFilter } from '../components/common/SearchField'
+
 export interface RegisterValues {
     username: string
     email: string
@@ -92,4 +94,10 @@ export interface FavoriteList {
     owner: string
     groceries: string[]
     meals: string[]
+}
+
+export interface SearchObject {
+    user_id?: string
+    query: string
+    filters?: SearchFilter[]
 }

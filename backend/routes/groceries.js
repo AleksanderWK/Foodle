@@ -36,12 +36,12 @@ router.post("/search", async (req, res) => {
     let matchedGroceries = await Grocery.find({ $and: queries }).then(
       (matchedGroceries) => {
         let filtered = matchedGroceries;
-        if (filters.has("favorite")) {
+        if (filters.has("Favoritter")) {
           filtered = filtered.filter((grocery) =>
             fl.groceries.includes(grocery._id)
           );
         }
-        if (filters.has("shoppinglist")) {
+        if (filters.has("Handleliste")) {
           filtered = filtered.filter((grocery) =>
             shl.groceries.includes(grocery._id)
           );

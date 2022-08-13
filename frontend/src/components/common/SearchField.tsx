@@ -4,7 +4,7 @@ import { Button } from './Button'
 import styles from './SearchField.module.scss'
 import { SearchOutlined, CloseOutlined } from '@ant-design/icons'
 import { manageShoppingList, searchGroceries } from '../../api/main'
-import { Grocery } from '../../api/types'
+import { Grocery, SearchObject } from '../../api/types'
 import { GroceryItem } from '../GroceryItem'
 import { Icon } from '@iconify/react'
 import { useRecoilState, useRecoilValue } from 'recoil'
@@ -40,12 +40,19 @@ export const SearchField: React.FC<Props> = ({
     const search = async () => {
         if (searchValue.length > 0) {
             const searchObject = {
+                user_id: user?._id,
                 query: searchValue,
+                filters: currentFilters,
             }
+            console.log(searchObject)
             const searchResult = await searchGroceries(searchObject)
             setSearchResult(searchResult)
         }
     }
+
+    useEffect(() => {
+        search()
+    }, [currentFilters])
 
     const onShoppingListClick = (grocery: Grocery) => {
         if (shoppingList) {
