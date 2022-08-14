@@ -4,8 +4,7 @@ const ShoppingList = require("../models/ShoppingList");
 const User = require("../models/User");
 const Token = require("../models/token");
 const router = express.Router();
-const nodemailer = require("nodemailer");
-const { sendEmail } = require("../utils");
+const { sendEmail } = require("../utils/emailUtils");
 const crypto = require("crypto");
 const FavoriteList = require("../models/FavoriteList");
 

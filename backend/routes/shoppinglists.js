@@ -1,7 +1,7 @@
 const express = require("express");
 const ShoppingList = require("../models/ShoppingList");
 const router = express.Router();
-const { sendEmail } = require("../utils");
+const { sendEmail } = require("../utils/emailUtils");
 
 // get shoppinglist by user id
 router.get("/:id", async (req, res) => {
