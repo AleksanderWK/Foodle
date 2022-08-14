@@ -1,8 +1,14 @@
 import { atom } from 'recoil'
 
+export interface AccessToken {
+    dateCreated: Date
+    token: string
+    userId: string
+}
+
 export interface User {
     _id: string
-    token: string
+    accessToken: AccessToken
     dateCreated: Date
     username: string
     email: string

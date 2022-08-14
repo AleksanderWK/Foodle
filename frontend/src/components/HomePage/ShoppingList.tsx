@@ -5,13 +5,13 @@ import { Card } from '../common/Card'
 import styles from './ShoppingList.module.scss'
 import { CloseOutlined, SendOutlined } from '@ant-design/icons'
 import { Button } from '../common/Button'
-import { manageShoppingList, sendShoppingList } from '../../api/main'
 import { Checkbox } from '../common/Checkbox'
 import { userState } from '../../state/user'
-import { Feedback, FeedbackTypes } from '../common/Feedback'
-import { useState } from 'react'
+import { FeedbackTypes } from '../common/Feedback'
 import { globalFeedbackState } from '../../state/main'
 import { Icon } from '@iconify/react'
+import useFetch, { PATH } from '../../utils/hooks/useFetch'
+import { useEffect } from 'react'
 
 interface Props {
     grocery: Grocery
@@ -45,41 +45,41 @@ export const ShoppingList: React.FC = () => {
     const [shoppingList, setShoppingList] = useRecoilState(shoppingListState)
     const user = useRecoilValue(userState)
     const setGlobalFeedback = useSetRecoilState(globalFeedbackState)
+    const fetch = useFetch()
+
+    useEffect(() => {
+        console.log(user)
+    }, [user])
 
     const removeFromList = (groceryId: string) => {
         if (shoppingList)
-            manageShoppingList('delete', groceryId, shoppingList._id).then(
-                (shl) => setShoppingList(shl)
-            )
+            fetch
+                .post(PATH.concat(`/shoppinglists/delete`), {
+                    groceryId: groceryId,
+                    shoppinglistId: shoppingList._id,
+                })
+                .then((shl) => setShoppingList(shl))
     }
 
     const mailShoppingList = async () => {
         if (user) {
-            const response = await sendShoppingList(user)
-            if (response.successful) {
-                setGlobalFeedback({
-                    message: 'Handleliste sendt! Sjekk eposten din.',
-                    type: FeedbackTypes.SUCCESS,
-                })
-            } else {
-                setGlobalFeedback({
-                    message: 'Det skjedde en feil',
-                    type: FeedbackTypes.ERROR,
-                })
-            }
+            fetch.post(PATH.concat(`/shoppinglists/send`), user).then(
+                () => {
+                    setGlobalFeedback({
+                        message: 'Handleliste sendt! Sjekk eposten din.',
+                        type: FeedbackTypes.SUCCESS,
+                    })
+                },
+                () => {
+                    setGlobalFeedback({
+                        message: 'Det skjedde en feil',
+                        type: FeedbackTypes.ERROR,
+                    })
+                }
+            )
             setTimeout(() => {
                 setGlobalFeedback(null)
             }, 5000)
-        }
-    }
-
-    const addToKjoleskap = (groceryId: string, checked: boolean) => {
-        if (shoppingList && checked) {
-            // Delete from shoppinglist
-            // manageShoppingList('delete', groceryId, shoppingList._id).then(
-            //     (shl) => setShoppingList(shl)
-            // )
-            // Add to kjøleskap
         }
     }
 
@@ -109,7 +109,7 @@ export const ShoppingList: React.FC = () => {
                         {shoppingList &&
                             shoppingList.groceries.map((grocery) => (
                                 <ShoppingListItem
-                                    onAddToKjoleskap={addToKjoleskap}
+                                    onAddToKjoleskap={() => {}}
                                     onRemove={removeFromList}
                                     key={grocery.Matvare}
                                     grocery={grocery}

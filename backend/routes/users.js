@@ -74,11 +74,20 @@ router.post("/register", async (req, res) => {
 
 router.post("/login", async (req, res) => {
   try {
-    const foundUser = await User.findOne({
+    let foundUser = await User.findOne({
       username: req.body.username,
       password: req.body.password,
     });
     if (foundUser.verified) {
+      const randomToken = crypto.randomBytes(128).toString("hex");
+      const accessToken = new Token({
+        userId: foundUser._id,
+        token: randomToken,
+      });
+      await accessToken.save();
+      foundUser.accessToken = accessToken._id;
+      foundUser = await foundUser.save();
+      foundUser = await foundUser.populate("accessToken");
       res.json(foundUser);
     } else if (foundUser && !foundUser.verified) {
       res.status(401).json();

@@ -102,23 +102,3 @@ export const manageShoppingList = async (
             return response
         })
 }
-
-export const sendShoppingList = async (
-    user: User
-): Promise<DefaultResponse> => {
-    return await fetch(PATH.concat(`/shoppinglists/send`), {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(user),
-    })
-        .then((response) => {
-            if (response.ok) {
-                return response.json()
-            } else return null
-        })
-        .then((response) => {
-            return response
-        })
-}

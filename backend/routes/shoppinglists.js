@@ -2,6 +2,7 @@ const express = require("express");
 const ShoppingList = require("../models/ShoppingList");
 const router = express.Router();
 const { sendEmail } = require("../utils/emailUtils");
+const isAuthenticated = require("../middleware/auth");
 
 // get shoppinglist by user id
 router.get("/:id", async (req, res) => {
@@ -37,7 +38,7 @@ router.post("/add", async (req, res) => {
 
 // delete a grocery from a shoppinglist
 
-router.post("/delete", async (req, res) => {
+router.post("/delete", isAuthenticated, async (req, res) => {
   try {
     let shl = await ShoppingList.findById(req.body.shoppinglistId);
     let shl_groceries = shl.groceries;

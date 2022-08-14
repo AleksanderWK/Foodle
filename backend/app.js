@@ -10,6 +10,7 @@ const Grid = require("gridfs-stream");
 const port = 3001;
 require("dotenv/config");
 const cors = require("cors");
+const isAuthenticated = require("./middleware/auth");
 
 // MIDDLEWARE
 const corsOptions = {
@@ -66,7 +67,7 @@ const favoriteRoute = require("./routes/favoritelists");
 
 app.use("/users", usersRoute);
 app.use("/groceries", groceriesRoute);
-app.use("/shoppinglists", shoppinglistRoute);
+app.use("/shoppinglists", shoppinglistRoute, isAuthenticated);
 app.use("/meals", mealsRoute);
 app.use("/consumptions", consumptionsRoute);
 app.use("/goals", goalsRoute);

@@ -12,9 +12,8 @@ const useFetch = () => {
 
     const authHeader = (url: string) => {
         // return auth header with jwt if user is logged in and request is to the api url
-        const token = user?.token
+        const token = user?.accessToken.token
         const isLoggedIn = !!token
-        console.log(isLoggedIn)
         const isApiUrl = url.startsWith(PATH)
         if (isLoggedIn && isApiUrl) {
             return { Authorization: `Bearer ${token}` } as Record<
@@ -31,7 +30,10 @@ const useFetch = () => {
             const data = text && JSON.parse(text)
 
             if (!response.ok) {
-                if ([401, 403].includes(response.status) && user?.token) {
+                if (
+                    [401, 403].includes(response.status) &&
+                    user?.accessToken.token
+                ) {
                     // auto logout if 401 Unauthorized or 403 Forbidden response returned from api
                     localStorage.removeItem('user')
                     setUser(null)
