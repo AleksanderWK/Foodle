@@ -1,54 +1,7 @@
-import {
-    Credentials,
-    DefaultResponse,
-    Grocery,
-    RegisterValues,
-    SearchObject,
-} from './types'
+import { DefaultResponse, Grocery, SearchObject } from './types'
 import { User } from '../state/user'
 import { ShoppingList } from '../state/shoppinglist'
-import { SearchFilter } from '../components/common/SearchField'
 export const PATH = 'http://localhost:3001'
-
-export const registerUser = async (
-    user: RegisterValues
-): Promise<User | null> => {
-    return await fetch(PATH.concat('/users/register'), {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(user),
-    })
-        .then((response) => {
-            if (response.ok) {
-                return response.json()
-            } else return null
-        })
-        .then((response) => {
-            return response
-        })
-}
-
-export const loginUser = async (
-    credentials: Credentials
-): Promise<User | null> => {
-    return await fetch(PATH.concat('/users/login'), {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(credentials),
-    })
-        .then((response) => {
-            if (response.ok) {
-                return response.json()
-            } else return null
-        })
-        .then((response) => {
-            return response
-        })
-}
 
 export const getUser = async (userId: string): Promise<User> => {
     return await fetch(PATH.concat(`/users/${userId}`), {

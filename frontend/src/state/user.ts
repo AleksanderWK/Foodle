@@ -1,7 +1,8 @@
-import { atom, selector } from 'recoil'
+import { atom } from 'recoil'
 
 export interface User {
     _id: string
+    token: string
     dateCreated: Date
     username: string
     email: string

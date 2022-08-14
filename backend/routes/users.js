@@ -66,9 +66,9 @@ router.post("/register", async (req, res) => {
     `
     );
 
-    res.json(savedUser);
+    res.status(200).json();
   } catch (error) {
-    res.json({ message: error });
+    res.status(500).json({ message: error });
   }
 });
 
@@ -81,10 +81,10 @@ router.post("/login", async (req, res) => {
     if (foundUser.verified) {
       res.json(foundUser);
     } else if (foundUser && !foundUser.verified) {
-      res.json(false);
+      res.status(401).json();
     }
   } catch (error) {
-    res.status(404).json(error);
+    res.status(404).json();
   }
 });
 
