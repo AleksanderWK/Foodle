@@ -69,6 +69,7 @@ export const Authentication: React.FunctionComponent = () => {
         fetch.post(PATH.concat('/users/login'), credentials).then(
             (user) => {
                 setUserState(user)
+                localStorage.setItem('user', JSON.stringify(user))
             },
             (errorStatus) => {
                 switch (errorStatus) {

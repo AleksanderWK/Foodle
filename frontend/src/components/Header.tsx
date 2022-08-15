@@ -63,7 +63,10 @@ export const Header: React.FC<HeaderProps> = ({
 
     const logout = () => {
         setIsLogout(true)
-        setTimeout(() => setUserState(null), 500)
+        setTimeout(() => {
+            setUserState(null)
+            localStorage.removeItem('user')
+        }, 500)
     }
 
     return (

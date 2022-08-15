@@ -47,10 +47,6 @@ export const ShoppingList: React.FC = () => {
     const setGlobalFeedback = useSetRecoilState(globalFeedbackState)
     const fetch = useFetch()
 
-    useEffect(() => {
-        console.log(user)
-    }, [user])
-
     const removeFromList = (groceryId: string) => {
         if (shoppingList)
             fetch

@@ -10,7 +10,6 @@ const Grid = require("gridfs-stream");
 const port = 3001;
 require("dotenv/config");
 const cors = require("cors");
-const isAuthenticated = require("./middleware/auth");
 
 // MIDDLEWARE
 const corsOptions = {
@@ -67,11 +66,16 @@ const favoriteRoute = require("./routes/favoritelists");
 
 app.use("/users", usersRoute);
 app.use("/groceries", groceriesRoute);
-app.use("/shoppinglists", shoppinglistRoute, isAuthenticated);
+app.use("/shoppinglists", shoppinglistRoute);
 app.use("/meals", mealsRoute);
 app.use("/consumptions", consumptionsRoute);
 app.use("/goals", goalsRoute);
 app.use("/favoritelists", favoriteRoute);
+
+// use error status as response status
+app.use((err, req, res, next) => {
+  res.status(err.status || 500).json();
+});
 
 //LISTENING
 app.listen(port);

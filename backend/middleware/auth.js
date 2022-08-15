@@ -7,12 +7,11 @@ const isAuthenticated = (req, res, next) => {
       if (error) {
         return next(error);
       } else {
-        if (token === null) {
+        if (token === null && isTokenOutdated(token)) {
           const err = new Error("Access denied");
           err.status = 401;
           return next(err);
         } else {
-          console.log("Access");
           return next();
         }
       }
@@ -22,6 +21,11 @@ const isAuthenticated = (req, res, next) => {
     err.status = 401;
     return next(err);
   }
+};
+
+const isTokenOutdated = (token) => {
+  //TODO
+  return false;
 };
 
 module.exports = isAuthenticated;
