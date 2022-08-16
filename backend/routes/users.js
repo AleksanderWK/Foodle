@@ -4,20 +4,12 @@ const ShoppingList = require("../models/ShoppingList");
 const User = require("../models/User");
 const Token = require("../models/token");
 const router = express.Router();
-const nodemailer = require("nodemailer");
-const { sendEmail } = require("../utils");
+const { sendEmail } = require("../utils/emailUtils");
 const crypto = require("crypto");
 const FavoriteList = require("../models/FavoriteList");
+const isAuthenticated = require("../middleware/auth");
 
 // /users
-
-router.get("/:id", async (req, res) => {
-  try {
-    User.findById(req.params.id).then((user) => res.json(user));
-  } catch (error) {
-    res.json({ message: error });
-  }
-});
 
 router.post("/register", async (req, res) => {
   // retrieve data from request and make object
@@ -67,25 +59,34 @@ router.post("/register", async (req, res) => {
     `
     );
 
-    res.json(savedUser);
+    res.status(200).json();
   } catch (error) {
-    res.json({ message: error });
+    res.status(500).json({ message: error });
   }
 });
 
 router.post("/login", async (req, res) => {
   try {
-    const foundUser = await User.findOne({
+    let foundUser = await User.findOne({
       username: req.body.username,
       password: req.body.password,
     });
     if (foundUser.verified) {
+      const randomToken = crypto.randomBytes(128).toString("hex");
+      const accessToken = new Token({
+        userId: foundUser._id,
+        token: randomToken,
+      });
+      await accessToken.save();
+      foundUser.accessToken = accessToken._id;
+      foundUser = await foundUser.save();
+      foundUser = await foundUser.populate("accessToken");
       res.json(foundUser);
     } else if (foundUser && !foundUser.verified) {
-      res.json(false);
+      res.status(401).json();
     }
   } catch (error) {
-    res.status(404).json(error);
+    res.status(404).json();
   }
 });
 
@@ -100,7 +101,7 @@ router.get("/verify/:token", async (req, res) => {
   }
 });
 
-router.get("/:username/shoppinglist", async (req, res) => {
+router.get("/:username/shoppinglist", isAuthenticated, async (req, res) => {
   User.find({ username: req.params.username })
     .populate("shoppinglist")
     .then((user) => res.json(user));
@@ -132,6 +133,17 @@ router.get("/:userid/picture", async (req, res) => {
     } else throw new Error();
   } catch (error) {
     res.status(404).json(null);
+  }
+});
+
+router.get("/logout", isAuthenticated, (req, res) => {
+  accessToken = req.headers["authorization"];
+  try {
+    Token.findOneAndDelete({ token: accessToken.split(" ")[1] }).then(() =>
+      res.status(200).json()
+    );
+  } catch (error) {
+    res.status(500).json();
   }
 });
 

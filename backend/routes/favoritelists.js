@@ -1,11 +1,12 @@
 const express = require("express");
+const isAuthenticated = require("../middleware/auth");
 const router = express.Router();
 const FavoriteList = require("../models/FavoriteList");
 
 // /favoritelists
 
 // get favoriteslist for user
-router.get("/:userid", async (req, res) => {
+router.get("/:userid", isAuthenticated, async (req, res) => {
   try {
     FavoriteList.findOne({ owner: req.params.userid }).then((fl) =>
       res.json(fl)
@@ -17,7 +18,7 @@ router.get("/:userid", async (req, res) => {
 
 // add item as favorite
 
-router.post("/add", async (req, res) => {
+router.post("/add", isAuthenticated, async (req, res) => {
   try {
     await FavoriteList.findByIdAndUpdate(
       { _id: req.body.favoritelistId },
@@ -37,7 +38,7 @@ router.post("/add", async (req, res) => {
 
 // remove item as favorite
 
-router.post("/delete", async (req, res) => {
+router.post("/delete", isAuthenticated, async (req, res) => {
   try {
     let fl = await FavoriteList.findById(req.body.favoritelistId);
     let fl_groceries = fl.groceries;

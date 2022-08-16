@@ -3,16 +3,15 @@ import React, { useEffect, useState } from 'react'
 import { Button } from './Button'
 import styles from './SearchField.module.scss'
 import { SearchOutlined, CloseOutlined } from '@ant-design/icons'
-import { manageShoppingList, searchGroceries } from '../../api/main'
-import { Grocery, SearchObject } from '../../api/types'
+import { Grocery } from '../../api/types'
 import { GroceryItem } from '../GroceryItem'
 import { Icon } from '@iconify/react'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import { shoppingListState } from '../../state/shoppinglist'
-import { manageFavoriteList } from '../../api/favorite'
 import { userState } from '../../state/user'
 import { favoritelistState } from '../../state/favoritelist'
 import { FilterBar } from './FilterBar'
+import useFetch, { PATH } from '../../utils/hooks/useFetch'
 
 export enum SearchFilter {
     FAVORITES = 'Favoritter',
@@ -36,6 +35,7 @@ export const SearchField: React.FC<Props> = ({
     const user = useRecoilValue(userState)
     const [favoriteList, setFavoriteList] = useRecoilState(favoritelistState)
     const [currentFilters, setCurrentFilters] = useState<SearchFilter[]>([])
+    const fetch = useFetch()
 
     const search = async () => {
         if (searchValue.length > 0) {
@@ -45,8 +45,11 @@ export const SearchField: React.FC<Props> = ({
                 filters: currentFilters,
             }
             console.log(searchObject)
-            const searchResult = await searchGroceries(searchObject)
-            setSearchResult(searchResult)
+            fetch
+                .post(PATH.concat('/groceries/search'), searchObject)
+                .then((res) => {
+                    setSearchResult(res)
+                })
         }
     }
 
@@ -61,15 +64,19 @@ export const SearchField: React.FC<Props> = ({
                     .map((grocery) => grocery._id)
                     .indexOf(grocery._id) == -1
             ) {
-                manageShoppingList('add', grocery._id, shoppingList._id).then(
-                    (shl) => setShoppingList(shl)
-                )
+                fetch
+                    .post(PATH.concat(`/shoppinglists/add`), {
+                        groceryId: grocery._id,
+                        shoppinglistId: shoppingList._id,
+                    })
+                    .then((shl) => setShoppingList(shl))
             } else {
-                manageShoppingList(
-                    'delete',
-                    grocery._id,
-                    shoppingList._id
-                ).then((shl) => setShoppingList(shl))
+                fetch
+                    .post(PATH.concat(`/shoppinglists/delete`), {
+                        groceryId: grocery._id,
+                        shoppinglistId: shoppingList._id,
+                    })
+                    .then((shl) => setShoppingList(shl))
             }
         }
     }
@@ -77,15 +84,21 @@ export const SearchField: React.FC<Props> = ({
     const handleGroceryFavorite = (grocery: Grocery) => {
         if (user) {
             if (favoriteList.groceries.indexOf(grocery._id) == -1) {
-                manageFavoriteList('add', user.favoritelist, grocery._id).then(
-                    (favoritelist) => setFavoriteList(favoritelist)
-                )
+                fetch
+                    .post(PATH.concat(`/favoritelists/add`), {
+                        groceryId: grocery._id,
+                        mealId: undefined,
+                        favoritelistId: favoriteList._id,
+                    })
+                    .then((favoritelist) => setFavoriteList(favoritelist))
             } else {
-                manageFavoriteList(
-                    'delete',
-                    user.favoritelist,
-                    grocery._id
-                ).then((favoritelist) => setFavoriteList(favoritelist))
+                fetch
+                    .post(PATH.concat(`/favoritelists/delete`), {
+                        groceryId: grocery._id,
+                        mealId: undefined,
+                        favoritelistId: favoriteList._id,
+                    })
+                    .then((favoritelist) => setFavoriteList(favoritelist))
             }
         }
     }

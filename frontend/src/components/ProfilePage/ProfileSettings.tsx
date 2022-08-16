@@ -1,5 +1,3 @@
-import { Icon } from '@iconify/react'
-import { Button } from '../common/Button'
 import styles from './ProfileSettings.module.scss'
 import { CloseOutlined } from '@ant-design/icons'
 import { useSetRecoilState } from 'recoil'

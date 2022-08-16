@@ -1,10 +1,13 @@
 import classNames from 'classnames'
 import { useState } from 'react'
 import { NavLink, useLocation } from 'react-router-dom'
-import { useSetRecoilState } from 'recoil'
+import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { LocationToNavNameMap } from '../FoodleApp'
+import { globalFeedbackState } from '../state/main'
 import { userState } from '../state/user'
+import useFetch, { PATH } from '../utils/hooks/useFetch'
 import { Button } from './common/Button'
+import { FeedbackTypes } from './common/Feedback'
 import { SearchField } from './common/SearchField'
 import styles from './Header.module.scss'
 
@@ -60,10 +63,29 @@ export const Header: React.FC<HeaderProps> = ({
     const setUserState = useSetRecoilState(userState)
     const [isLogout, setIsLogout] = useState<boolean>(false)
     const currentTab = useLocation()
+    const fetch = useFetch()
+    const setFeedback = useSetRecoilState(globalFeedbackState)
 
     const logout = () => {
         setIsLogout(true)
-        setTimeout(() => setUserState(null), 500)
+        fetch.get(PATH.concat('/users/logout')).then(
+            () => {
+                setTimeout(() => {
+                    setUserState(null)
+                    localStorage.removeItem('user')
+                }, 500)
+            },
+            () => {
+                setIsLogout(false)
+                setFeedback({
+                    type: FeedbackTypes.ERROR,
+                    message: 'Det skjedde en feil ved logout',
+                })
+                setTimeout(() => {
+                    setFeedback(null)
+                }, 5000)
+            }
+        )
     }
 
     return (

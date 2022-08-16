@@ -34,6 +34,10 @@ const UserSchema = mongoose.Schema({
     type: Schema.Types.ObjectId,
     ref: "FavoriteList",
   },
+  accessToken: {
+    type: Schema.Types.ObjectId,
+    ref: "Token",
+  },
 });
 
 module.exports = mongoose.model("User", UserSchema, "users");

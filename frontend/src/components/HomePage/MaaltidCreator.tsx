@@ -12,16 +12,14 @@ import {
 import { Input } from '../common/Input'
 import { Button } from '../common/Button'
 import { Consumption, Grocery } from '../../api/types'
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
+import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { userState } from '../../state/user'
 import { Meal } from '../../api/types'
-import { searchGroceries } from '../../api/main'
-import { searchMeals } from '../../api/kitchen'
 import { ListItem } from '../common/ListItem'
-import { addConsumption } from '../../api/consumptions'
 import { consumptionsState } from '../../state/consumption'
 import { globalFeedbackState } from '../../state/main'
 import { FeedbackTypes } from '../common/Feedback'
+import useFetch, { PATH } from '../../utils/hooks/useFetch'
 
 interface Props {
     visible: boolean
@@ -37,9 +35,10 @@ export const MaaltidCreator = ({ visible, onSetVisible }: Props) => {
     const [searchShowing, setSearchShowing] = useState(false)
     const user = useRecoilValue(userState)
     const [searchValue, setSearchValue] = useState<string>('')
-    const [searchResult, setSearchResult] = useState<multiSearchResult | null>(
-        null
-    )
+    const [searchResult, setSearchResult] = useState<multiSearchResult>({
+        groceries: [],
+        meals: [],
+    })
     const [consumption, setConsumption] = useState<Consumption>({
         name: '',
         owner: user ? user?._id : '',
@@ -49,6 +48,7 @@ export const MaaltidCreator = ({ visible, onSetVisible }: Props) => {
     })
     const setConsumptions = useSetRecoilState(consumptionsState)
     const setGlobalFeedback = useSetRecoilState(globalFeedbackState)
+    const fetch = useFetch()
 
     const handleMaaltidContents = (
         type: 'groceries' | 'meals',
@@ -71,16 +71,27 @@ export const MaaltidCreator = ({ visible, onSetVisible }: Props) => {
             const searchObject = {
                 query: value,
             }
-            const searchResultGrocery = await searchGroceries(searchObject)
-            const searchResultMeal = await searchMeals(searchObject)
-            const searchResult: multiSearchResult = {
-                groceries: searchResultGrocery,
-                meals: searchResultMeal,
-            }
-            setSearchResult(searchResult)
+            fetch
+                .post(PATH.concat('/groceries/search'), searchObject)
+                .then((res) =>
+                    setSearchResult((prevState) => ({
+                        ...prevState,
+                        groceries: res,
+                    }))
+                )
+
+            fetch.post(PATH.concat('/meals/search'), searchObject).then((res) =>
+                setSearchResult((prevState) => ({
+                    ...prevState,
+                    meals: res,
+                }))
+            )
         }
         if (value == '') {
-            setSearchResult(null)
+            setSearchResult({
+                groceries: [],
+                meals: [],
+            })
         }
     }
 
@@ -95,21 +106,23 @@ export const MaaltidCreator = ({ visible, onSetVisible }: Props) => {
     }
 
     const saveMaaltid = async () => {
-        const newConsumptions = await addConsumption(consumption)
-        if (newConsumptions != null) {
-            setConsumptions(newConsumptions)
-            resetState()
-            onSetVisible(false)
-            setGlobalFeedback({
-                type: FeedbackTypes.SUCCESS,
-                message: 'Måltid lagt til!',
-            })
-        } else {
-            setGlobalFeedback({
-                type: FeedbackTypes.ERROR,
-                message: 'Det skjedde en feil!',
-            })
-        }
+        fetch.post(PATH.concat('/consumptions/add'), consumption).then(
+            (newConsumptions) => {
+                setConsumptions(newConsumptions)
+                resetState()
+                onSetVisible(false)
+                setGlobalFeedback({
+                    type: FeedbackTypes.SUCCESS,
+                    message: 'Måltid lagt til!',
+                })
+            },
+            () => {
+                setGlobalFeedback({
+                    type: FeedbackTypes.ERROR,
+                    message: 'Det skjedde en feil!',
+                })
+            }
+        )
         setTimeout(() => setGlobalFeedback(null), 5000)
     }
 
@@ -287,43 +300,62 @@ export const MaaltidCreator = ({ visible, onSetVisible }: Props) => {
                             onClick={() => {
                                 setSearchShowing(false)
                                 setSearchValue('')
-                                setSearchResult(null)
+                                setSearchResult({
+                                    groceries: [],
+                                    meals: [],
+                                })
                             }}
                         />
                     </span>
                     <div className={styles.searchResultContainer}>
                         {searchResult != null ? (
                             <>
-                                {searchResult.groceries != null && (
-                                    <div>
-                                        <div className={styles.categoryHeader}>
-                                            Produkter
+                                {searchResult.groceries &&
+                                    searchResult.groceries.length > 0 && (
+                                        <div>
+                                            <div
+                                                className={
+                                                    styles.categoryHeader
+                                                }
+                                            >
+                                                Produkter
+                                            </div>
+                                            {searchResult?.groceries?.map(
+                                                (grocery) => (
+                                                    <ListItem
+                                                        key={grocery._id}
+                                                        title={grocery.Matvare}
+                                                        ListOptions={groceryOptions(
+                                                            grocery
+                                                        )}
+                                                    />
+                                                )
+                                            )}
                                         </div>
-                                        {searchResult?.groceries?.map(
-                                            (grocery) => (
-                                                <ListItem
-                                                    title={grocery.Matvare}
-                                                    ListOptions={groceryOptions(
-                                                        grocery
-                                                    )}
-                                                />
-                                            )
-                                        )}
-                                    </div>
-                                )}
-                                {searchResult.meals != null && (
-                                    <div>
-                                        <div className={styles.categoryHeader}>
-                                            Matretter
+                                    )}
+                                {searchResult.meals &&
+                                    searchResult.meals.length > 0 && (
+                                        <div>
+                                            <div
+                                                className={
+                                                    styles.categoryHeader
+                                                }
+                                            >
+                                                Matretter
+                                            </div>
+                                            {searchResult?.meals?.map(
+                                                (meal) => (
+                                                    <ListItem
+                                                        key={meal._id}
+                                                        title={meal.mealName}
+                                                        ListOptions={mealOptions(
+                                                            meal
+                                                        )}
+                                                    />
+                                                )
+                                            )}
                                         </div>
-                                        {searchResult?.meals?.map((meal) => (
-                                            <ListItem
-                                                title={meal.mealName}
-                                                ListOptions={mealOptions(meal)}
-                                            />
-                                        ))}
-                                    </div>
-                                )}
+                                    )}
                             </>
                         ) : (
                             <div className={styles.information}>

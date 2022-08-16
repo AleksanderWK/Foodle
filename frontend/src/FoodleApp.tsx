@@ -53,10 +53,11 @@ export const FoodleApp: React.FunctionComponent = () => {
     }
 
     useEffect(() => {
-        if (location.pathname == '/') {
-            setUserState(null)
+        const user = localStorage.getItem('user')
+        if (user != null) {
+            setUserState(JSON.parse(user))
         }
-    }, [location])
+    }, [])
 
     useEffect(() => {
         if (user) {

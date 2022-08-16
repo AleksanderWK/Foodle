@@ -1,7 +1,5 @@
 import React, { useState } from 'react'
-import { loginUser, registerUser } from '../api/main'
 import { Credentials, RegisterValues } from '../api/types'
-import { User } from '../state/user'
 import styles from './Authentication.module.scss'
 import { Button } from './common/Button'
 import { Input } from './common/Input'
@@ -11,6 +9,7 @@ import { Feedback, FeedbackTypes } from './common/Feedback'
 import classNames from 'classnames'
 import { useSetRecoilState } from 'recoil'
 import { userState } from '../state/user'
+import useFetch, { PATH } from '../utils/hooks/useFetch'
 
 export enum AuthenticationTabs {
     LOGIN = 'Logg inn',
@@ -33,6 +32,7 @@ export const Authentication: React.FunctionComponent = () => {
     })
     const [feedback, setFeedback] = useState<null | Feedback>()
     const setUserState = useSetRecoilState(userState)
+    const fetch = useFetch()
 
     const onInputChanged = (
         type: AuthenticationTabs,
@@ -66,22 +66,29 @@ export const Authentication: React.FunctionComponent = () => {
             username: loginValues.username,
             password: loginValues.password,
         }
-        const result = await loginUser(credentials)
-        if (result != null) {
-            if (!result) {
-                setFeedback({
-                    type: FeedbackTypes.ERROR,
-                    message: 'Bruker er ikke verifisert. Sjekk eposten din!',
-                })
-            } else {
-                setUserState(result)
+        fetch.post(PATH.concat('/users/login'), credentials).then(
+            (user) => {
+                setUserState(user)
+                localStorage.setItem('user', JSON.stringify(user))
+            },
+            (errorStatus) => {
+                switch (errorStatus) {
+                    case 404:
+                        setFeedback({
+                            type: FeedbackTypes.ERROR,
+                            message: 'Feil brukernavn eller passord!',
+                        })
+                        break
+                    case 401:
+                        setFeedback({
+                            type: FeedbackTypes.ERROR,
+                            message:
+                                'Bruker er ikke verifisert. Sjekk eposten din!',
+                        })
+                        break
+                }
             }
-        } else {
-            setFeedback({
-                type: FeedbackTypes.ERROR,
-                message: 'Feil brukernavn eller passord!',
-            })
-        }
+        )
     }
 
     const submitRegisterForm = async () => {
@@ -97,17 +104,25 @@ export const Authentication: React.FunctionComponent = () => {
                 password: registerValues.password1,
                 email: registerValues.email,
             }
-            if ((await registerUser(user)) != null) {
-                setFeedback({
-                    type: FeedbackTypes.SUCCESS,
-                    message: 'Bruker opprettet!',
-                })
-            } else {
-                setFeedback({
-                    type: FeedbackTypes.INFORMATION,
-                    message: 'Det skjedde en feil ved opprettelse av bruker.',
-                })
-            }
+            fetch.post(PATH.concat('/users/register'), user).then(
+                () => {
+                    setFeedback({
+                        type: FeedbackTypes.SUCCESS,
+                        message: 'Bruker opprettet!',
+                    })
+                },
+                (errorStatus) => {
+                    switch (errorStatus) {
+                        case 500:
+                            setFeedback({
+                                type: FeedbackTypes.INFORMATION,
+                                message:
+                                    'Det skjedde en feil ved opprettelse av bruker.',
+                            })
+                            break
+                    }
+                }
+            )
         }
     }
 

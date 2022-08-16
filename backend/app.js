@@ -72,5 +72,10 @@ app.use("/consumptions", consumptionsRoute);
 app.use("/goals", goalsRoute);
 app.use("/favoritelists", favoriteRoute);
 
+// use error status as response status
+app.use((err, req, res, next) => {
+  res.status(err.status || 500).json();
+});
+
 //LISTENING
 app.listen(port);

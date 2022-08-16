@@ -1,10 +1,11 @@
 const express = require("express");
 const ShoppingList = require("../models/ShoppingList");
 const router = express.Router();
-const { sendEmail } = require("../utils");
+const { sendEmail } = require("../utils/emailUtils");
+const isAuthenticated = require("../middleware/auth");
 
 // get shoppinglist by user id
-router.get("/:id", async (req, res) => {
+router.get("/:id", isAuthenticated, async (req, res) => {
   try {
     ShoppingList.findOne({ owner: req.params.id })
       .populate("groceries")
@@ -15,7 +16,7 @@ router.get("/:id", async (req, res) => {
 });
 
 // add a grocery to a shoppinglist
-router.post("/add", async (req, res) => {
+router.post("/add", isAuthenticated, async (req, res) => {
   try {
     await ShoppingList.findByIdAndUpdate(
       { _id: req.body.shoppinglistId },
@@ -37,7 +38,7 @@ router.post("/add", async (req, res) => {
 
 // delete a grocery from a shoppinglist
 
-router.post("/delete", async (req, res) => {
+router.post("/delete", isAuthenticated, async (req, res) => {
   try {
     let shl = await ShoppingList.findById(req.body.shoppinglistId);
     let shl_groceries = shl.groceries;
@@ -61,7 +62,7 @@ router.post("/delete", async (req, res) => {
 
 // Send shoppinglist to a user´s email
 
-router.post("/send", async (req, res) => {
+router.post("/send", isAuthenticated, async (req, res) => {
   try {
     const content = await ShoppingList.findOne({ owner: req.body._id })
       .populate("groceries")

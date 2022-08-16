@@ -3,19 +3,11 @@ const Grocery = require("../models/Grocery");
 const router = express.Router();
 const FavoriteList = require("../models/FavoriteList");
 const ShoppingList = require("../models/ShoppingList");
+const isAuthenticated = require("../middleware/auth");
 
 // /groceries
 
-router.get("/", async (req, res) => {
-  try {
-    const groceries = await Grocery.find().limit(2);
-    res.json(groceries);
-  } catch (error) {
-    res.json({ message: error });
-  }
-});
-
-router.post("/search", async (req, res) => {
+router.post("/search", isAuthenticated, async (req, res) => {
   try {
     const queryWords = req.body.query.split(" ");
     const queries = [];
