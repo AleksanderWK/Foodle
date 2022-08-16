@@ -1,4 +1,5 @@
 const express = require("express");
+const isAuthenticated = require("../middleware/auth");
 const Consumption = require("../models/Consumption");
 const router = express.Router();
 
@@ -6,7 +7,7 @@ const router = express.Router();
 
 // post a consumption for a user
 
-router.post("/add", async (req, res) => {
+router.post("/add", isAuthenticated, async (req, res) => {
   try {
     const newConsumption = new Consumption({
       owner: req.body.owner,
@@ -38,7 +39,7 @@ router.post("/add", async (req, res) => {
 
 // get a users monthly consumptions
 
-router.get("/:userId/lastthirty", async (req, res) => {
+router.get("/:userId/lastthirty", isAuthenticated, async (req, res) => {
   try {
     const currentDate = new Date();
     const thirtyDaysAgo = new Date().setDate(currentDate.getDate() - 30);

@@ -7,16 +7,9 @@ const router = express.Router();
 const { sendEmail } = require("../utils/emailUtils");
 const crypto = require("crypto");
 const FavoriteList = require("../models/FavoriteList");
+const isAuthenticated = require("../middleware/auth");
 
 // /users
-
-router.get("/:id", async (req, res) => {
-  try {
-    User.findById(req.params.id).then((user) => res.json(user));
-  } catch (error) {
-    res.json({ message: error });
-  }
-});
 
 router.post("/register", async (req, res) => {
   // retrieve data from request and make object
@@ -108,7 +101,7 @@ router.get("/verify/:token", async (req, res) => {
   }
 });
 
-router.get("/:username/shoppinglist", async (req, res) => {
+router.get("/:username/shoppinglist", isAuthenticated, async (req, res) => {
   User.find({ username: req.params.username })
     .populate("shoppinglist")
     .then((user) => res.json(user));
@@ -140,6 +133,17 @@ router.get("/:userid/picture", async (req, res) => {
     } else throw new Error();
   } catch (error) {
     res.status(404).json(null);
+  }
+});
+
+router.get("/logout", isAuthenticated, (req, res) => {
+  accessToken = req.headers["authorization"];
+  try {
+    Token.findOneAndDelete({ token: accessToken.split(" ")[1] }).then(() =>
+      res.status(200).json()
+    );
+  } catch (error) {
+    res.status(500).json();
   }
 });
 

@@ -1,12 +1,13 @@
 const express = require("express");
 const Goal = require("../models/Goal");
 const router = express.Router();
+const isAuthenticated = require("../middleware/auth");
 
 // /goals
 
 // add a goal for a user
 
-router.post("/add", async (req, res) => {
+router.post("/add", isAuthenticated, async (req, res) => {
   try {
     const goal = new Goal({
       owner: req.body.owner,
@@ -29,7 +30,7 @@ router.post("/add", async (req, res) => {
 
 // get a users goal
 
-router.get("/:userid", async (req, res) => {
+router.get("/:userid", isAuthenticated, async (req, res) => {
   try {
     Goal.findOne({ owner: req.params.userid }).then((goal) => {
       res.json(goal);

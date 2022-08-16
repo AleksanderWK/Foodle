@@ -1,26 +1,20 @@
 import { ExpandingContainer } from './ExpandingContainer'
 import styles from './MealCreator.module.scss'
-import React, { ReactNode, useEffect, useRef, useState } from 'react'
-import {
-    PlusOutlined,
-    SearchOutlined,
-    EditOutlined,
-    CheckOutlined,
-} from '@ant-design/icons'
+import React, { useState } from 'react'
+import { SearchOutlined, EditOutlined, CheckOutlined } from '@ant-design/icons'
 import classNames from 'classnames'
 import { Input } from '../common/Input'
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 import { Button } from '../common/Button'
-import { createMeal } from '../../api/kitchen'
 import { currentMealState, mealsState } from '../../state/kitchen'
 import { Icon } from '@iconify/react'
 import { userState } from '../../state/user'
 import { Grocery } from '../../api/types'
 import { CaretDownFilled } from '@ant-design/icons'
-import { Feedback, FeedbackTypes } from '../common/Feedback'
-import { searchGroceries } from '../../api/main'
+import { FeedbackTypes } from '../common/Feedback'
 import { GroceryItem } from '../GroceryItem'
 import { globalFeedbackState } from '../../state/main'
+import useFetch, { PATH } from '../../utils/hooks/useFetch'
 
 interface Props {
     grocery: Grocery
@@ -61,15 +55,15 @@ const MealListItem = ({ grocery }: Props) => {
 
 export const MealCreator: React.FC = () => {
     const [expanded, setExpanded] = useState(false)
-    const [feedback, setGlobalFeedback] = useRecoilState(globalFeedbackState)
-    const [meals, setMealsState] = useRecoilState(mealsState)
+    const setGlobalFeedback = useSetRecoilState(globalFeedbackState)
+    const setMealsState = useSetRecoilState(mealsState)
     const user = useRecoilValue(userState)
     const [currentMeal, setCurrentMeal] = useRecoilState(currentMealState)
     const [nameInputShowing, setNameInputShowing] = useState(false)
     const [showSearch, setShowSearch] = useState(false)
-
     const [searchValue, setSearchValue] = useState<string>('')
     const [searchResult, setSearchResult] = useState<Grocery[] | null>(null)
+    const fetch = useFetch()
 
     const handleMealDataChange = (property: string, value: string) => {
         if (property == 'mealName') {
@@ -83,8 +77,9 @@ export const MealCreator: React.FC = () => {
             const searchObject = {
                 query: value,
             }
-            const searchResult = await searchGroceries(searchObject)
-            setSearchResult(searchResult)
+            fetch
+                .post(PATH.concat('/groceries/search'), searchObject)
+                .then((res) => setSearchResult(res))
         }
         if (value == '') {
             setSearchResult(null)
@@ -93,12 +88,17 @@ export const MealCreator: React.FC = () => {
 
     const saveMeal = async () => {
         if (user) {
-            const newMeal = await createMeal({
-                owner: user._id,
-                mealName: currentMeal.mealName,
-                groceryIds: currentMeal.groceries.map((grocery) => grocery._id),
-            })
-            setMealsState((prevState) => prevState.concat([newMeal]))
+            fetch
+                .post(PATH.concat('/meals/create'), {
+                    owner: user._id,
+                    mealName: currentMeal.mealName,
+                    groceryIds: currentMeal.groceries.map(
+                        (grocery) => grocery._id
+                    ),
+                })
+                .then((newMeal) =>
+                    setMealsState((prevState) => prevState.concat([newMeal]))
+                )
             resetMeal()
             setGlobalFeedback({
                 type: FeedbackTypes.SUCCESS,

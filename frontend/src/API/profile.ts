@@ -1,4 +1,4 @@
-import { PATH } from './main'
+import { PATH } from '../utils/hooks/useFetch'
 
 export const uploadProfilePicture = async (
     formData: FormData

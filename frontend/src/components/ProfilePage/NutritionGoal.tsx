@@ -7,7 +7,6 @@ import { userState } from '../../state/user'
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 import { Button } from '../common/Button'
 import { Slider } from '../common/Slider'
-import { addGoal, getGoal } from '../../api/goals'
 import { goalCalculatedGramsState, goalState } from '../../state/goal'
 import { globalFeedbackState } from '../../state/main'
 import { FeedbackTypes } from '../common/Feedback'
@@ -17,6 +16,7 @@ import { dailyConsumptionsTotalState } from '../../state/consumption'
 import classNames from 'classnames'
 import { monthNamesNor } from '../../utils/dateUtils'
 import { PlusOutlined } from '@ant-design/icons'
+import useFetch, { PATH } from '../../utils/hooks/useFetch'
 
 export const NutritionGoal = () => {
     const [creatGoalVisible, setCreateGoalVisible] = useState(false)
@@ -33,10 +33,11 @@ export const NutritionGoal = () => {
     const calculatedDailyTotals = useRecoilValue(dailyConsumptionsTotalState)
     const setGlobalFeedback = useSetRecoilState(globalFeedbackState)
     const macros = ['protein', 'fat', 'carbohydrates']
+    const fetch = useFetch()
 
     useEffect(() => {
         if (user) {
-            getGoal(user._id).then((goal) => {
+            fetch.get(PATH.concat(`/goals/${user._id}`)).then((goal) => {
                 if (goal != null) {
                     setGoal(goal)
                     setCreateGoal(goal)
@@ -109,22 +110,25 @@ export const NutritionGoal = () => {
     }
 
     const saveGoalConfig = () => {
-        addGoal(createGoal).then((goal) => {
-            if (goal != null) {
-                setGoal(goal)
-                setGlobalFeedback({
-                    type: FeedbackTypes.SUCCESS,
-                    message: 'Mål oppdatert!',
-                })
-            } else {
+        fetch.post(PATH.concat('/goals/add'), createGoal).then(
+            (goal) => {
+                if (goal != null) {
+                    setGoal(goal)
+                    setGlobalFeedback({
+                        type: FeedbackTypes.SUCCESS,
+                        message: 'Mål oppdatert!',
+                    })
+                }
+                setCreateGoalVisible(false)
+            },
+            () => {
                 setGlobalFeedback({
                     type: FeedbackTypes.ERROR,
                     message: 'Det skjedde en feil ved oppdatering av målet',
                 })
             }
-            setCreateGoalVisible(false)
-            setTimeout(() => setGlobalFeedback(null), 5000)
-        })
+        )
+        setTimeout(() => setGlobalFeedback(null), 5000)
     }
 
     const getHeaderDate = () => {

@@ -5,7 +5,7 @@ const { sendEmail } = require("../utils/emailUtils");
 const isAuthenticated = require("../middleware/auth");
 
 // get shoppinglist by user id
-router.get("/:id", async (req, res) => {
+router.get("/:id", isAuthenticated, async (req, res) => {
   try {
     ShoppingList.findOne({ owner: req.params.id })
       .populate("groceries")
@@ -16,7 +16,7 @@ router.get("/:id", async (req, res) => {
 });
 
 // add a grocery to a shoppinglist
-router.post("/add", async (req, res) => {
+router.post("/add", isAuthenticated, async (req, res) => {
   try {
     await ShoppingList.findByIdAndUpdate(
       { _id: req.body.shoppinglistId },
@@ -62,7 +62,7 @@ router.post("/delete", isAuthenticated, async (req, res) => {
 
 // Send shoppinglist to a user´s email
 
-router.post("/send", async (req, res) => {
+router.post("/send", isAuthenticated, async (req, res) => {
   try {
     const content = await ShoppingList.findOne({ owner: req.body._id })
       .populate("groceries")

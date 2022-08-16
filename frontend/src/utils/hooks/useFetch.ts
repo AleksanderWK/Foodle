@@ -44,7 +44,7 @@ const useFetch = () => {
     }
 
     const request = (method: RequestType) => {
-        return (url: string, body: Object) => {
+        return (url: string, body?: Object) => {
             let requestOptions: RequestInit = {}
             if (body) {
                 requestOptions = {

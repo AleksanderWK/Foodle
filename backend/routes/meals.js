@@ -1,9 +1,10 @@
 const express = require("express");
 const Meal = require("../models/Meal");
 const router = express.Router();
+const isAuthenticated = require("../middleware/auth");
 
 // get meals by user id
-router.get("/:id", async (req, res) => {
+router.get("/:id", isAuthenticated, async (req, res) => {
   try {
     Meal.find({ owner: req.params.id })
       .populate("groceries")
@@ -14,7 +15,7 @@ router.get("/:id", async (req, res) => {
 });
 
 // create meal
-router.post("/create", async (req, res) => {
+router.post("/create", isAuthenticated, async (req, res) => {
   try {
     const newMeal = new Meal({
       owner: req.body.owner,
@@ -31,7 +32,7 @@ router.post("/create", async (req, res) => {
 });
 
 // returns all meals by all users
-router.post("/search", async (req, res) => {
+router.post("/search", isAuthenticated, async (req, res) => {
   try {
     const queryWords = req.body.query.split(" ");
     const queries = [];

@@ -1,26 +1,20 @@
 import { Icon } from '@iconify/react'
 import { Button } from '../common/Button'
 import classNames from 'classnames'
-import { ChangeEvent, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Card } from '../common/Card'
 import styles from './MealTimeline.module.scss'
-import {
-    PlusOutlined,
-    CloseOutlined,
-    SearchOutlined,
-    CheckOutlined,
-} from '@ant-design/icons'
+import { PlusOutlined } from '@ant-design/icons'
 import {
     consumptionsState,
     dailyConsumptionsState,
 } from '../../state/consumption'
-import { useRecoilState, useRecoilValue } from 'recoil'
-import { getLastThirtyDaysConsumption } from '../../api/consumptions'
+import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { userState } from '../../state/user'
 import { Consumption, Grocery } from '../../api/types'
 import { Meal } from '../../api/types'
-import { Input } from '../common/Input'
 import { MaaltidCreator } from './MaaltidCreator'
+import useFetch, { PATH } from '../../utils/hooks/useFetch'
 
 interface MealIndicatorProps {
     name: string
@@ -78,15 +72,16 @@ enum TimelineState {
 
 export const MealTimeline: React.FC = () => {
     const user = useRecoilValue(userState)
-    const [consumptions, setConsumptions] = useRecoilState(consumptionsState)
+    const setConsumptions = useSetRecoilState(consumptionsState)
     const todaysConsumptions = useRecoilValue(dailyConsumptionsState)
     const [visible, setVisible] = useState(false)
+    const fetch = useFetch()
 
     useEffect(() => {
         if (user) {
-            getLastThirtyDaysConsumption(user._id).then((consumptions) =>
-                setConsumptions(consumptions)
-            )
+            fetch
+                .get(PATH.concat(`/consumptions/${user._id}/lastthirty`))
+                .then((consumptions) => setConsumptions(consumptions))
         }
     }, [])
 
